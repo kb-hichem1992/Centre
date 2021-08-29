@@ -17,7 +17,7 @@ import {
   Group,
   Resize,
   Sort,
-  GroupSettingsModel,
+  ExcelExport,
 } from "@syncfusion/ej2-react-grids";
 import Button from "../components/controls/Button";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -31,6 +31,7 @@ import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import TableFormation from "../Formation/TableFormation.js";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AlertDialog from "../components/controls/Dialog";
+import GroupeForm from "../Formation/GroupeForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,11 +86,13 @@ export default function TableCandForm({
   const [openImprimer, setOpenImprimer] = useState(false);
   const [openFormation, setOpenFormation] = useState(false);
   const { userData } = useContext(UserContext);
-  const numeroAgrement = userData[0].NUMERO_AGREMENT;
   const [open, setOpen] = useState(false);
+  const [openNumero, setOpenNumero] = useState(false);
+  const numeroAgrement = userData[0].NUMERO_AGREMENT;
+
   useEffect(() => {
     fetch(
-      `https://transport-app-server.herokuapp.com/api/get_candidat_form/${numeroFormation}/${numeroAgrement}/${groupe}`
+      `http://localhost:3001/api/get_candidat_form/${numeroFormation}/${numeroAgrement}/${groupe}`
     )
       .then((response) => response.json())
       .then((json) => setdata(json));
@@ -128,6 +131,8 @@ export default function TableCandForm({
       },
     },
   });
+  const contextMenuItems = ["Copy", "ExcelExport"];
+
   const updatePasse = (
     remarque,
     note,
@@ -139,7 +144,7 @@ export default function TableCandForm({
     numeroAgrement
   ) => {
     axios
-      .put("https://transport-app-server.herokuapp.com/update_passe", {
+      .put("http://localhost:3001/update_passe", {
         remarque: remarque,
         note: note,
         numeroCandidat: numeroCandidat,
@@ -155,8 +160,6 @@ export default function TableCandForm({
   };
   const insertBrevet = (
     NumeroBrevet,
-    LivBrevet,
-    ExpBrevet,
     numeroCandidat,
     Date_ins,
     Num_permis,
@@ -165,10 +168,8 @@ export default function TableCandForm({
     GROUPE
   ) => {
     axios
-      .put("https://transport-app-server.herokuapp.com/insert_brevet", {
+      .put("http://localhost:3001/insert_brevet", {
         NumeroBrevet: NumeroBrevet,
-        LivBrevet: LivBrevet,
-        ExpBrevet: ExpBrevet,
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
         Num_permis: Num_permis,
@@ -180,7 +181,6 @@ export default function TableCandForm({
         setEtat(!etat);
       });
   };
-
   const deletePasse = (
     numeroCandidat,
     Date_ins,
@@ -190,7 +190,7 @@ export default function TableCandForm({
     numeroAgrement
   ) => {
     axios
-      .post(`https://transport-app-server.herokuapp.com/delete_passe`, {
+      .post(`http://localhost:3001/delete_passe`, {
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
         Num_permis: Num_permis,
@@ -269,10 +269,27 @@ export default function TableCandForm({
           startIcon={<EditOutlinedIcon />}
           className={classes.newButton}
           disabled={
-            Values === undefined || userData[0].ADMIN !== "admin" || Values.REMARQUE === "ناجح"  ? true : false
+            Values === undefined ||
+            userData[0].ADMIN !== "admin" ||
+            Values.REMARQUE === "ناجح" ||
+            Values.NOTE > 0
+              ? true
+              : false
           }
           onClick={() => {
             setOpen(true);
+          }}
+        />
+        <Button
+          text="رقم الترتيب"
+          variant="outlined"
+          size="small"
+          color="primary"
+          startIcon={<EditOutlinedIcon />}
+          className={classes.newButton}
+          disabled={Values === undefined || userData[0].ADMIN !== "admin"}
+          onClick={() => {
+            setOpenNumero(true);
           }}
         />
       </div>
@@ -287,10 +304,13 @@ export default function TableCandForm({
           allowResizing={true}
           allowSorting={true}
           height={200}
+          width="auto"
           ref={TableRef3}
           enableRtl={true}
           locale="ar-AE"
           groupSettings={GroupSettingsModel}
+          contextMenuItems={contextMenuItems}
+          allowExcelExport={true}
         >
           <ColumnsDirective>
             <ColumnDirective
@@ -298,6 +318,7 @@ export default function TableCandForm({
               headerText="الفوج"
               clipMode="EllipsisWithTooltip"
             />
+            <ColumnDirective field="NUMERO" headerText="رقم" Width={50} />
             <ColumnDirective
               field="NOM_CANDIDAT"
               headerText="اللقب"
@@ -309,22 +330,46 @@ export default function TableCandForm({
               clipMode="EllipsisWithTooltip"
             />
             <ColumnDirective
-              field="PRENOM_PERE"
-              headerText="إسم الأب"
+              field="DATE_NAIS_CANDIDAT"
+              headerText="تاريخ الميلاد "
               clipMode="EllipsisWithTooltip"
+            />
+            <ColumnDirective
+              field="LIEU_NAIS_CANDIDAT"
+              headerText="مكان الميلاد "
+              clipMode="EllipsisWithTooltip"
+            />
+            <ColumnDirective
+              field="ADRESSE_CANDIDAT"
+              headerText=" العنوان "
+              clipMode="EllipsisWithTooltip"
+            />
+            <ColumnDirective
+              field="CATEGORIE_PERMIS"
+              headerText=" أصناف رخصة السياقة "
+              clipMode="EllipsisWithTooltip"
+              Width='100'
+            />
+            <ColumnDirective
+              field="DATE_LIV_PERMIS"
+              headerText="تاريخ إصدار رخصة السياقة"
+              clipMode="EllipsisWithTooltip"
+              Width="120"
             />
             <ColumnDirective
               field="REMARQUE"
               headerText="الملاحظة"
               clipMode="EllipsisWithTooltip"
+              Width="100"
             />
             <ColumnDirective
               field="NOTE"
               headerText="العلامة"
               clipMode="EllipsisWithTooltip"
+              Width="80"
             />
           </ColumnsDirective>
-          <Inject services={[Page, Sort, Filter, Group, Resize]} />
+          <Inject services={[Page, Sort, Filter, Group, Resize, ExcelExport]} />
         </GridComponent>
       </div>
       <Popup
@@ -350,7 +395,19 @@ export default function TableCandForm({
           data={data}
         />
       </Popup>
-
+      <Popup
+        title="الترتيب"
+        openPopup={openNumero}
+        setOpenPopup={setOpenNumero}
+      >
+        <GroupeForm
+          close={setOpenNumero}
+          values={Values}
+          data={data}
+          etat={etat}
+          setEtat={setEtat}
+        />
+      </Popup>
       <Popup
         title="تحديد التكوين"
         openPopup={openFormation}

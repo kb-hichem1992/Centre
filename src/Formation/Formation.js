@@ -106,7 +106,7 @@ function AppFor({ id }) {
     Fin
   ) => {
     axios
-      .post("https://transport-app-server.herokuapp.com/Add_formation", {
+      .post("http://localhost:3001/Add_formation", {
         numeroFormation: numeroFormation,
         numeroAgrement: numeroAgrement,
         groupe: groupe,
@@ -127,7 +127,7 @@ function AppFor({ id }) {
     Fin
   ) => {
     axios
-      .put("https://transport-app-server.herokuapp.com/update_formation", {
+      .put("http://localhost:3001/update_formation", {
         Type: Type,
         Debut: Debut,
         Fin: Fin,
@@ -142,7 +142,7 @@ function AppFor({ id }) {
   const deleteFormation = (numeroFormation, numeroAgrement, groupe) => {
     axios
       .delete(
-        `https://transport-app-server.herokuapp.com/delete_formation/${numeroFormation}/${numeroAgrement}/${groupe}`,
+        `http://localhost:3001/delete_formation/${numeroFormation}/${numeroAgrement}/${groupe}`,
         {}
       )
       .then(() => {
@@ -231,7 +231,7 @@ function AppFor({ id }) {
           <GridComponent
             dataSource={data}
             allowPaging={true}
-            pageSettings={{ pageSize: 10 }}
+            pageSettings={{ pageSize: 50 }}
             allowFiltering={true}
             allowGrouping={true}
             filterSettings={filter}

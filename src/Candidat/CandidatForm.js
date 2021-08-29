@@ -1,4 +1,4 @@
-import React, { useState, useRef, Fragment } from "react";
+import React, { useState, useRef, Fragment, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import {
@@ -21,6 +21,7 @@ import Controls from "../components/controls/Controls";
 import AlertDialog from "../components/controls/Dialog";
 import Popup from "../components/Popup";
 import ListCategorie from "./CategoriePermis";
+import { UserContext } from "../UserContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,12 +79,11 @@ export default function Candidat(props) {
     SEX_CONDIDAT,
     NUM_PERMIS,
     DATE_LIV_PERMIS,
-    DATE_EXP_PERMIS,
     CATEGORIE_PERMIS,
     TYPE_PERMIS,
     DATE_INS,
     TYPE_CANDIDAT,
-  } = props.values;
+  } = props.values || [];
 
   const [selectedDate, setSelectedDate] = useState(DATE_NAIS_CANDIDAT);
   const [numeroCandidat, setNumeroCandidat] = useState(NUM_INS);
@@ -99,11 +99,14 @@ export default function Candidat(props) {
   const [Typepermis, setTypePermis] = useState(TYPE_PERMIS);
   const [NumPermis, setNumPermis] = useState(NUM_PERMIS);
   const [LivPermis, setLivPermis] = useState(DATE_LIV_PERMIS);
-  const [ExpPermis, setExpPermis] = useState(DATE_EXP_PERMIS);
+  //  const [ExpPermis, setExpPermis] = useState(DATE_EXP_PERMIS);
   const [CategoriePermis, setCategoriePermis] = useState(CATEGORIE_PERMIS);
   const [textChanged, setTextChanged] = useState(false);
   const [open, setOpen] = useState(false);
   const [Categorie, setOpenCategorie] = useState(false);
+  const { userData } = useContext(UserContext);
+  const numeroAgrement = userData[0].NUMERO_AGREMENT;
+  const Num_insc = numeroCandidat + "-" + new Date().getFullYear()+"-"+numeroAgrement;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -141,20 +144,35 @@ export default function Candidat(props) {
     }
   }
 
-  function CandidatExists(id) {
+  function CandidatExists(id, date, num_permis) {
     return props.data.some(function (el) {
-      if (el.NUM_PERMIS === id) {
+      if (
+        el.NUM_INS === id &&
+        el.DATE_INS === convert(date) &&
+        el.NUM_PERMIS === num_permis
+      ) {
         return true;
       } else {
         return false;
       }
     });
   }
+  function TestNumIns(id) {
+    return props.data.some(function (el) {
+      if (
+        el.NUM_INS === id
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
+  
+  const messageB = "هل أنت متأكد من القيام بهذه العملية ؟";
 
   const Enregister = () => {
     const dt1 = new Date(selectedDate);
-    const dt2 = new Date(LivPermis);
-    const dt3 = new Date(ExpPermis);
     const dt0 = new Date();
 
     if (
@@ -171,32 +189,31 @@ export default function Candidat(props) {
       Sexe === "" ||
       NumPermis === "" ||
       LivPermis === "" ||
-      ExpPermis === "" ||
       CategoriePermis === "" ||
       Typepermis === ""
     ) {
       alert("يجب ملئ جميع البيانات ");
     } else if (convert(dt1) >= convert(dt0)) {
       alert("تاريخ الميلاد خاطئ");
-    } else if (convert(dt2) >= convert(dt3)) {
-      alert("تاريخ إصدار رخسة السياقة خاطئ");
     } else if (
-      CandidatExists(NumPermis) === true &&
+      CandidatExists(Num_insc, Date_ins, NumPermis) === true &&
       props.onClick.name === "addCondidat"
     ) {
       alert("المترشح مسجل من قبل");
     } else if (
-      CandidatExists(NumPermis) === true &&
+      CandidatExists(numeroCandidat, Date_ins, NumPermis) === true &&
       props.onClick.name === "updateCandidat" &&
       textChanged === true
     ) {
       alert("المترشح مسجل من قبل");
+    } else if (TestNumIns(Num_insc)) {
+      alert("رقم التسجيل مكرر");
     } else {
       handleClickOpen();
     }
   };
 
-  const niveauScolaire = ["ابتدائي", "متوسط", "ثانوي", "جامعي"];
+  const niveauScolaire = ["ابتدائي", "متوسط", "ثانوي", "جامعي","بدون مستوى"];
   const Type = ["متعاقد", "حر"];
 
   return (
@@ -210,14 +227,15 @@ export default function Candidat(props) {
                 label=" رقم التسجيل"
                 value={numeroCandidat}
                 size="small"
-                disabled={ props.onClick.name === "updateCandidat" ? true : false}
+             /*    disabled={
+                  props.onClick.name === "updateCandidat" ? true : false
+                } */
                 onChange={(e) => setNumeroCandidat(e.target.value)}
               />
               <Controls.DatePicker
                 label="تاريخ التسجيل"
                 value={Date_ins}
                 onChange={setDate_ins}
-               
               />
               <FormControl>
                 <InputLabel id="demo-simple-select-label">
@@ -274,6 +292,8 @@ export default function Candidat(props) {
                 size="small"
                 onChange={(e) => setLieu(e.target.value)}
               />
+            </Grid>
+            <Grid item xs={6}>
               <Controls.DatePicker
                 label="تاريخ الميلاد"
                 value={selectedDate}
@@ -321,12 +341,12 @@ export default function Candidat(props) {
                   />
                 </RadioGroup>
               </FormControl>
-            </Grid>
-            <Grid item xs={6}>
               <TextField
                 variant="outlined"
                 label="رقم رخسة السياقة"
-                disabled={ props.onClick.name === "updateCandidat" ? true : false}
+                disabled={
+                  props.onClick.name === "updateCandidat" ? true : false
+                }
                 value={NumPermis}
                 size="small"
                 onChange={(e) => {
@@ -339,11 +359,6 @@ export default function Candidat(props) {
                 label="تاريخ الإصدار"
                 value={LivPermis}
                 onChange={setLivPermis}
-              />
-              <Controls.DatePicker
-                label="نهاية الصلاحية"
-                value={ExpPermis}
-                onChange={setExpPermis}
               />
               <FormControl component="fieldset">
                 <FormLabel component="legend">Type de Permis</FormLabel>
@@ -414,30 +429,51 @@ export default function Candidat(props) {
 
       <AlertDialog
         title="تأكيد"
-        message="هل أنت متأكد من القيام بهذه العملية ؟"
+        message={messageB}
         open={open}
         setOpen={setOpen}
         method={() => {
           try {
-            props.onClick(
-              numeroCandidat,
-              convert(DATE_INS),
-              Nom,
-              Prenom,
-              convert(selectedDate),
-              Lieu,
-              Niveau,
-              Adresse,
-              PrenomPere,
-              Sexe,
-              Type_candidat,
-              NumPermis,
-              convert(LivPermis),
-              convert(ExpPermis),
-              CategoriePermis.toString(),
-              Typepermis,
-              convert(Date_ins),
-            );
+            if (props.onClick.name === "addCondidat") {
+              props.onClick(
+                Num_insc,
+                convert(Date_ins),
+                Nom,
+                Prenom,
+                convert(selectedDate),
+                Lieu,
+                Niveau,
+                Adresse,
+                PrenomPere,
+                Sexe,
+                Type_candidat,
+                NumPermis,
+                convert(LivPermis),
+                CategoriePermis.toString(),
+                Typepermis,
+                convert(Date_ins)
+              );
+            } else if (props.onClick.name === "updateCandidat") {
+              props.onClick(
+                NUM_INS,
+                numeroCandidat,
+                convert(DATE_INS),
+                Nom,
+                Prenom,
+                convert(selectedDate),
+                Lieu,
+                Niveau,
+                Adresse,
+                PrenomPere,
+                Sexe,
+                Type_candidat,
+                NumPermis,
+                convert(LivPermis),
+                CategoriePermis.toString(),
+                Typepermis,
+                convert(Date_ins)
+              );
+            }
           } catch (err) {
             console.log(err);
           }

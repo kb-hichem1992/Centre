@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profil() {
   const classes = useStyles();
-  const { userData, setstate } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const [openSnack, setOpenSnack] = useState(false);
   const [oldpass, setoldpass] = useState("");
   const [newpass, setnewpass] = useState("");
@@ -70,7 +70,7 @@ export default function Profil() {
     setOpenSnack(false);
   };
   const updatePasseword = (password, username, admin, numeroAgrement) => {
-    Axios.put("https://transport-app-server.herokuapp.com/update_password", {
+    Axios.put("http://localhost:3001/update_password", {
       password: password,
       username: username,
       admin: admin,

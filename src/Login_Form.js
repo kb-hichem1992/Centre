@@ -37,15 +37,13 @@ export default function LoginForm({ setstate, user, setUser }) {
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
 
-
   useEffect(() => {
-    fetch(`https://transport-app-server.herokuapp.com/api/getUser/${userName}/${password}`)
+    fetch(
+      `${process.env.REACT_APP_API_URL}/api/getUser/${userName}/${password}`
+    )
       .then((response) => response.json())
       .then((json) => setUser(json));
   }, [userName, password, setUser]);
-
-
-
 
   return (
     <Container component="main" maxWidth="xs">
@@ -87,10 +85,10 @@ export default function LoginForm({ setstate, user, setUser }) {
             color="primary"
             className={classes.submit}
             onClick={() => {
-              if(Object.keys(user).length !== 0){
-                setstate(true)
-              }else{
-                alert('إسم المستخدم أو الرقن السري خاطئ')
+              if (Object.keys(user).length !== 0) {
+                setstate(true);
+              } else {
+                alert("إسم المستخدم أو الرقن السري خاطئ");
               }
             }}
           >

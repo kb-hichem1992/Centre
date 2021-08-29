@@ -29,7 +29,9 @@ import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import AppBrevet from "./Brevet/Brevet.js";
 import { UserContext } from "./UserContext";
 import Profil from "./Profil";
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import SearchTable from "./Formation/Search.js";
+import SearchIcon from "@material-ui/icons/Search";
 
 const drawerWidth = 180;
 
@@ -224,6 +226,14 @@ export default function Dashboard() {
           </div>
           <Divider />
           <List>
+            <Link to="/" className={classes.link}>
+              <ListItem button>
+                <ListItemIcon>
+                  <SearchIcon />
+                </ListItemIcon>
+                <ListItemText primary="البحث" />
+              </ListItem>
+            </Link>
             <Link to="/candidat" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
@@ -268,20 +278,10 @@ export default function Dashboard() {
           <Container maxWidth="lg" className={classes.container}>
             <Grid item xs={12}>
               <Switch>
-                <Route
-                  path="/"
-                  exact
-                  render={(props) => (
-                    <AppFor
-                      {...props}
-                      id={"https://transport-app-server.herokuapp.com/api/get_form"}
-                    />
-                  )}
-                />
-                <Route path="/" render={<div> welcome </div>} exact />
+                <Route path="/" exact render={() => <SearchTable />} />
                 <Route path="/op/mor">
                   <AppOp
-                    id={"https://transport-app-server.herokuapp.com/api/get_op/mor"}
+                    id={process.env.REACT_APP_API_URL + "/api/get_op/mor"}
                     Title={"Liste des opérateurs/Personne Morale"}
                   />
                 </Route>
@@ -290,7 +290,7 @@ export default function Dashboard() {
                   render={(props) => (
                     <AppOp
                       {...props}
-                      id={"https://transport-app-server.herokuapp.com/api/get_op/phy"}
+                      id={process.env.REACT_APP_API_URL + "/api/get_op/phy"}
                       Title={"Liste des opérateurs/Personne Physique"}
                     />
                   )}
@@ -300,7 +300,7 @@ export default function Dashboard() {
                   render={(props) => (
                     <AppFor
                       {...props}
-                      id={"https://transport-app-server.herokuapp.com/api/get_form"}
+                      id={process.env.REACT_APP_API_URL + "/api/get_form"}
                     />
                   )}
                 />
@@ -309,7 +309,7 @@ export default function Dashboard() {
                   render={(props) => (
                     <AppCand
                       {...props}
-                      id={"https://transport-app-server.herokuapp.com/api/get_candidat"}
+                      id={process.env.REACT_APP_API_URL + "/api/get_candidat"}
                     />
                   )}
                 />
@@ -318,8 +318,8 @@ export default function Dashboard() {
                   render={(props) => (
                     <AppVeh
                       {...props}
-                      id={"https://transport-app-server.herokuapp.com/api/get_veh_Mar"}
-                      id2={"https://transport-app-server.herokuapp.com/api/get_veh_voyag"}
+                      id={process.env.REACT_APP_API_URL + "/api/get_veh_Mar"}
+                      id2={process.env.REACT_APP_API_URL + "/api/get_veh_voyag"}
                     />
                   )}
                 />
@@ -328,11 +328,11 @@ export default function Dashboard() {
                   render={(props) => (
                     <AppBrevet
                       {...props}
-                      id={"https://transport-app-server.herokuapp.com/api/get_brevet"}
+                      id={`http://64.225.69.7/api/get_brevet/283`}
                     />
                   )}
                 />
-                <Route path="/Profile" render={(props) => <Profil/>} />
+                <Route path="/Profile" render={(props) => <Profil />} />
               </Switch>
             </Grid>
           </Container>

@@ -62,12 +62,11 @@ export default function CandidatInfo(props) {
     SEX_CONDIDAT,
     NUM_PERMIS,
     DATE_LIV_PERMIS,
-    DATE_EXP_PERMIS,
     CATEGORIE_PERMIS,
     TYPE_PERMIS,
     DATE_INS,
     TYPE_CANDIDAT,
-  } = props.values;
+  } = props.values  || [];
 
   return (
     <Fragment>
@@ -102,9 +101,9 @@ export default function CandidatInfo(props) {
               variant="h6"
               paragraph={true}
             >
-              : نهاية الصلاحية {" "}
+              :  رقم الهاتف {" "}
               <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {convert(DATE_EXP_PERMIS)}
+                
               </Typography>
             </Typography>
             <Typography

@@ -47,7 +47,7 @@ export default function PasseFrom(props) {
   const classes = useStyles();
 
 
-  const { NUMERO_FORMATION, NUMERO_AGREMENT, NUM_INS, GROUPE, NOTE, REMARQUE , DATE_INS, NUM_PERMIS } = props.values || "";
+  const { NUMERO_FORMATION, NUMERO_AGREMENT, NUM_INS, GROUPE, NOTE, REMARQUE , DATE_INS, NUM_PERMIS } = props.values || [];
 
   const [numeroFormation] = useState(NUMERO_FORMATION);
   const [numeroCandidat] = useState(NUM_INS);

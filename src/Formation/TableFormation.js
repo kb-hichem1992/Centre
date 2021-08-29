@@ -75,13 +75,13 @@ export default function TableFormation(props) {
   }
 
   useEffect(() => {
-    fetch("https://transport-app-server.herokuapp.com/api/get_form")
+    fetch("http://localhost:3001/api/get_form")
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, []);
 
   useEffect(() => {
-    fetch("https://transport-app-server.herokuapp.com/api/get_passe")
+    fetch("http://localhost:3001/api/get_passe")
       .then((response) => response.json())
       .then((json) => setpassdata(json));
   }, []);
@@ -108,7 +108,7 @@ export default function TableFormation(props) {
     groupe
   ) => {
     axios
-      .post("https://transport-app-server.herokuapp.com/Add_passe", {
+      .post("http://localhost:3001/Add_passe", {
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
         Num_permis: Num_permis,
@@ -136,7 +136,7 @@ export default function TableFormation(props) {
         el.NUM_INS === numeroCandidat &&
         convert(el.DATE_INS) === convert(Date_ins) &&
         el.NUMERO_FORMATION === Number(numeroFormation) &&
-        el.NUMERO_AGREMENT === numeroAgrement 
+        el.NUMERO_AGREMENT === numeroAgrement
       ) {
         return true;
       } else {
@@ -177,13 +177,13 @@ export default function TableFormation(props) {
         <GridComponent
           dataSource={data}
           allowPaging={true}
-          pageSettings={{ pageSize: 5 }}
+          pageSettings={{ pageSize: 50 }}
           allowFiltering={true}
-          allowGrouping={true}
+          allowGrouping={true}       
           filterSettings={filter}
           allowResizing={true}
           allowSorting={true}
-          height={100}
+          height={250}
           ref={TableRef}
           enableRtl={true}
           locale="ar-AE"
@@ -217,7 +217,6 @@ export default function TableFormation(props) {
             className={classes.newButton}
             disabled={values === undefined ? true : false}
             onClick={() => {
-
               if (
                 dejaInscrit(
                   NUM_PERMIS,

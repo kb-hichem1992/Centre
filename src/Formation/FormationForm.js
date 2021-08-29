@@ -71,7 +71,7 @@ export default function Form(props) {
   };
 
   useEffect(() => {
-    fetch("https://transport-app-server.herokuapp.com/api/get_form")
+    fetch("http://localhost:3001/api/get_form")
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [data]);

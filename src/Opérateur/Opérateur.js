@@ -43,7 +43,7 @@ export default function Opérateur(props) {
   });
   const [data, setdata] = useState([]);
   useEffect(() => {
-    fetch("https://transport-app-server.herokuapp.com/api/getOp")
+    fetch("http://localhost:3001/api/getOp")
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [data]);

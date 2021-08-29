@@ -32,6 +32,8 @@ import PrintIcon from "@material-ui/icons/Print";
 import AlertDialog from "../components/controls/Dialog";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import BrevetDateForm from "./BrevetDateForm.js";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
@@ -103,6 +105,7 @@ export default function AppBrevet({ id }) {
   const [etat, setEtat] = useState(false);
   const [open, setOpen] = useState(false);
   const [openSnack, setOpenSnack] = useState(false);
+  const [openDateBrevet, setopenDateBrevet] = useState(false);
 
   useEffect(() => {
     fetch(id)
@@ -126,7 +129,7 @@ export default function AppBrevet({ id }) {
     GROUPE
   ) => {
     axios
-      .put("https://transport-app-server.herokuapp.com/insert_brevet", {
+      .put("http://localhost:3001/insert_brevet", {
         NumeroBrevet: NumeroBrevet,
         LivBrevet: LivBrevet,
         ExpBrevet: ExpBrevet,
@@ -151,7 +154,7 @@ export default function AppBrevet({ id }) {
     numeroAgrement
   ) => {
     axios
-      .put("https://transport-app-server.herokuapp.com/Printed", {
+      .put("http://localhost:3001/Printed", {
         numeroCandidat: numeroCandidat,
         Num_permis: Num_permis,
         dateins: dateins,
@@ -215,14 +218,13 @@ export default function AppBrevet({ id }) {
     if (reason === "clickaway") {
       return;
     }
-
     setOpenSnack(false);
   };
 
   const showPdf = (e) => {
     e.preventDefault();
     if (Values.PRINT === 1) {
-      setOpen(true)
+      setOpen(true);
     } else {
       setPrinted(
         Values.NUM_INS,
@@ -234,12 +236,10 @@ export default function AppBrevet({ id }) {
       );
       handleClick();
       window.open(
-        "https://transport-app-server.herokuapp.com/report/DIPLOME/" +
+        "http://localhost:3001/report/DIPLOME/" +
           Values.NUM_INS +
           "/" +
           Values.NUMERO_FORMATION +
-          "/" +
-          Values.NUM_PERMIS +
           "/" +
           Values.DATE_INS +
           "/" +
@@ -274,6 +274,19 @@ export default function AppBrevet({ id }) {
             }
           />
         </form>
+        <Button
+          text="تاريخ الصلاحية"
+          variant="outlined"
+          size="small"
+          startIcon={<EditOutlinedIcon />}
+          className={classes.newButton}
+          disabled={
+            Values === undefined || userData[0].ADMIN !== "admin" ? true : false
+          }
+          onClick={() => {
+            setopenDateBrevet(true);
+          }}
+        />
       </div>
       <div className={classes.container}>
         <Paper className={classes.paper}>
@@ -300,6 +313,14 @@ export default function AppBrevet({ id }) {
                 clipMode="EllipsisWithTooltip"
               />
               <ColumnDirective
+                field="DATE_EMISSION"
+                headerText="تاريخ التسليم"
+                type="date"
+                format="dd/MM/yyyy"
+                clipMode="EllipsisWithTooltip"
+                allowFiltering={false}
+              />
+              <ColumnDirective
                 field="NOM_CANDIDAT"
                 headerText="اللقب"
                 clipMode="EllipsisWithTooltip"
@@ -310,13 +331,8 @@ export default function AppBrevet({ id }) {
                 clipMode="EllipsisWithTooltip"
               />
               <ColumnDirective
-                field="PRENOM_PERE"
-                headerText="إسم الأب"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
                 field="LIV_BREVET"
-                headerText="تاريخ الإصدار"
+                headerText="تاريخ بداية الصلاحية"
                 type="date"
                 format="dd/MM/yyyy"
                 clipMode="EllipsisWithTooltip"
@@ -333,6 +349,16 @@ export default function AppBrevet({ id }) {
               <ColumnDirective
                 field="TYPE_FORMATION"
                 headerText="نوع الدورة"
+                clipMode="EllipsisWithTooltip"
+              />
+              <ColumnDirective
+                field="NUMERO_FORMATION"
+                headerText="رقم الدورة"
+                clipMode="EllipsisWithTooltip"
+              />
+              <ColumnDirective
+                field="GROUPE"
+                headerText=" الفوج"
                 clipMode="EllipsisWithTooltip"
               />
             </ColumnsDirective>
@@ -362,6 +388,18 @@ export default function AppBrevet({ id }) {
           data={data}
         />
       </Popup>
+      <Popup
+        title="تاريخ الصلاحية"
+        openPopup={openDateBrevet}
+        setOpenPopup={setopenDateBrevet}
+      >
+        <BrevetDateForm
+          setEtat={setEtat}
+          etat={etat}
+          Close={setopenDateBrevet}
+          values={Values}
+        />
+      </Popup>
       <AlertDialog
         title="تنبيه"
         message="هذه الشهادة قد طبعت من قبل. هل تود طباعتها من جديد؟"
@@ -369,12 +407,10 @@ export default function AppBrevet({ id }) {
         setOpen={setOpen}
         method={() => {
           window.open(
-            "https://transport-app-server.herokuapp.com/report/DIPLOME/" +
+            "http://localhost:3001/report/DIPLOME/" +
               Values.NUM_INS +
               "/" +
               Values.NUMERO_FORMATION +
-              "/" +
-              Values.NUM_PERMIS +
               "/" +
               Values.DATE_INS +
               "/" +
