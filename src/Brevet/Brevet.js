@@ -129,7 +129,7 @@ export default function AppBrevet({ id }) {
     GROUPE
   ) => {
     axios
-      .put("http://localhost:3001/insert_brevet", {
+      .put(process.env.REACT_APP_API_URL + "/insert_brevet", {
         NumeroBrevet: NumeroBrevet,
         LivBrevet: LivBrevet,
         ExpBrevet: ExpBrevet,
@@ -154,7 +154,7 @@ export default function AppBrevet({ id }) {
     numeroAgrement
   ) => {
     axios
-      .put("http://localhost:3001/Printed", {
+      .put(process.env.REACT_APP_API_URL + "/Printed", {
         numeroCandidat: numeroCandidat,
         Num_permis: Num_permis,
         dateins: dateins,
@@ -236,7 +236,8 @@ export default function AppBrevet({ id }) {
       );
       handleClick();
       window.open(
-        "http://localhost:3001/report/DIPLOME/" +
+        process.env.REACT_APP_API_URL +
+          "/report/DIPLOME/" +
           Values.NUM_INS +
           "/" +
           Values.NUMERO_FORMATION +
@@ -407,7 +408,8 @@ export default function AppBrevet({ id }) {
         setOpen={setOpen}
         method={() => {
           window.open(
-            "http://localhost:3001/report/DIPLOME/" +
+            process.env.REACT_APP_API_URL +
+              "/report/DIPLOME/" +
               Values.NUM_INS +
               "/" +
               Values.NUMERO_FORMATION +

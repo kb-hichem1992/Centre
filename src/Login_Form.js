@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -37,13 +37,18 @@ export default function LoginForm({ setstate, user, setUser }) {
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    fetch(
-      `${process.env.REACT_APP_API_URL}/api/getUser/${userName}/${password}`
-    )
+  const LoginUser = () => {
+    const url = `${process.env.REACT_APP_API_URL}/api/getUser/${userName}/${password}`;
+    fetch(url)
       .then((response) => response.json())
-      .then((json) => setUser(json));
-  }, [userName, password, setUser]);
+      .then((json) => {
+        setUser(json);
+        setstate(true);
+      })
+      .catch(() => {
+        alert("إسم المستخدم أو كلمة المرور خاطىء");
+      });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -84,13 +89,7 @@ export default function LoginForm({ setstate, user, setUser }) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => {
-              if (Object.keys(user).length !== 0) {
-                setstate(true);
-              } else {
-                alert("إسم المستخدم أو الرقن السري خاطئ");
-              }
-            }}
+            onClick={LoginUser}
           >
             دخول
           </Button>

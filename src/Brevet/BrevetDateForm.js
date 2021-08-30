@@ -92,7 +92,7 @@ export default function BrevetDateForm(props) {
     NumeroBrevet
   ) => {
     axios
-      .put("http://localhost:3001/insert_Date_brevet", {
+      .put(process.env.REACT_APP_API_URL +"/insert_Date_brevet", {
         LivBrevt: LivBrevt,
         ExpBrevet: ExpBrevet,
         Emission: Emission,

@@ -47,7 +47,7 @@ export default function GroupeForm(props) {
     Num_permis
   ) => {
     axios
-      .put("http://localhost:3001/update_groupe_number", {
+      .put(process.env.REACT_APP_API_URL +"/update_groupe_number", {
         number: number,
         numeroCandidat: numeroCandidat,
         Num_permis: Num_permis,

@@ -70,7 +70,7 @@ export default function Profil() {
     setOpenSnack(false);
   };
   const updatePasseword = (password, username, admin, numeroAgrement) => {
-    Axios.put("http://localhost:3001/update_password", {
+    Axios.put(process.env.REACT_APP_API_URL + "/update_password", {
       password: password,
       username: username,
       admin: admin,

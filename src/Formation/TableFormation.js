@@ -75,13 +75,13 @@ export default function TableFormation(props) {
   }
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/get_form")
+    fetch(process.env.REACT_APP_API_URL +"/api/get_form")
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/get_passe")
+    fetch(process.env.REACT_APP_API_URL +"/api/get_passe")
       .then((response) => response.json())
       .then((json) => setpassdata(json));
   }, []);
@@ -108,7 +108,7 @@ export default function TableFormation(props) {
     groupe
   ) => {
     axios
-      .post("http://localhost:3001/Add_passe", {
+      .post(process.env.REACT_APP_API_URL +"/Add_passe", {
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
         Num_permis: Num_permis,

@@ -106,7 +106,7 @@ function AppFor({ id }) {
     Fin
   ) => {
     axios
-      .post("http://localhost:3001/Add_formation", {
+      .post(process.env.REACT_APP_API_URL +"/Add_formation", {
         numeroFormation: numeroFormation,
         numeroAgrement: numeroAgrement,
         groupe: groupe,
@@ -127,7 +127,7 @@ function AppFor({ id }) {
     Fin
   ) => {
     axios
-      .put("http://localhost:3001/update_formation", {
+      .put(process.env.REACT_APP_API_URL +"/update_formation", {
         Type: Type,
         Debut: Debut,
         Fin: Fin,
@@ -142,7 +142,7 @@ function AppFor({ id }) {
   const deleteFormation = (numeroFormation, numeroAgrement, groupe) => {
     axios
       .delete(
-        `http://localhost:3001/delete_formation/${numeroFormation}/${numeroAgrement}/${groupe}`,
+        `${process.env.REACT_APP_API_URL}/delete_formation/${numeroFormation}/${numeroAgrement}/${groupe}`,
         {}
       )
       .then(() => {

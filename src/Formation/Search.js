@@ -32,7 +32,7 @@ export default function SearchTable() {
   const numeroAgrement = userData[0].NUMERO_AGREMENT;
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/Passing_List/${numeroAgrement}`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`)
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [numeroAgrement]);

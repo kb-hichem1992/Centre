@@ -71,7 +71,7 @@ export default function Form(props) {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/get_form")
+    fetch(process.env.REACT_APP_API_URL +"/api/get_form")
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [data]);

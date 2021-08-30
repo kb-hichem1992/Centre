@@ -92,7 +92,7 @@ export default function TableCandForm({
 
   useEffect(() => {
     fetch(
-      `http://localhost:3001/api/get_candidat_form/${numeroFormation}/${numeroAgrement}/${groupe}`
+      `${process.env.REACT_APP_API_URL}/api/get_candidat_form/${numeroFormation}/${numeroAgrement}/${groupe}`
     )
       .then((response) => response.json())
       .then((json) => setdata(json));
@@ -144,7 +144,7 @@ export default function TableCandForm({
     numeroAgrement
   ) => {
     axios
-      .put("http://localhost:3001/update_passe", {
+      .put(process.env.REACT_APP_API_URL + "/update_passe", {
         remarque: remarque,
         note: note,
         numeroCandidat: numeroCandidat,
@@ -168,7 +168,7 @@ export default function TableCandForm({
     GROUPE
   ) => {
     axios
-      .put("http://localhost:3001/insert_brevet", {
+      .put(process.env.REACT_APP_API_URL + "/insert_brevet", {
         NumeroBrevet: NumeroBrevet,
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
@@ -190,7 +190,7 @@ export default function TableCandForm({
     numeroAgrement
   ) => {
     axios
-      .post(`http://localhost:3001/delete_passe`, {
+      .post(`${process.env.REACT_APP_API_URL}/delete_passe`, {
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
         Num_permis: Num_permis,
@@ -348,7 +348,7 @@ export default function TableCandForm({
               field="CATEGORIE_PERMIS"
               headerText=" أصناف رخصة السياقة "
               clipMode="EllipsisWithTooltip"
-              Width='100'
+              Width="100"
             />
             <ColumnDirective
               field="DATE_LIV_PERMIS"

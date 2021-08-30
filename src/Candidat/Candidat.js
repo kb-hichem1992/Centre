@@ -172,7 +172,7 @@ export default function AppCand({ id }) {
     categorie_permis,
     type_permis
   ) => {
-    Axios.post("http://localhost:3001/Add_condidat", {
+    Axios.post(process.env.REACT_APP_API_URL +"/Add_condidat", {
       numeroCandidat: numeroCandidat,
       Date_ins: Date_ins,
       Nom: Nom,
@@ -211,7 +211,7 @@ export default function AppCand({ id }) {
     type_permis,
     Date_ins,
   ) => {
-    Axios.put("http://localhost:3001/update_candidat", {
+    Axios.put(process.env.REACT_APP_API_URL +"/update_candidat", {
       numins:numins,
       Nom: Nom,
       Prénom: Prénom,
@@ -235,7 +235,7 @@ export default function AppCand({ id }) {
   };
 
   const deleteCandidat = (Num_permis, Date_ins, numeroCandidat) => {
-    Axios.post(`http://localhost:3001/delete_candidat`, {
+    Axios.post(process.env.REACT_APP_API_URL +`/delete_candidat`, {
       Num_permis: Num_permis,
       Date_ins: Date_ins,
       numeroCandidat: numeroCandidat,
@@ -353,7 +353,7 @@ export default function AppCand({ id }) {
           <form
             action={
               Values !== undefined
-                ? "http://localhost:3001/report/EVALUATION/" +
+                ? process.env.REACT_APP_API_URL +"/report/EVALUATION/" +
                   Values.NUM_INS +
                   "/" +
                   Values.DATE_INS +

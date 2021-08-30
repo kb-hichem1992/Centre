@@ -69,7 +69,7 @@ export default function BrevetForm(props) {
     numeroAgrement
   ) => {
     axios
-      .put("http://localhost:3001/Printed", {
+      .put(process.env.REACT_APP_API_URL + "/Printed", {
         numeroCandidat: numeroCandidat,
         Num_permis: Num_permis,
         dateins: dateins,
@@ -179,7 +179,8 @@ export default function BrevetForm(props) {
             GROUPE
           );
           window.open(
-            "http://localhost:3001/report/DIPLOME/" +
+            process.env.REACT_APP_API_URL +
+              "/report/DIPLOME/" +
               NUM_INS +
               "/" +
               NUMERO_FORMATION +
@@ -219,7 +220,8 @@ export default function BrevetForm(props) {
             GROUPE
           );
           window.open(
-            "http://localhost:3001/report/DIPLOME/" +
+            process.env.REACT_APP_API_URL +
+              "/report/DIPLOME/" +
               NUM_INS +
               "/" +
               NUMERO_FORMATION +

@@ -328,7 +328,7 @@ export default function Dashboard() {
                   render={(props) => (
                     <AppBrevet
                       {...props}
-                      id={`http://64.225.69.7/api/get_brevet/283`}
+                      id={`${process.env.REACT_APP_API_URL}/api/get_brevet/${numeroAgrement}`}
                     />
                   )}
                 />
