@@ -130,7 +130,7 @@ export default function AppCand({ id }) {
     fetch(id)
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, [id, data, etat]);
+  }, [id, etat]);
 
   function convert(date) {
     const current_datetime = new Date(date);
