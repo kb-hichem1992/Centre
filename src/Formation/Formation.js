@@ -95,7 +95,7 @@ function AppFor({ id }) {
     fetch(id)
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, [id, data, etat]);
+  }, [id, etat]);
 
   const addFormation = (
     numeroFormation,
