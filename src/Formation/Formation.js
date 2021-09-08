@@ -98,7 +98,6 @@ function AppFor({ id }) {
       .then((json) => setdata(json));
   }, [id, etat]);
 
-
   const updateFormation = (
     numeroFormation,
     numeroAgrement,
@@ -167,7 +166,7 @@ function AppFor({ id }) {
     Fin
   ) => {
     axios
-      .post(process.env.REACT_APP_API_URL + "/Add_formation", {
+      .post(process.env.REACT_APP_API_URL + `/Add_formation`, {
         numeroFormation: numeroFormation,
         numeroAgrement: numeroAgrement,
         groupe: groupe,
