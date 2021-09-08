@@ -153,7 +153,7 @@ export default function Form(props) {
     Fin
   ) => {
     axios
-      .post(process.env.REACT_APP_API_URL + "/Add_formation", {
+      .post(`${process.env.REACT_APP_API_URL}/Add_formation`, {
         numeroFormation: numeroFormation,
         numeroAgrement: numeroAgrement,
         groupe: groupe,
@@ -256,7 +256,7 @@ export default function Form(props) {
         open={open}
         setOpen={setOpen}
         method={() => {
-          addFormation(
+          props.onClick(
             numeroFormation,
             numeroAgrement,
             groupe,
