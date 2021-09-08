@@ -91,6 +91,7 @@ function AppFor({ id }) {
   const [openModifier, setOpenModifier] = useState(false);
   const [etat, setEtat] = useState(false);
   const [open, setopen] = useState(false);
+  const [Values, setValues] = useState();
   useEffect(() => {
     fetch(id)
       .then((response) => response.json())
@@ -106,7 +107,7 @@ function AppFor({ id }) {
     Fin
   ) => {
     axios
-      .post(process.env.REACT_APP_API_URL +"/Add_formation", {
+      .post(process.env.REACT_APP_API_URL + "/Add_formation", {
         numeroFormation: numeroFormation,
         numeroAgrement: numeroAgrement,
         groupe: groupe,
@@ -127,7 +128,7 @@ function AppFor({ id }) {
     Fin
   ) => {
     axios
-      .put(process.env.REACT_APP_API_URL +"/update_formation", {
+      .put(process.env.REACT_APP_API_URL + "/update_formation", {
         Type: Type,
         Debut: Debut,
         Fin: Fin,
@@ -167,18 +168,18 @@ function AppFor({ id }) {
 
   const TableRef = useRef(null);
 
-  function rowSelected() {
+  async function rowSelected() {
     try {
-      const selectedrecords = TableRef.current.getSelectedRecords();
+      const selectedrecords = await TableRef.current.getSelectedRecords();
       const obj = JSON.stringify(selectedrecords);
       const parsedobj = JSON.parse(obj);
-      return parsedobj[0];
+      setValues(parsedobj[0]);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const Values = rowSelected();
+  //  const Values = rowSelected();
 
   return (
     <Fragment>
@@ -241,6 +242,10 @@ function AppFor({ id }) {
             ref={TableRef}
             enableRtl={true}
             locale="ar-AE"
+            rowSelected={rowSelected}
+            rowDeselected={() => {
+              setValues(undefined);
+            }}
           >
             <ColumnsDirective>
               <ColumnDirective

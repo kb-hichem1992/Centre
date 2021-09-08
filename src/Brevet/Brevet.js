@@ -106,6 +106,7 @@ export default function AppBrevet({ id }) {
   const [open, setOpen] = useState(false);
   const [openSnack, setOpenSnack] = useState(false);
   const [openDateBrevet, setopenDateBrevet] = useState(false);
+  const [Values, setValues] = useState();
 
   useEffect(() => {
     fetch(id)
@@ -198,17 +199,17 @@ export default function AppBrevet({ id }) {
 
   const TableRef2 = useRef(null);
 
-  function rowSelected() {
+  async function rowSelected() {
     try {
-      const selectedrecords = TableRef2.current.getSelectedRecords();
+      const selectedrecords = await TableRef2.current.getSelectedRecords();
       const obj = JSON.stringify(selectedrecords);
       const parsedobj = JSON.parse(obj);
-      return parsedobj[0];
+      setValues(parsedobj[0]);
     } catch (error) {
       console.log(error);
     }
   }
-  const Values = rowSelected();
+  //  const Values = rowSelected();
   const { userData } = useContext(UserContext);
   const handleClick = () => {
     setOpenSnack(true);
@@ -306,6 +307,10 @@ export default function AppBrevet({ id }) {
             locale="ar-AE"
             contextMenuItems={contextMenuItems}
             allowExcelExport={true}
+            rowSelected={rowSelected}
+            rowDeselected={() => {
+              setValues(undefined);
+            }}
           >
             <ColumnsDirective>
               <ColumnDirective

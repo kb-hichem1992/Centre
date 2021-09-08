@@ -124,6 +124,7 @@ export default function AppCand({ id }) {
   const [openDetail, setOpenDetail] = useState(false);
   const [etat, setEtat] = useState(false);
   const [open, setOpen] = useState(false);
+  const [Values, setValues] = useState();
 
   const { userData } = useContext(UserContext);
   useEffect(() => {
@@ -172,7 +173,7 @@ export default function AppCand({ id }) {
     categorie_permis,
     type_permis
   ) => {
-    Axios.post(process.env.REACT_APP_API_URL +"/Add_condidat", {
+    Axios.post(process.env.REACT_APP_API_URL + "/Add_condidat", {
       numeroCandidat: numeroCandidat,
       Date_ins: Date_ins,
       Nom: Nom,
@@ -209,10 +210,10 @@ export default function AppCand({ id }) {
     date_liv,
     categorie_permis,
     type_permis,
-    Date_ins,
+    Date_ins
   ) => {
-    Axios.put(process.env.REACT_APP_API_URL +"/update_candidat", {
-      numins:numins,
+    Axios.put(process.env.REACT_APP_API_URL + "/update_candidat", {
+      numins: numins,
       Nom: Nom,
       Prénom: Prénom,
       Date_naissance: Date_naissance,
@@ -235,7 +236,7 @@ export default function AppCand({ id }) {
   };
 
   const deleteCandidat = (Num_permis, Date_ins, numeroCandidat) => {
-    Axios.post(process.env.REACT_APP_API_URL +`/delete_candidat`, {
+    Axios.post(process.env.REACT_APP_API_URL + `/delete_candidat`, {
       Num_permis: Num_permis,
       Date_ins: Date_ins,
       numeroCandidat: numeroCandidat,
@@ -270,15 +271,17 @@ export default function AppCand({ id }) {
     TYPE_PERMIS: "القديم",
   };
 
-  function rowSelected() {
+  async function rowSelected() {
     try {
-      const selectedrecords = TableRef2.current.getSelectedRecords();
+      const selectedrecords = await TableRef2.current.getSelectedRecords();
       const obj = JSON.stringify(selectedrecords);
       const parsedobj = JSON.parse(obj);
-      return parsedobj[0];
-    } catch (error) {}
+      setValues(parsedobj[0]);
+    } catch (error) {
+      console.log(error);
+    }
   }
-  const Values = rowSelected();
+  // const Values = rowSelected();
 
   // const numeroAgrement = userData[0].NUMERO_AGREMENT;
 
@@ -353,7 +356,8 @@ export default function AppCand({ id }) {
           <form
             action={
               Values !== undefined
-                ? process.env.REACT_APP_API_URL +"/report/EVALUATION/" +
+                ? process.env.REACT_APP_API_URL +
+                  "/report/EVALUATION/" +
                   Values.NUM_INS +
                   "/" +
                   Values.DATE_INS +
@@ -410,6 +414,10 @@ export default function AppCand({ id }) {
             allowExcelExport={true}
             allowPdfExport={true}
             locale="ar-AE"
+            rowSelected={rowSelected}
+            rowDeselected={() => {
+              setValues(undefined);
+            }}
           >
             <ColumnsDirective>
               <ColumnDirective

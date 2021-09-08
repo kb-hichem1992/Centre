@@ -89,6 +89,7 @@ export default function TableCandForm({
   const [open, setOpen] = useState(false);
   const [openNumero, setOpenNumero] = useState(false);
   const numeroAgrement = userData[0].NUMERO_AGREMENT;
+  const [Values, setValues] = useState();
 
   useEffect(() => {
     fetch(
@@ -202,17 +203,16 @@ export default function TableCandForm({
         setEtat(!etat);
       });
   };
-  function rowSelected() {
+  async function rowSelected() {
     try {
-      const selectedrecords = TableRef3.current.getSelectedRecords();
+      const selectedrecords = await TableRef3.current.getSelectedRecords();
       const obj = JSON.stringify(selectedrecords);
       const parsedobj = JSON.parse(obj);
-      return parsedobj[0];
+      setValues(parsedobj[0]);
     } catch (error) {
       console.log(error);
     }
   }
-  const Values = rowSelected();
 
   return (
     <Fragment>
@@ -311,6 +311,10 @@ export default function TableCandForm({
           groupSettings={GroupSettingsModel}
           contextMenuItems={contextMenuItems}
           allowExcelExport={true}
+          rowSelected={rowSelected}
+          rowDeselected={() => {
+            setValues(undefined);
+          }}
         >
           <ColumnsDirective>
             <ColumnDirective
