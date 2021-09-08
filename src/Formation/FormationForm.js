@@ -74,7 +74,7 @@ export default function Form(props) {
     fetch(process.env.REACT_APP_API_URL +"/api/get_form")
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, [data]);
+  }, []);
   // convertir le format de la Date en yyyy-mm-dd
   function convert(date) {
     const current_datetime = new Date(date);
