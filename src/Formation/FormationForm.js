@@ -72,7 +72,7 @@ export default function Form(props) {
   };
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL +"/api/get_form")
+    fetch(process.env.REACT_APP_API_URL + "/api/get_form")
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, []);
@@ -112,7 +112,7 @@ export default function Form(props) {
         return false;
       }
     });
-      };
+  };
 
   const add = () => {
     const dt1 = new Date(debut);
@@ -165,7 +165,6 @@ export default function Form(props) {
         props.setEtat(!props.etat);
       });
   };
-
 
   return (
     <Fragment>
@@ -228,13 +227,23 @@ export default function Form(props) {
               variant="contained"
               color="primary"
               size="small"
+              // onClick={() => {
+              // if (props.onClick.name === "addFormation") {
+              //  add();
+              // }
+              //if (props.onClick.name === "updateFormation") {
+              // update();
+              // }
+              //}}
               onClick={() => {
-                if (props.onClick.name === "addFormation") {
-                  add();
-                }
-                if (props.onClick.name === "updateFormation") {
-                  update();
-                }
+                addFormation(
+                  numeroFormation,
+                  numeroAgrement,
+                  groupe,
+                  typeFormation,
+                  convert(debut),
+                  convert(fin)
+                );
               }}
             />
 
