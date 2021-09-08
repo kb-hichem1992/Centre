@@ -11,6 +11,7 @@ import {
 import FormControl from "@material-ui/core/FormControl";
 import Controls from "../components/controls/Controls";
 import AlertDialog from "../components/controls/Dialog";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -111,7 +112,7 @@ export default function Form(props) {
         return false;
       }
     });
-  };
+      };
 
   const add = () => {
     const dt1 = new Date(debut);
@@ -142,6 +143,29 @@ export default function Form(props) {
       }
     }
   };
+
+  const addFormation = (
+    numeroFormation,
+    numeroAgrement,
+    groupe,
+    Type,
+    Debut,
+    Fin
+  ) => {
+    axios
+      .post(process.env.REACT_APP_API_URL + "/Add_formation", {
+        numeroFormation: numeroFormation,
+        numeroAgrement: numeroAgrement,
+        groupe: groupe,
+        Type: Type,
+        Debut: Debut,
+        Fin: Fin,
+      })
+      .then(() => {
+        props.setEtat(!props.etat);
+      });
+  };
+
 
   return (
     <Fragment>
@@ -232,7 +256,7 @@ export default function Form(props) {
         open={open}
         setOpen={setOpen}
         method={() => {
-          props.onClick(
+          addFormation(
             numeroFormation,
             numeroAgrement,
             groupe,

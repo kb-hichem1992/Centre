@@ -98,27 +98,7 @@ function AppFor({ id }) {
       .then((json) => setdata(json));
   }, [id, etat]);
 
-  const addFormation = (
-    numeroFormation,
-    numeroAgrement,
-    groupe,
-    Type,
-    Debut,
-    Fin
-  ) => {
-    axios
-      .post(process.env.REACT_APP_API_URL + "/Add_formation", {
-        numeroFormation: numeroFormation,
-        numeroAgrement: numeroAgrement,
-        groupe: groupe,
-        Type: Type,
-        Debut: Debut,
-        Fin: Fin,
-      })
-      .then(() => {
-        setEtat(!etat);
-      });
-  };
+
   const updateFormation = (
     numeroFormation,
     numeroAgrement,
@@ -178,6 +158,27 @@ function AppFor({ id }) {
       console.log(error);
     }
   }
+  const addFormation = (
+    numeroFormation,
+    numeroAgrement,
+    groupe,
+    Type,
+    Debut,
+    Fin
+  ) => {
+    axios
+      .post(process.env.REACT_APP_API_URL + "/Add_formation", {
+        numeroFormation: numeroFormation,
+        numeroAgrement: numeroAgrement,
+        groupe: groupe,
+        Type: Type,
+        Debut: Debut,
+        Fin: Fin,
+      })
+      .then(() => {
+        setEtat(!etat);
+      });
+  };
 
   //  const Values = rowSelected();
 
@@ -301,6 +302,8 @@ function AppFor({ id }) {
           onClick={addFormation}
           Close={setOpenAjouter}
           values={initialvalues}
+          etat={etat}
+          setEtat={setEtat}
         />
       </Popup>
 
