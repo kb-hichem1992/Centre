@@ -66,7 +66,7 @@ export default function CandidatInfo(props) {
     TYPE_PERMIS,
     DATE_INS,
     TYPE_CANDIDAT,
-  } = props.values  || [];
+  } = props.values || [];
 
   return (
     <Fragment>
@@ -79,7 +79,7 @@ export default function CandidatInfo(props) {
               variant="h6"
               paragraph={true}
             >
-              : رقم رخسة السياقة {" "}
+              : رقم رخسة السياقة{" "}
               <Typography color="textPrimary" variant="h6" paragraph={true}>
                 {NUM_PERMIS}
               </Typography>
@@ -90,12 +90,12 @@ export default function CandidatInfo(props) {
               variant="h6"
               paragraph={true}
             >
-             : تاريخ الإصدار {" "}
+              : تاريخ الإصدار{" "}
               <Typography color="textPrimary" variant="h6" paragraph={true}>
                 {convert(DATE_LIV_PERMIS)}
               </Typography>
             </Typography>
-            <Typography
+            {/* <Typography
               align="right"
               color="textSecondary"
               variant="h6"
@@ -105,7 +105,7 @@ export default function CandidatInfo(props) {
               <Typography color="textPrimary" variant="h6" paragraph={true}>
                 
               </Typography>
-            </Typography>
+            </Typography> */}
             <Typography
               align="right"
               color="textSecondary"

@@ -107,7 +107,11 @@ export default function Candidat(props) {
   const { userData } = useContext(UserContext);
   const numeroAgrement = userData[0].NUMERO_AGREMENT;
   const Num_insc =
-    numeroCandidat + "-" + new Date().getFullYear() + "-" + numeroAgrement;
+    numeroCandidat +
+    "-" +
+    new Date(Date_ins).getFullYear() +
+    "-" +
+    numeroAgrement;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -196,12 +200,12 @@ export default function Candidat(props) {
       alert("تاريخ الميلاد خاطئ");
     } else if (
       CandidatExists(Num_insc, Date_ins, NumPermis) === true &&
-      props.onClick.name === "addCondidat"
+      props.type === "add"
     ) {
       alert("المترشح مسجل من قبل");
     } else if (
       CandidatExists(numeroCandidat, Date_ins, NumPermis) === true &&
-      props.onClick.name === "updateCandidat" &&
+      props.type === "update" &&
       textChanged === true
     ) {
       alert("المترشح مسجل من قبل");
@@ -212,6 +216,9 @@ export default function Candidat(props) {
     }
   };
 
+  const handleDateChange = (date) => {
+    setDate_ins(date);
+  };
   const niveauScolaire = ["ابتدائي", "متوسط", "ثانوي", "جامعي", "بدون مستوى"];
   const Type = ["متعاقد", "حر"];
 
@@ -234,7 +241,7 @@ export default function Candidat(props) {
               <Controls.DatePicker
                 label="تاريخ التسجيل"
                 value={Date_ins}
-                onChange={setDate_ins}
+                onChange={handleDateChange}
               />
               <FormControl>
                 <InputLabel id="demo-simple-select-label">
@@ -409,7 +416,9 @@ export default function Candidat(props) {
                   variant="contained"
                   color="primary"
                   size="small"
-                  onClick={Enregister}
+                  onClick={() => {
+                    Enregister();
+                  }}
                 />
                 <Controls.Button
                   text="إلغاء"
