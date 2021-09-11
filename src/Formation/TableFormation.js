@@ -28,6 +28,7 @@ export default function TableFormation(props) {
   const [data, setdata] = useState([]);
   const [passdata, setpassdata] = useState([]);
   const { NUM_INS, DATE_INS, NUM_PERMIS } = props.valeur;
+  const [Values, setValues] = useState();
 
   const [open, setOpen] = useState(false);
   const { userData } = useContext(UserContext);
@@ -75,29 +76,29 @@ export default function TableFormation(props) {
   }
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL +"/api/get_form")
+    fetch(process.env.REACT_APP_API_URL + "/api/get_form")
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, []);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL +"/api/get_passe")
+    fetch(process.env.REACT_APP_API_URL + "/api/get_passe")
       .then((response) => response.json())
       .then((json) => setpassdata(json));
   }, []);
 
-  function rowSelected() {
+  async function rowSelected() {
     try {
-      const selectedrecords = TableRef.current.getSelectedRecords();
+      const selectedrecords = await TableRef.current.getSelectedRecords();
       const obj = JSON.stringify(selectedrecords);
       const parsedobj = JSON.parse(obj);
-      return parsedobj[0];
+      setValues(parsedobj[0]);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const values = rowSelected();
+  //  const values = rowSelected();
 
   const AffecteFormation = (
     numeroCandidat,
@@ -108,7 +109,7 @@ export default function TableFormation(props) {
     groupe
   ) => {
     axios
-      .post(process.env.REACT_APP_API_URL +"/Add_passe", {
+      .post(process.env.REACT_APP_API_URL + "/Add_passe", {
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
         Num_permis: Num_permis,
@@ -179,7 +180,7 @@ export default function TableFormation(props) {
           allowPaging={true}
           pageSettings={{ pageSize: 50 }}
           allowFiltering={true}
-          allowGrouping={true}       
+          allowGrouping={true}
           filterSettings={filter}
           allowResizing={true}
           allowSorting={true}
@@ -187,6 +188,10 @@ export default function TableFormation(props) {
           ref={TableRef}
           enableRtl={true}
           locale="ar-AE"
+          rowSelected={rowSelected}
+          rowDeselected={() => {
+            setValues(undefined);
+          }}
         >
           <ColumnsDirective>
             <ColumnDirective field="NUMERO_FORMATION" headerText="رقم الدورة" />
@@ -215,16 +220,16 @@ export default function TableFormation(props) {
             variant="outlined"
             size="small"
             className={classes.newButton}
-            disabled={values === undefined ? true : false}
+            disabled={Values === undefined ? true : false}
             onClick={() => {
               if (
                 dejaInscrit(
                   NUM_PERMIS,
                   NUM_INS,
                   DATE_INS,
-                  values.NUMERO_FORMATION,
+                  Values.NUMERO_FORMATION,
                   numeroAgrement,
-                  values.GROUPE
+                  Values.GROUPE
                 ) === true
               ) {
                 alert("مسجل من قبل");
@@ -245,9 +250,9 @@ export default function TableFormation(props) {
             NUM_INS,
             convert(DATE_INS),
             NUM_PERMIS,
-            values.NUMERO_FORMATION,
+            Values.NUMERO_FORMATION,
             numeroAgrement,
-            values.GROUPE
+            Values.GROUPE
           );
           setOpen(false);
           props.Close(false);

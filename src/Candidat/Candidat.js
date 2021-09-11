@@ -126,6 +126,7 @@ export default function AppCand({ id }) {
   const [open, setOpen] = useState(false);
   const [Values, setValues] = useState();
 
+  
   const { userData } = useContext(UserContext);
   useEffect(() => {
     fetch(id)
