@@ -1,17 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Grid,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  TextField,
-} from "@material-ui/core";
+import { Grid, InputLabel, MenuItem, Paper, Select, TextField } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Controls from "../components/controls/Controls";
 import AlertDialog from "../components/controls/Dialog";
-import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,14 +39,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Form(props) {
   const classes = useStyles();
 
-  const {
-    NUMERO_FORMATION,
-    NUMERO_AGREMENT,
-    GROUPE,
-    TYPE_FORMATION,
-    DEBUT,
-    FIN,
-  } = props.values;
+  const { NUMERO_FORMATION, NUMERO_AGREMENT, GROUPE, TYPE_FORMATION, DEBUT, FIN } = props.values;
+
   const [data, setdata] = useState([]);
   const [numeroFormation, setnumeroFormation] = useState(NUMERO_FORMATION);
   const [numeroAgrement] = useState(NUMERO_AGREMENT);
@@ -81,22 +67,9 @@ export default function Form(props) {
     const current_datetime = new Date(date);
     const m = current_datetime.getMonth() + 1;
     if (m > 9) {
-      return (
-        current_datetime.getFullYear() +
-        "-" +
-        m +
-        "-" +
-        current_datetime.getDate()
-      );
+      return current_datetime.getFullYear() + "-" + m + "-" + current_datetime.getDate();
     } else {
-      return (
-        current_datetime.getFullYear() +
-        "-" +
-        0 +
-        m +
-        "-" +
-        current_datetime.getDate()
-      );
+      return current_datetime.getFullYear() + "-" + 0 + m + "-" + current_datetime.getDate();
     }
   }
 
@@ -144,28 +117,6 @@ export default function Form(props) {
     }
   };
 
-  const addFormation = (
-    numeroFormation,
-    numeroAgrement,
-    groupe,
-    Type,
-    Debut,
-    Fin
-  ) => {
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/Add_formation`, {
-        numeroFormation: numeroFormation,
-        numeroAgrement: numeroAgrement,
-        groupe: groupe,
-        Type: Type,
-        Debut: Debut,
-        Fin: Fin,
-      })
-      .then(() => {
-        props.setEtat(!props.etat);
-      });
-  };
-
   return (
     <Fragment>
       <Paper className={classes.pageContent}>
@@ -207,43 +158,27 @@ export default function Form(props) {
               >
                 <MenuItem value={"نقل البضائع"}>نقل البضائع</MenuItem>
                 <MenuItem value={"نقل المسافرين"}>نقل المسافرين</MenuItem>
-                <MenuItem value={"نفل المواد الخطيرة"}>
-                  نفل المواد الخطيرة
-                </MenuItem>
+                <MenuItem value={"نفل المواد الخطيرة"}>نفل المواد الخطيرة</MenuItem>
               </Select>
             </FormControl>
-            <Controls.DatePicker
-              label="تاريخ البداية"
-              value={debut}
-              onChange={setDebut}
-            />
-            <Controls.DatePicker
-              label="تاريخ النهاية"
-              value={fin}
-              onChange={setFin}
-            />
+            <Controls.DatePicker label="تاريخ البداية" value={debut} onChange={setDebut} />
+            <Controls.DatePicker label="تاريخ النهاية" value={fin} onChange={setFin} />
             <Controls.Button
               text="تأكيد"
               variant="contained"
               color="primary"
               size="small"
-              // onClick={() => {
-              // if (props.onClick.name === "addFormation") {
-              //  add();
-              // }
-              //if (props.onClick.name === "updateFormation") {
-              // update();
-              // }
-              //}}
               onClick={() => {
-                addFormation(
-                  numeroFormation,
-                  numeroAgrement,
-                  groupe,
-                  typeFormation,
-                  convert(debut),
-                  convert(fin)
-                );
+                try {
+                  if (props.type === "add") {
+                    add();
+                  }
+                  if (props.type === "update") {
+                    update();
+                  }
+                } catch (err) {
+                  console.log(err);
+                }
               }}
             />
 
@@ -253,7 +188,11 @@ export default function Form(props) {
               color="secondary"
               size="small"
               onClick={() => {
-                setOpen(false);
+                try {
+                  props.Close(false);
+                } catch (error) {
+                  alert(error);
+                }
               }}
             />
           </Grid>
@@ -265,14 +204,7 @@ export default function Form(props) {
         open={open}
         setOpen={setOpen}
         method={() => {
-          props.onClick(
-            numeroFormation,
-            numeroAgrement,
-            groupe,
-            typeFormation,
-            convert(debut),
-            convert(fin)
-          );
+          props.execute(numeroFormation, numeroAgrement, groupe, typeFormation, convert(debut), convert(fin));
           props.Close(false);
         }}
       />

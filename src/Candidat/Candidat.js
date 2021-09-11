@@ -488,6 +488,7 @@ export default function AppCand({ id }) {
       >
         <Candidat
           key="Ajouter"
+          type="add"
           setOpenWindows={setOpenAjouter}
           onClick={addCondidat}
           Close={setOpenAjouter}
@@ -495,13 +496,13 @@ export default function AppCand({ id }) {
           data={data}
         />
       </Popup>
-
       <Popup
         title="تعديل البيانات"
         openPopup={openModifier}
         setOpenPopup={setOpenModifier}
       >
         <Candidat
+          type="update"
           setOpenWindows={setOpenModifier}
           onClick={updateCandidat}
           Close={setOpenModifier}

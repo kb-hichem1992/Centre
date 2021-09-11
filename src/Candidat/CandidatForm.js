@@ -106,7 +106,8 @@ export default function Candidat(props) {
   const [Categorie, setOpenCategorie] = useState(false);
   const { userData } = useContext(UserContext);
   const numeroAgrement = userData[0].NUMERO_AGREMENT;
-  const Num_insc = numeroCandidat + "-" + new Date().getFullYear()+"-"+numeroAgrement;
+  const Num_insc =
+    numeroCandidat + "-" + new Date().getFullYear() + "-" + numeroAgrement;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -159,16 +160,14 @@ export default function Candidat(props) {
   }
   function TestNumIns(id) {
     return props.data.some(function (el) {
-      if (
-        el.NUM_INS === id
-      ) {
+      if (el.NUM_INS === id) {
         return true;
       } else {
         return false;
       }
     });
   }
-  
+
   const messageB = "هل أنت متأكد من القيام بهذه العملية ؟";
 
   const Enregister = () => {
@@ -213,7 +212,7 @@ export default function Candidat(props) {
     }
   };
 
-  const niveauScolaire = ["ابتدائي", "متوسط", "ثانوي", "جامعي","بدون مستوى"];
+  const niveauScolaire = ["ابتدائي", "متوسط", "ثانوي", "جامعي", "بدون مستوى"];
   const Type = ["متعاقد", "حر"];
 
   return (
@@ -227,7 +226,7 @@ export default function Candidat(props) {
                 label=" رقم التسجيل"
                 value={numeroCandidat}
                 size="small"
-             /*    disabled={
+                /*    disabled={
                   props.onClick.name === "updateCandidat" ? true : false
                 } */
                 onChange={(e) => setNumeroCandidat(e.target.value)}
@@ -434,7 +433,7 @@ export default function Candidat(props) {
         setOpen={setOpen}
         method={() => {
           try {
-            if (props.onClick.name === "addCondidat") {
+            if (props.type === "add") {
               props.onClick(
                 Num_insc,
                 convert(Date_ins),
@@ -453,7 +452,7 @@ export default function Candidat(props) {
                 Typepermis,
                 convert(Date_ins)
               );
-            } else if (props.onClick.name === "updateCandidat") {
+            } else if (props.type === "update") {
               props.onClick(
                 NUM_INS,
                 numeroCandidat,
