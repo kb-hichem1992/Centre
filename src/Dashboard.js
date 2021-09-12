@@ -300,7 +300,7 @@ export default function Dashboard() {
                   render={(props) => (
                     <AppFor
                       {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_form"}
+                      id={process.env.REACT_APP_API_URL + "/api/get_form/"+numeroAgrement}
                     />
                   )}
                 />

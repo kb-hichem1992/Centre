@@ -76,7 +76,7 @@ export default function TableFormation(props) {
   }
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL + "/api/get_form")
+    fetch(process.env.REACT_APP_API_URL + "/api/get_form/"+numeroAgrement)
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, []);
