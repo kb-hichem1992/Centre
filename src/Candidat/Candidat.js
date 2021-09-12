@@ -125,14 +125,26 @@ export default function AppCand({ id }) {
   const [etat, setEtat] = useState(false);
   const [open, setOpen] = useState(false);
   const [Values, setValues] = useState();
+ 
 
   
   const { userData } = useContext(UserContext);
+  const numeroAgrement = userData[0].NUMERO_AGREMENT;
+
+
+
   useEffect(() => {
     fetch(id)
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [id, etat]);
+
+const filtredData = data.filter( el=>el.NUM_INS.split('-')[2] === numeroAgrement);
+   
+
+
+
+
 
   function convert(date) {
     const current_datetime = new Date(date);
@@ -399,7 +411,7 @@ export default function AppCand({ id }) {
       <div className={classes.container}>
         <Paper className={classes.paper}>
           <GridComponent
-            dataSource={data}
+            dataSource={filtredData}
             enableRtl={true}
             allowPaging={true}
             pageSettings={{ pageSize: 100 }}

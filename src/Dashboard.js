@@ -151,6 +151,7 @@ export default function Dashboard() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const numeroAgrement = userData[0].NUMERO_AGREMENT;
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -158,8 +159,6 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const numeroAgrement = userData[0].NUMERO_AGREMENT;
 
   return (
     // the Appbar Starts from here
@@ -300,7 +299,11 @@ export default function Dashboard() {
                   render={(props) => (
                     <AppFor
                       {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_form/"+numeroAgrement}
+                      id={
+                        process.env.REACT_APP_API_URL +
+                        "/api/get_form/" +
+                        numeroAgrement
+                      }
                     />
                   )}
                 />
