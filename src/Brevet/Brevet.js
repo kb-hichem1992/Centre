@@ -27,13 +27,14 @@ import BrevetForm from "../Formation/BrevetForm.js";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import axios from "axios";
 import { L10n } from "@syncfusion/ej2-base";
-import { UserContext } from "../UserContext.js";
+//import { UserContext } from "../UserContext.js";
 import PrintIcon from "@material-ui/icons/Print";
 import AlertDialog from "../components/controls/Dialog";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import BrevetDateForm from "./BrevetDateForm.js";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import { useLocalStorage } from "../useLocalStorage";
 
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
@@ -107,6 +108,7 @@ export default function AppBrevet({ id }) {
   const [openSnack, setOpenSnack] = useState(false);
   const [openDateBrevet, setopenDateBrevet] = useState(false);
   const [Values, setValues] = useState();
+  const [admin, setAdmin] = useLocalStorage("typeUser", "");
 
   useEffect(() => {
     fetch(id)
@@ -210,7 +212,7 @@ export default function AppBrevet({ id }) {
     }
   }
   //  const Values = rowSelected();
-  const { userData } = useContext(UserContext);
+  //  const { userData } = useContext(UserContext);
   const handleClick = () => {
     setOpenSnack(true);
   };
@@ -270,9 +272,7 @@ export default function AppBrevet({ id }) {
             startIcon={<PrintIcon />}
             className={classes.newButton}
             disabled={
-              Values === undefined || userData[0].ADMIN !== "admin"
-                ? true
-                : false
+              Values === undefined || admin !== "admin" ? true : false
             }
           />
         </form>
@@ -282,9 +282,7 @@ export default function AppBrevet({ id }) {
           size="small"
           startIcon={<EditOutlinedIcon />}
           className={classes.newButton}
-          disabled={
-            Values === undefined || userData[0].ADMIN !== "admin" ? true : false
-          }
+          disabled={Values === undefined || admin !== "admin" ? true : false}
           onClick={() => {
             setopenDateBrevet(true);
           }}

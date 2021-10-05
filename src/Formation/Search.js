@@ -1,47 +1,41 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 
 import "../Candidat/Candidat.css";
 import {
   GridComponent,
   ColumnDirective,
   ColumnsDirective,
+  ContextMenu,
   Page,
   Inject,
   Filter,
   Group,
   Resize,
   Sort,
+  ExcelExport,
 } from "@syncfusion/ej2-react-grids";
 import { L10n } from "@syncfusion/ej2-base";
-import { UserContext } from "../UserContext";
 import PageHeader from "../PageHeader";
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from "@material-ui/icons/Search";
+import { useLocalStorage } from "../useLocalStorage";
 
-
-
-export default function SearchTable() {
+export default function SearchTable({ id }) {
   const [data, setdata] = useState([]);
 
-  const { userData } = useContext(UserContext);
-  const numeroAgrement = userData[0].NUMERO_AGREMENT;
+  const [side] = useLocalStorage("side");
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`)
+    fetch(id)
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, [numeroAgrement]);
+  }, [id]);
 
   const filter = {
     type: "CheckBox",
   };
 
   const TableRef3 = useRef(null);
+  const contextMenuItems = ["Copy", "ExcelExport"];
 
   L10n.load({
     "ar-AE": {
@@ -70,11 +64,12 @@ export default function SearchTable() {
   });
   return (
     <Fragment>
-       <PageHeader
+      <PageHeader
         title="قائمة البحث "
         subTitle="قائمة المترشحين الذين إجتازوا أو سجلوا في الدورات"
         icon={<SearchIcon />}
       />
+
       <div id="cont">
         <GridComponent
           dataSource={data}
@@ -89,8 +84,21 @@ export default function SearchTable() {
           ref={TableRef3}
           enableRtl={true}
           locale="ar-AE"
+          contextMenuItems={contextMenuItems}
+          allowExcelExport={true}
         >
           <ColumnsDirective>
+            <ColumnDirective
+              field="NUMERO_AGREMENT"
+              headerText="رقم المركز"
+              clipMode="EllipsisWithTooltip"
+              visible={side === "مركز" ? false : true}
+            />
+            <ColumnDirective
+              field="NUM_INS"
+              headerText="رقم التسجيل"
+              clipMode="EllipsisWithTooltip"
+            />
             <ColumnDirective
               field="NOM_CANDIDAT"
               headerText="اللقب"
@@ -132,7 +140,17 @@ export default function SearchTable() {
               clipMode="EllipsisWithTooltip"
             />
           </ColumnsDirective>
-          <Inject services={[Page, Sort, Filter, Group, Resize]} />
+          <Inject
+            services={[
+              Page,
+              Sort,
+              Filter,
+              Group,
+              Resize,
+              ContextMenu,
+              ExcelExport,
+            ]}
+          />
         </GridComponent>
       </div>
     </Fragment>

@@ -82,7 +82,7 @@ export default function PasseFrom(props) {
           DATE_INS,
           numeroFormation,
           GROUPE,
-          NUMERO_AGREMENT
+          NUMERO_AGREMENT,
         );
         props.Close(false);
       }

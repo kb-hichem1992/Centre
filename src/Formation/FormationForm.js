@@ -1,6 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, InputLabel, MenuItem, Paper, Select, TextField } from "@material-ui/core";
+import {
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Controls from "../components/controls/Controls";
 import AlertDialog from "../components/controls/Dialog";
@@ -39,7 +46,15 @@ const useStyles = makeStyles((theme) => ({
 export default function Form(props) {
   const classes = useStyles();
 
-  const { NUMERO_FORMATION, NUMERO_AGREMENT, GROUPE, TYPE_FORMATION, DEBUT, FIN } = props.values;
+  const {
+    NUMERO_FORMATION,
+    NUMERO_AGREMENT,
+    GROUPE,
+    TYPE_FORMATION,
+    DEBUT,
+    FIN,
+    TYPE_GROUPE,
+  } = props.values;
 
   const [data, setdata] = useState([]);
   const [numeroFormation, setnumeroFormation] = useState(NUMERO_FORMATION);
@@ -49,9 +64,13 @@ export default function Form(props) {
   const [fin, setFin] = useState(FIN);
   const [open, setOpen] = useState(false);
   const [groupe, setGroupe] = useState(GROUPE);
+  const [type_groupe, setType_groupe] = useState(TYPE_GROUPE);
 
   const handleTypeChange = (e) => {
     setTypeFormation(e.target.value);
+  };
+  const handleTypeGroupe = (e) => {
+    setType_groupe(e.target.value);
   };
   const handleGroupeChange = (e) => {
     setGroupe(e.target.value);
@@ -67,9 +86,22 @@ export default function Form(props) {
     const current_datetime = new Date(date);
     const m = current_datetime.getMonth() + 1;
     if (m > 9) {
-      return current_datetime.getFullYear() + "-" + m + "-" + current_datetime.getDate();
+      return (
+        current_datetime.getFullYear() +
+        "-" +
+        m +
+        "-" +
+        current_datetime.getDate()
+      );
     } else {
-      return current_datetime.getFullYear() + "-" + 0 + m + "-" + current_datetime.getDate();
+      return (
+        current_datetime.getFullYear() +
+        "-" +
+        0 +
+        m +
+        "-" +
+        current_datetime.getDate()
+      );
     }
   }
 
@@ -153,16 +185,38 @@ export default function Form(props) {
               <Select
                 labelId="demo-simple-select"
                 id="demo-simple-select"
+                value={type_groupe}
+                onChange={handleTypeGroupe}
+              >
+                <MenuItem value={"فوج عادي"}> فوج عادي</MenuItem>
+                <MenuItem value={"مؤجل للإمتحان"}> مؤجل للإمتحان</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">نوع التكوين</InputLabel>
+              <Select
+                labelId="demo-simple-select"
+                id="demo-simple-select"
                 value={typeFormation}
                 onChange={handleTypeChange}
               >
                 <MenuItem value={"نقل البضائع"}>نقل البضائع</MenuItem>
                 <MenuItem value={"نقل المسافرين"}>نقل المسافرين</MenuItem>
-                <MenuItem value={"نفل المواد الخطيرة"}>نفل المواد الخطيرة</MenuItem>
+                <MenuItem value={"نفل المواد الخطيرة"}>
+                  نفل المواد الخطيرة
+                </MenuItem>
               </Select>
             </FormControl>
-            <Controls.DatePicker label="تاريخ البداية" value={debut} onChange={setDebut} />
-            <Controls.DatePicker label="تاريخ النهاية" value={fin} onChange={setFin} />
+            <Controls.DatePicker
+              label="تاريخ البداية"
+              value={debut}
+              onChange={setDebut}
+            />
+            <Controls.DatePicker
+              label="تاريخ النهاية"
+              value={fin}
+              onChange={setFin}
+            />
             <Controls.Button
               text="تأكيد"
               variant="contained"
@@ -204,7 +258,15 @@ export default function Form(props) {
         open={open}
         setOpen={setOpen}
         method={() => {
-          props.execute(numeroFormation, numeroAgrement, groupe, typeFormation, convert(debut), convert(fin));
+          props.execute(
+            numeroFormation,
+            numeroAgrement,
+            groupe,
+            typeFormation,
+            convert(debut),
+            convert(fin),
+            type_groupe
+          );
           props.Close(false);
         }}
       />

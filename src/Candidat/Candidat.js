@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  Fragment,
-  useContext,
-} from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import "./Candidat.css";
 import Candidat from "./CandidatForm.js";
@@ -34,9 +28,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import PageHeader from "../PageHeader";
 import CandidatInfo from "./CandidatInfo";
 import GroupIcon from "@material-ui/icons/Group";
-import { UserContext } from "../UserContext";
 import AlertDialog from "../components/controls/Dialog";
 import PrintIcon from "@material-ui/icons/Print";
+import { useLocalStorage } from "../useLocalStorage";
+
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
 
@@ -125,13 +120,8 @@ export default function AppCand({ id }) {
   const [etat, setEtat] = useState(false);
   const [open, setOpen] = useState(false);
   const [Values, setValues] = useState();
- 
-
-  
-  const { userData } = useContext(UserContext);
-  const numeroAgrement = userData[0].NUMERO_AGREMENT;
-
-
+  const [admin] = useLocalStorage("typeUser", "");
+  const [numeroAgrement] = useLocalStorage("user", 0);
 
   useEffect(() => {
     fetch(id)
@@ -139,12 +129,9 @@ export default function AppCand({ id }) {
       .then((json) => setdata(json));
   }, [id, etat]);
 
-const filtredData = data.filter( el=>el.NUM_INS.split('-')[2] === numeroAgrement);
-   
-
-
-
-
+  const filtredData = data.filter(
+    (el) => el.NUM_INS.split("-")[2] == numeroAgrement
+  );
 
   function convert(date) {
     const current_datetime = new Date(date);
@@ -294,10 +281,6 @@ const filtredData = data.filter( el=>el.NUM_INS.split('-')[2] === numeroAgrement
       console.log(error);
     }
   }
-  // const Values = rowSelected();
-
-  // const numeroAgrement = userData[0].NUMERO_AGREMENT;
-
   const contextMenuItems = ["Copy", "ExcelExport"];
 
   const ContextMenuItemModel = [
@@ -339,11 +322,7 @@ const filtredData = data.filter( el=>el.NUM_INS.split('-')[2] === numeroAgrement
             size="small"
             startIcon={<EditOutlinedIcon />}
             className={classes.newButton}
-            disabled={
-              Values === undefined || userData[0].ADMIN !== "admin"
-                ? true
-                : false
-            }
+            disabled={Values === undefined || admin !== "admin" ? true : false}
             onClick={() => {
               setOpenModifier(true);
             }}
@@ -355,11 +334,7 @@ const filtredData = data.filter( el=>el.NUM_INS.split('-')[2] === numeroAgrement
             color="secondary"
             startIcon={<DeleteIcon />}
             className={classes.newButton}
-            disabled={
-              Values === undefined || userData[0].ADMIN !== "admin"
-                ? true
-                : false
-            }
+            disabled={Values === undefined || admin !== "admin" ? true : false}
             onClick={() => {
               setOpen(true);
             }}
@@ -400,9 +375,7 @@ const filtredData = data.filter( el=>el.NUM_INS.split('-')[2] === numeroAgrement
               startIcon={<PrintIcon />}
               className={classes.newButton}
               disabled={
-                Values === undefined || userData[0].ADMIN !== "admin"
-                  ? true
-                  : false
+                Values === undefined || admin !== "admin" ? true : false
               }
             />
           </form>

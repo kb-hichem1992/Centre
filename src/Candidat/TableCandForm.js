@@ -26,12 +26,12 @@ import PasseFrom from "../Formation/PasseForm";
 import axios from "axios";
 import BrevetForm from "../Formation/BrevetForm";
 import { L10n } from "@syncfusion/ej2-base";
-import { UserContext } from "../UserContext";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import TableFormation from "../Formation/TableFormation.js";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AlertDialog from "../components/controls/Dialog";
 import GroupeForm from "../Formation/GroupeForm";
+import { useLocalStorage } from "../useLocalStorage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,16 +85,17 @@ export default function TableCandForm({
   const [openModifier, setOpenModifier] = useState(false);
   const [openImprimer, setOpenImprimer] = useState(false);
   const [openFormation, setOpenFormation] = useState(false);
-  const { userData } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [openNumero, setOpenNumero] = useState(false);
-  const numeroAgrement = userData[0].NUMERO_AGREMENT;
   const [Values, setValues] = useState();
+  const [numeroAgrement] = useLocalStorage("user",0);
+  const [admin] = useLocalStorage("typeUser","");
+
+
 
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_API_URL}/api/get_candidat_form/${numeroFormation}/${numeroAgrement}/${groupe}`
-    )
+      `${process.env.REACT_APP_API_URL}/api/get_candidat_form/${numeroFormation}/${numeroAgrement}/${groupe}` )
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [etat, numeroFormation, numeroAgrement, groupe]);
@@ -142,7 +143,7 @@ export default function TableCandForm({
     dateins,
     numeroFormation,
     GROUPE,
-    numeroAgrement
+    numeroAgrement,
   ) => {
     axios
       .put(process.env.REACT_APP_API_URL + "/update_passe", {
@@ -224,7 +225,7 @@ export default function TableCandForm({
           startIcon={<EditOutlinedIcon />}
           className={classes.newButton}
           disabled={
-            Values === undefined || userData[0].ADMIN !== "admin" ? true : false
+            Values === undefined || admin !== "admin" ? true : false
           }
           onClick={() => {
             setOpenModifier(true);
@@ -238,7 +239,7 @@ export default function TableCandForm({
           disabled={
             Values === undefined ||
             Values.NOTE < 10 ||
-            userData[0].ADMIN !== "admin"
+            admin !== "admin"
               ? true
               : false
           }
@@ -270,7 +271,7 @@ export default function TableCandForm({
           className={classes.newButton}
           disabled={
             Values === undefined ||
-            userData[0].ADMIN !== "admin" ||
+            admin !== "admin" ||
             Values.REMARQUE === "ناجح" ||
             Values.NOTE > 0
               ? true
@@ -287,7 +288,7 @@ export default function TableCandForm({
           color="primary"
           startIcon={<EditOutlinedIcon />}
           className={classes.newButton}
-          disabled={Values === undefined || userData[0].ADMIN !== "admin"}
+          disabled={Values === undefined || admin !== "admin"}
           onClick={() => {
             setOpenNumero(true);
           }}

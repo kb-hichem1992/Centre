@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useRef, Fragment, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  Fragment,
+} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import "./Formation.css";
 import Form from "./FormationForm.js";
@@ -24,8 +29,8 @@ import { Paper } from "@material-ui/core";
 import TableCandForm from "../Candidat/TableCandForm";
 import LaptopChromebookIcon from "@material-ui/icons/LaptopChromebook";
 import { L10n } from "@syncfusion/ej2-base";
-import { UserContext } from "../UserContext";
 import AlertDialog from "../components/controls/Dialog";
+import { useLocalStorage } from "../useLocalStorage";
 
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
@@ -79,25 +84,37 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AppFor({ id }) {
-  const { userData } = useContext(UserContext);
+
   const [data, setdata] = useState([]);
   const [openAjouter, setOpenAjouter] = useState(false);
   const [openModifier, setOpenModifier] = useState(false);
   const [etat, setEtat] = useState(false);
   const [open, setopen] = useState(false);
   const [Values, setValues] = useState();
+  const [numeroAgrement] = useLocalStorage("user",0);
+  const [admin] = useLocalStorage("typeUser","");
+
   useEffect(() => {
     fetch(id)
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [id, etat]);
 
-  const updateFormation = (numeroFormation, numeroAgrement, groupe, Type, Debut, Fin) => {
+  const updateFormation = (
+    numeroFormation,
+    numeroAgrement,
+    groupe,
+    Type,
+    Debut,
+    Fin,
+    type_groupe
+  ) => {
     axios
       .put(process.env.REACT_APP_API_URL + "/update_formation", {
         Type: Type,
         Debut: Debut,
         Fin: Fin,
+        type_groupe: type_groupe,
         numeroFormation: numeroFormation,
         numeroAgrement: numeroAgrement,
         groupe: groupe,
@@ -108,7 +125,10 @@ function AppFor({ id }) {
   };
   const deleteFormation = (numeroFormation, numeroAgrement, groupe) => {
     axios
-      .delete(`${process.env.REACT_APP_API_URL}/delete_formation/${numeroFormation}/${numeroAgrement}/${groupe}`, {})
+      .delete(
+        `${process.env.REACT_APP_API_URL}/delete_formation/${numeroFormation}/${numeroAgrement}/${groupe}`,
+        {}
+      )
       .then(() => {
         setEtat(!etat);
       });
@@ -122,7 +142,7 @@ function AppFor({ id }) {
 
   const initialvalues = {
     NUMERO_FORMATION: "",
-    NUMERO_AGREMENT: userData[0].NUMERO_AGREMENT,
+    NUMERO_AGREMENT: numeroAgrement,
     GROUPE: "",
     TYPE_FORMATION: "",
     DEBUT: new Date(),
@@ -141,7 +161,15 @@ function AppFor({ id }) {
       console.log(error);
     }
   }
-  const addFormation = (numeroFormation, numeroAgrement, groupe, Type, Debut, Fin) => {
+  const addFormation = (
+    numeroFormation,
+    numeroAgrement,
+    groupe,
+    Type,
+    Debut,
+    Fin,
+    type_groupe
+  ) => {
     axios
       .post(`${process.env.REACT_APP_API_URL}/Add_formation`, {
         numeroFormation: numeroFormation,
@@ -150,17 +178,20 @@ function AppFor({ id }) {
         Type: Type,
         Debut: Debut,
         Fin: Fin,
+        type_groupe: type_groupe,
       })
       .then(() => {
         setEtat(!etat);
       });
   };
 
-  //  const Values = rowSelected();
-
   return (
     <Fragment>
-      <PageHeader title="الدورات التكوينية" subTitle="قائمة الدورات" icon={<LaptopChromebookIcon />} />
+      <PageHeader
+        title="الدورات التكوينية"
+        subTitle="قائمة الدورات"
+        icon={<LaptopChromebookIcon />}
+      />
       <div className={classes.container}>
         <Button
           text="إضافة"
@@ -178,7 +209,9 @@ function AppFor({ id }) {
           size="small"
           startIcon={<EditOutlinedIcon />}
           className={classes.newButton}
-          disabled={Values === undefined || userData[0].ADMIN !== "admin" ? true : false}
+          disabled={
+            Values === undefined || admin !== "admin" ? true : false
+          }
           onClick={() => {
             setOpenModifier(true);
           }}
@@ -190,7 +223,9 @@ function AppFor({ id }) {
           color="secondary"
           startIcon={<DeleteIcon />}
           className={classes.newButton}
-          disabled={Values === undefined || userData[0].ADMIN !== "admin" ? true : false}
+          disabled={
+            Values === undefined || admin !== "admin" ? true : false
+          }
           onClick={() => {
             setopen(true);
           }}
@@ -217,9 +252,16 @@ function AppFor({ id }) {
             }}
           >
             <ColumnsDirective>
-              <ColumnDirective field="NUMERO_FORMATION" headerText="رقم الدورة" />
+              <ColumnDirective
+                field="NUMERO_FORMATION"
+                headerText="رقم الدورة"
+              />
               <ColumnDirective field="GROUPE" headerText="الفوج" />
-              <ColumnDirective field="TYPE_FORMATION" headerText="نوع التكوين" />
+              <ColumnDirective field="TYPE_GROUPE" headerText="نوع الفوج" />
+              <ColumnDirective
+                field="TYPE_FORMATION"
+                headerText="نوع التكوين"
+              />
               <ColumnDirective
                 field="DEBUT"
                 headerText="تاريخ البداية"
@@ -241,7 +283,11 @@ function AppFor({ id }) {
           </GridComponent>
         </div>
       </div>
-      <PageHeader title="الدورات التكوينية" subTitle="ٌقائمة المترشحين لكل فوج " icon={<LaptopChromebookIcon />} />
+      <PageHeader
+        title="الدورات التكوينية"
+        subTitle="ٌقائمة المترشحين لكل فوج "
+        icon={<LaptopChromebookIcon />}
+      />
       <Paper>
         <TableCandForm
           setEtat={setEtat}
@@ -251,7 +297,11 @@ function AppFor({ id }) {
         />
       </Paper>
 
-      <Popup title="إضافة" openPopup={openAjouter} setOpenPopup={setOpenAjouter}>
+      <Popup
+        title="إضافة"
+        openPopup={openAjouter}
+        setOpenPopup={setOpenAjouter}
+      >
         <Form
           type="add"
           execute={addFormation}
@@ -262,8 +312,17 @@ function AppFor({ id }) {
         />
       </Popup>
 
-      <Popup title="تعديل" openPopup={openModifier} setOpenPopup={setOpenModifier}>
-        <Form type="update" onClick={updateFormation} Close={setOpenModifier} values={Values} />
+      <Popup
+        title="تعديل"
+        openPopup={openModifier}
+        setOpenPopup={setOpenModifier}
+      >
+        <Form
+          type="update"
+          execute={updateFormation}
+          Close={setOpenModifier}
+          values={Values}
+        />
       </Popup>
       <AlertDialog
         title="تأكيد"
@@ -271,7 +330,11 @@ function AppFor({ id }) {
         open={open}
         setOpen={setopen}
         method={() => {
-          deleteFormation(Values.NUMERO_FORMATION, userData[0].NUMERO_AGREMENT, Values.GROUPE);
+          deleteFormation(
+            Values.NUMERO_FORMATION,
+            numeroAgrement,
+            Values.GROUPE
+          );
           setopen(false);
         }}
       />

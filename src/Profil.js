@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -7,11 +7,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { UserContext } from "./UserContext";
 import Axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-
+import { useLocalStorage } from "./useLocalStorage";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -50,13 +49,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Profil() {
+export default function Profil({ id }) {
   const classes = useStyles();
-  const { userData } = useContext(UserContext);
   const [openSnack, setOpenSnack] = useState(false);
   const [oldpass, setoldpass] = useState("");
   const [newpass, setnewpass] = useState("");
-  const [newpassconfirmation, setnewpassconfirmation] = useState(".");
+  const [newpassconfirmation, setnewpassconfirmation] = useState("-");
+  const [message, setmessage] = useState("");
+  const [oldPassword] = useLocalStorage("pass");
+  const [username] = useLocalStorage("username");
+  const [admin] = useLocalStorage("typeUser");
+  const [numeroAgrement] = useLocalStorage("user");
+  const [side] = useLocalStorage("side");
+
+  const update_pass_center = (
+    oldpass,
+    storedpass,
+    password,
+    username,
+    admin,
+    numeroAgrement
+  ) => {
+    Axios.put(id, {
+      oldpass: oldpass,
+      storedpass: storedpass,
+      password: password,
+      username: username,
+      admin: admin,
+      numeroAgrement: numeroAgrement,
+    }).then((response) => {
+      if (response.data.message) {
+        setmessage(response.data.message);
+      } else {
+        handleClick();
+        localStorage.clear();
+        window.open("/", "_self");
+      }
+    });
+  };
+  const update_pass_direction = (oldpass, storedpass, password, username) => {
+    Axios.put(id, {
+      oldpass: oldpass,
+      storedpass: storedpass,
+      password: password,
+      username: username,
+    }).then((response) => {
+      if (response.data.message) {
+        setmessage(response.data.message);
+      } else {
+        handleClick();
+        localStorage.clear();
+        window.open("/", "_self");
+      }
+    });
+  };
 
   const handleClick = () => {
     setOpenSnack(true);
@@ -69,16 +115,7 @@ export default function Profil() {
 
     setOpenSnack(false);
   };
-  const updatePasseword = (password, username, admin, numeroAgrement) => {
-    Axios.put(process.env.REACT_APP_API_URL + "/update_password", {
-      password: password,
-      username: username,
-      admin: admin,
-      numeroAgrement: numeroAgrement,
-    }).then(() => {
-      handleClick();
-    });
-  };
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -135,22 +172,26 @@ export default function Profil() {
               className={classes.submit}
               disabled={newpass !== newpassconfirmation ? true : false}
               onClick={() => {
-                if (oldpass === userData[0].PASSWORD) {
-                  updatePasseword(
+                if (side === "مركز") {
+                  update_pass_center(
+                    oldpass,
+                    oldPassword,
                     newpass,
-                    userData[0].USERNAME,
-                    userData[0].ADMIN,
-                    userData[0].NUMERO_AGREMENT
+                    username,
+                    admin,
+                    numeroAgrement
                   );
-                  window.open("/", "_self" ) 
-                } else {
-                  alert("كلمة المرور القديمة خاطئة");
+                } else if (side === "المديرية") {
+                  update_pass_direction(oldpass, oldPassword, newpass, username);
                 }
               }}
             >
               تأكيد
             </Button>
           </form>
+          <Typography color="textPrimary" variant="h6" paragraph={true}>
+            {message}
+          </Typography>
         </div>
       </Container>
       <div className={classes.root}>
@@ -160,7 +201,7 @@ export default function Profil() {
           onClose={handleClose}
         >
           <Alert onClose={handleClose} severity="info">
-            تم تغيير كلمة السر بنجاح{" "}
+            تمت العملية
           </Alert>
         </Snackbar>
       </div>

@@ -16,29 +16,13 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import LaptopChromebookIcon from "@material-ui/icons/LaptopChromebook";
-import AppOp from "./Tables/AppOp.js";
-import AppFor from "./Formation/Formation.js";
-import AppCand from "./Candidat/Candidat.js";
-import AppVeh from "./Table_vehicule//AppVeh.js";
 import Button from "./components/controls/Button";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Link,
-  useRouteMatch,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link, useRouteMatch } from "react-router-dom";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import GroupIcon from "@material-ui/icons/Group";
-import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
-import AppBrevet from "./Brevet/Brevet.js";
 import Profil from "./Profil";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SearchTable from "./Formation/Search.js";
 import SearchIcon from "@material-ui/icons/Search";
-import { useLocalStorage } from "./useLocalStorage";
 
 const drawerWidth = 180;
 
@@ -153,21 +137,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard(props) {
+export default function DashboardService(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [numeroAgrement] = useLocalStorage("user", 0);
-  let { path, url } = useRouteMatch();
-  const [isLogedIn] = useLocalStorage("isLoggedIn");
-  const [side] = useLocalStorage("side");
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  let { path, url } = useRouteMatch();
   return (
     // the Appbar Starts from here
     <Router>
@@ -198,7 +178,7 @@ export default function Dashboard(props) {
               noWrap
               className={classes.title}
             >
-              مركز رقم {numeroAgrement}
+              مديرية النقل
             </Typography>
             <Button
               text="خروج"
@@ -234,7 +214,7 @@ export default function Dashboard(props) {
           </div>
           <Divider />
           <List>
-            <Link to={`${url}`} className={classes.link}>
+            <Link to={url} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <SearchIcon />
@@ -242,33 +222,9 @@ export default function Dashboard(props) {
                 <ListItemText primary="البحث" />
               </ListItem>
             </Link>
-            <Link to={`${url}/candidat`} className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <GroupIcon />
-                </ListItemIcon>
-                <ListItemText primary="المنرشحين" />
-              </ListItem>
-            </Link>
-            <Link to={`${url}/Formation`} className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <LaptopChromebookIcon />
-                </ListItemIcon>
-                <ListItemText primary="الدورات" />
-              </ListItem>
-            </Link>
-            <Link to={url + "/Diplômes"} className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <LibraryBooksIcon />
-                </ListItemIcon>
-                <ListItemText primary="الشهادات" />
-              </ListItem>
-            </Link>
           </List>
           <Divider />
-          <Link to={url + "/Profile"} className={classes.link}>
+          <Link to={url+"/Profile"} className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <AccountCircleIcon />
@@ -286,88 +242,8 @@ export default function Dashboard(props) {
           <Container maxWidth="lg" className={classes.container}>
             <Grid item xs={12}>
               <Switch>
-                <Route
-                  path={`${path}`}
-                  exact
-                  render={() =>
-                    isLogedIn && side === "مركز" ? (
-                      <SearchTable
-                        id={`${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`}
-                      />
-                    ) : (
-                      <Redirect to="/signIn" />
-                    )
-                  }
-                />
-                <Route path="/op/mor">
-                  <AppOp
-                    id={process.env.REACT_APP_API_URL + "/api/get_op/mor"}
-                    Title={"Liste des opérateurs/Personne Morale"}
-                  />
-                </Route>
-                <Route
-                  path="/op/phy"
-                  render={(props) => (
-                    <AppOp
-                      {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_op/phy"}
-                      Title={"Liste des opérateurs/Personne Physique"}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${path}/Formation`}
-                  render={(props) =>
-                    isLogedIn && side === "مركز" ? (
-                      <AppFor
-                        {...props}
-                        id={
-                          process.env.REACT_APP_API_URL +
-                          "/api/get_form/" +
-                          numeroAgrement
-                        }
-                      />
-                    ) : (
-                      <Redirect to="/signIn" />
-                    )
-                  }
-                />
-                <Route
-                  path={`${path}/candidat`}
-                  render={(props) => (
-                    <AppCand
-                      {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_candidat"}
-                    />
-                  )}
-                />
-                <Route
-                  path="/Vehicule"
-                  render={(props) => (
-                    <AppVeh
-                      {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_veh_Mar"}
-                      id2={process.env.REACT_APP_API_URL + "/api/get_veh_voyag"}
-                    />
-                  )}
-                />
-                <Route
-                  path={path + "/Diplômes"}
-                  render={(props) => (
-                    <AppBrevet
-                      {...props}
-                      id={`${process.env.REACT_APP_API_URL}/api/get_brevet/${numeroAgrement}`}
-                    />
-                  )}
-                />
-                <Route
-                  path={path + "/Profile"}
-                  render={(props) => (
-                    <Profil
-                      id={process.env.REACT_APP_API_URL + "/pass_Center_update"}
-                    />
-                  )}
-                />
+                <Route path={path} exact render={() => <SearchTable id={`${process.env.REACT_APP_API_URL}/api/Passing_List`} />} />
+                <Route path={path+"/Profile"} render={(props) => <Profil id ={process.env.REACT_APP_API_URL + "/pass_Direction_update"} />} />
               </Switch>
             </Grid>
           </Container>

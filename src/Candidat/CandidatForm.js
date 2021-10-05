@@ -1,4 +1,4 @@
-import React, { useState, useRef, Fragment, useContext } from "react";
+import React, { useState, useRef, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import {
@@ -21,7 +21,8 @@ import Controls from "../components/controls/Controls";
 import AlertDialog from "../components/controls/Dialog";
 import Popup from "../components/Popup";
 import ListCategorie from "./CategoriePermis";
-import { UserContext } from "../UserContext";
+
+import { useLocalStorage } from "../useLocalStorage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,13 +100,12 @@ export default function Candidat(props) {
   const [Typepermis, setTypePermis] = useState(TYPE_PERMIS);
   const [NumPermis, setNumPermis] = useState(NUM_PERMIS);
   const [LivPermis, setLivPermis] = useState(DATE_LIV_PERMIS);
-  //  const [ExpPermis, setExpPermis] = useState(DATE_EXP_PERMIS);
   const [CategoriePermis, setCategoriePermis] = useState(CATEGORIE_PERMIS);
   const [textChanged, setTextChanged] = useState(false);
   const [open, setOpen] = useState(false);
   const [Categorie, setOpenCategorie] = useState(false);
-  const { userData } = useContext(UserContext);
-  const numeroAgrement = userData[0].NUMERO_AGREMENT;
+  const [numeroAgrement] = useLocalStorage('user', 0);
+    
   const Num_insc =
     numeroCandidat +
     "-" +
@@ -219,6 +219,7 @@ export default function Candidat(props) {
   const handleDateChange = (date) => {
     setDate_ins(date);
   };
+
   const niveauScolaire = ["ابتدائي", "متوسط", "ثانوي", "جامعي", "بدون مستوى"];
   const Type = ["متعاقد", "حر"];
 
@@ -409,7 +410,6 @@ export default function Candidat(props) {
                   <AddCircleIcon />
                 </IconButton>
               </FormGroup>
-
               <Grid item xs={12}>
                 <Controls.Button
                   text="موافق"

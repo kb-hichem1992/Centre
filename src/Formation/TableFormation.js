@@ -23,17 +23,18 @@ import axios from "axios";
 import { L10n } from "@syncfusion/ej2-base";
 import AlertDialog from "../components/controls/Dialog";
 import { UserContext } from "../UserContext";
+import { useLocalStorage } from "../useLocalStorage";
 
 export default function TableFormation(props) {
   const [data, setdata] = useState([]);
   const [passdata, setpassdata] = useState([]);
   const { NUM_INS, DATE_INS, NUM_PERMIS } = props.valeur;
   const [Values, setValues] = useState();
-
+  const [numeroAgrement] = useLocalStorage("user");
   const [open, setOpen] = useState(false);
   const { userData } = useContext(UserContext);
 
-  const numeroAgrement = userData[0].NUMERO_AGREMENT;
+
 
   const useStyles = makeStyles((theme) => ({
     container: {
@@ -76,10 +77,10 @@ export default function TableFormation(props) {
   }
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL + "/api/get_form/"+numeroAgrement)
+    fetch(process.env.REACT_APP_API_URL + "/api/get_form/" + numeroAgrement)
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, []);
+  }, [numeroAgrement]);
 
   useEffect(() => {
     fetch(process.env.REACT_APP_API_URL + "/api/get_passe")
@@ -195,7 +196,9 @@ export default function TableFormation(props) {
         >
           <ColumnsDirective>
             <ColumnDirective field="NUMERO_FORMATION" headerText="رقم الدورة" />
+
             <ColumnDirective field="GROUPE" headerText="رقم الفوج" />
+            <ColumnDirective field="TYPE_GROUPE" headerText="نوع الفوج" />
             <ColumnDirective field="TYPE_FORMATION" headerText="الفوج " />
             <ColumnDirective
               field="DEBUT"
