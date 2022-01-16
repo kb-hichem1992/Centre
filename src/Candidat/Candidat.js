@@ -17,6 +17,7 @@ import {
   ContextMenu,
   ExcelExport,
   PdfExport,
+  SortSettingsModel,
 } from "@syncfusion/ej2-react-grids";
 import { L10n } from "@syncfusion/ej2-base";
 import Axios from "axios";
@@ -248,7 +249,9 @@ export default function AppCand({ id }) {
   const filter = {
     type: "CheckBox",
   };
-
+  const SortSettingsModel = {
+    columns: [{ field: "DATE_INS", direction: "Descending " }],
+  };
   const classes = useStyles();
 
   const TableRef2 = useRef(null);
@@ -399,6 +402,7 @@ export default function AppCand({ id }) {
             contextMenuClick={contextMenuClick}
             allowExcelExport={true}
             allowPdfExport={true}
+            sortSettings={SortSettingsModel}
             locale="ar-AE"
             rowSelected={rowSelected}
             rowDeselected={() => {

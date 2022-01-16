@@ -104,8 +104,8 @@ export default function Candidat(props) {
   const [textChanged, setTextChanged] = useState(false);
   const [open, setOpen] = useState(false);
   const [Categorie, setOpenCategorie] = useState(false);
-  const [numeroAgrement] = useLocalStorage('user', 0);
-    
+  const [numeroAgrement] = useLocalStorage("user", 0);
+
   const Num_insc =
     numeroCandidat +
     "-" +
@@ -211,6 +211,8 @@ export default function Candidat(props) {
       alert("المترشح مسجل من قبل");
     } else if (TestNumIns(Num_insc)) {
       alert("رقم التسجيل مكرر");
+    } else if (CategoriePermis === "B") {
+      alert(" صنف رخسة السياقة غير مقبول");
     } else {
       handleClickOpen();
     }
@@ -498,6 +500,7 @@ export default function Candidat(props) {
         <ListCategorie
           key="CategoriePermis"
           setOpenCategorie={setOpenCategorie}
+          CategoriePermis={CategoriePermis}
           Typepermis={Typepermis}
           setCategoriePermis={setCategoriePermis}
         />

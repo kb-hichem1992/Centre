@@ -9,6 +9,7 @@ import {
   makeStyles,
   Paper,
 } from "@material-ui/core";
+import { colGroup } from "@syncfusion/ej2-react-grids";
 import React, { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +53,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ListCategorie(props) {
-  const { Typepermis , setCategoriePermis, setOpenCategorie} = props;
+  const { Typepermis, setCategoriePermis, setOpenCategorie, CategoriePermis } =
+    props;
   const classes = useStyles();
   const [CatNormal, setCatNormal] = useState({
     A1: false,
@@ -150,10 +152,17 @@ export default function ListCategorie(props) {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Button variant="contained" color="primary" size="small" onClick={()=>{
-            Typepermis === "القديم" ? setCategoriePermis(getCatgr(CatNormal)) : setCategoriePermis(getCatgr(CatNew))
-            setOpenCategorie(false)
-          }}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => {
+              Typepermis === "القديم"
+                ? setCategoriePermis(getCatgr(CatNormal))
+                : setCategoriePermis(getCatgr(CatNew));
+              setOpenCategorie(false);
+            }}
+          >
             Enregister
           </Button>
         </Grid>

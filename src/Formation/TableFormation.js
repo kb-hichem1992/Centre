@@ -196,7 +196,6 @@ export default function TableFormation(props) {
         >
           <ColumnsDirective>
             <ColumnDirective field="NUMERO_FORMATION" headerText="رقم الدورة" />
-
             <ColumnDirective field="GROUPE" headerText="رقم الفوج" />
             <ColumnDirective field="TYPE_GROUPE" headerText="نوع الفوج" />
             <ColumnDirective field="TYPE_FORMATION" headerText="الفوج " />

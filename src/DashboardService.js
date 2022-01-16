@@ -17,7 +17,14 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "./components/controls/Button";
-import { BrowserRouter as Router, Route, Switch, Link, useRouteMatch } from "react-router-dom";
+import Operateur from "./Opérateur/Opérateur";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
+  useRouteMatch,
+} from "react-router-dom";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Profil from "./Profil";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -222,9 +229,17 @@ export default function DashboardService(props) {
                 <ListItemText primary="البحث" />
               </ListItem>
             </Link>
+            <Link to={url + "/operateur"} className={classes.link}>
+              <ListItem button>
+                <ListItemIcon>
+                  <SearchIcon />
+                </ListItemIcon>
+                <ListItemText primary="المعاملين" />
+              </ListItem>
+            </Link>
           </List>
           <Divider />
-          <Link to={url+"/Profile"} className={classes.link}>
+          <Link to={url + "/Profile"} className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <AccountCircleIcon />
@@ -242,8 +257,30 @@ export default function DashboardService(props) {
           <Container maxWidth="lg" className={classes.container}>
             <Grid item xs={12}>
               <Switch>
-                <Route path={path} exact render={() => <SearchTable id={`${process.env.REACT_APP_API_URL}/api/Passing_List`} />} />
-                <Route path={path+"/Profile"} render={(props) => <Profil id ={process.env.REACT_APP_API_URL + "/pass_Direction_update"} />} />
+                <Route
+                  path={path}
+                  exact
+                  render={() => (
+                    <SearchTable
+                      id={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
+                    />
+                  )}
+                />
+                <Route
+                  path={path + "/operateur"}
+                  exact
+                  render={() => <Operateur/>}
+                />
+                <Route
+                  path={path + "/Profile"}
+                  render={(props) => (
+                    <Profil
+                      id={
+                        process.env.REACT_APP_API_URL + "/pass_Direction_update"
+                      }
+                    />
+                  )}
+                />
               </Switch>
             </Grid>
           </Container>
