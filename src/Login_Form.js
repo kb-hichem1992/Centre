@@ -82,8 +82,7 @@ export default function LoginForm({ setisLogedIn, setUser, setSide }) {
           service: etablissement,
         })
         .then((response) => {
-          if (response.data.message) { 
-            
+          if (response.data.message) {
             setmessage(response.data.message);
           } else {
             setUser(response.data[0]);
@@ -145,17 +144,20 @@ export default function LoginForm({ setisLogedIn, setUser, setSide }) {
             >
               دخول
             </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              تسجيل
-            </Button>
+
+            {
+              //  <Button
+              //   fullWidth
+              //   variant="contained"
+              //   color="primary"
+              //   className={classes.submit}
+              //   onClick={() => {
+              //     setOpen(true);
+              //   }}
+              // >
+              //   تسجيل
+              //  </Button>
+            }
             <FormControl component="fieldset">
               <FormLabel component="legend">المؤسسة</FormLabel>
               <RadioGroup

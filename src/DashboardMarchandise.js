@@ -275,7 +275,7 @@ export default function DashboardMarchandise(props) {
                   exact
                   render={() => (
                     <SearchTable
-                      id={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
+                      url={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
                     />
                   )}
                 />
