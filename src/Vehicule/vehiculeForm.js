@@ -7,8 +7,6 @@ import {
   IconButton,
   Tooltip,
 } from "@material-ui/core";
-import axios from "axios";
-import Controls from "../components/controls/Controls";
 import { Stack } from "@mui/material";
 import PersonOutlineSharpIcon from "@mui/icons-material/PersonOutlineSharp";
 import PopupFull from "../components/PopupFullScreen";
@@ -53,8 +51,6 @@ export default function VehiculeForm(props) {
   const [ptac, setptac] = useState("");
   const [cu, setcu] = useState("");
   const [num_peris, setnum_peris] = useState("");
-  const [num_ins, setnum_ins] = useState("");
-  const [date_ins, setdate_ins] = useState("");
   const [openListeCandidat, setopenListeCandidat] = useState(false);
   const handleMatriculeChange = (e) => {
     setmatricule(e.target.value);

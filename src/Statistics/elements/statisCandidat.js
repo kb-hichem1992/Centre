@@ -12,7 +12,7 @@ import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 export default function StatisCandidat(props) {
   const sysDate = new Date();
   const Dte =
-    sysDate.getDate() + "-" + sysDate.getMonth() + "-" + sysDate.getFullYear();
+    sysDate.getDate() + "-" + sysDate.getMonth() + 1 + "-" + sysDate.getFullYear();
 
   const { nbr_total_candidat } = props.statis[0] || [];
 

@@ -12,7 +12,7 @@ import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 export default function StatisBrevet(props) {
   const sysDate = new Date();
   const Dte =
-    sysDate.getDate() + "-" + sysDate.getMonth() + "-" + sysDate.getFullYear();
+    sysDate.getDate() + "-" + sysDate.getMonth()+1 + "-" + sysDate.getFullYear();
 
   const { nbr_total_brevet } = props.statis[0] || [];
 

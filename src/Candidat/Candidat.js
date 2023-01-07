@@ -17,7 +17,6 @@ import {
   ContextMenu,
   ExcelExport,
   PdfExport,
-  SortSettingsModel,
 } from "@syncfusion/ej2-react-grids";
 import { L10n } from "@syncfusion/ej2-base";
 import Axios from "axios";

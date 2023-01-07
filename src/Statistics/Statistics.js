@@ -34,7 +34,7 @@ export default function Statistics({ id }) {
           </Grid>
           <Grid item xs={12}>
             <SearchTable
-              id={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
+              url={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
             />
           </Grid>
         </Grid>

@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import { UserContext } from "./UserContext";
 import LoginForm from "./Login_Form";
 import Dashboard from "./Dashboard.js";
-import DashboardService from "./DashboardMarchandise";
 import { useLocalStorage } from "./useLocalStorage";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import DashboardFormation from "./DashboardFormation";

@@ -55,7 +55,6 @@ export default function OperateurForm(props) {
   const [wilaya, setWilaya] = useState(WILAYA);
   const [date_Enregistrement, setdate_Enregistrement] =
     useState(DATE_ENREGISTREMENT);
-  const [message, setmessage] = useState("");
 
   const add = (
     numeroEnregistrement,

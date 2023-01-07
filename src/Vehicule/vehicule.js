@@ -14,7 +14,6 @@ import { makeStyles } from "@material-ui/core";
 import Button from "../components/controls/Button";
 import { L10n } from "@syncfusion/ej2-base";
 import PageHeader from "../PageHeader";
-import AddIcon from "@material-ui/icons/Add";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useLocalStorage } from "../useLocalStorage";

@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useRef,
   Fragment,
-  useContext,
 } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
@@ -108,7 +107,7 @@ export default function AppBrevet({ id }) {
   const [openSnack, setOpenSnack] = useState(false);
   const [openDateBrevet, setopenDateBrevet] = useState(false);
   const [Values, setValues] = useState();
-  const [admin, setAdmin] = useLocalStorage("typeUser", "");
+  const [admin] = useLocalStorage("typeUser", "");
 
   useEffect(() => {
     fetch(id)

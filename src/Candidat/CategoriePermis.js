@@ -9,7 +9,6 @@ import {
   makeStyles,
   Paper,
 } from "@material-ui/core";
-import { colGroup } from "@syncfusion/ej2-react-grids";
 import React, { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ListCategorie(props) {
-  const { Typepermis, setCategoriePermis, setOpenCategorie, CategoriePermis } =
+  const { Typepermis, setCategoriePermis, setOpenCategorie } =
     props;
   const classes = useStyles();
   const [CatNormal, setCatNormal] = useState({

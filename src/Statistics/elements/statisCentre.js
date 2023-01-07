@@ -12,7 +12,7 @@ import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 export default function StatisCentre(props) {
   const sysDate = new Date();
   const Dte =
-    sysDate.getDate() + "-" + sysDate.getMonth() + "-" + sysDate.getFullYear();
+    sysDate.getDate() + "-" + sysDate.getMonth() + 1 + "-" + sysDate.getFullYear();
 
   const { nbr_centre } = props.statis[0] || [];
 

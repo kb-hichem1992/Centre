@@ -19,20 +19,17 @@ import PageHeader from "../PageHeader";
 import SearchIcon from "@material-ui/icons/Search";
 import { useLocalStorage } from "../useLocalStorage";
 
-export default function SearchTable() {
+export default function SearchTable({ url }) {
   const [data, setdata] = useState([]);
 
   const [side] = useLocalStorage("side");
-  const [type] = useLocalStorage("typeUser");
-  const [numeroAgrement] = useLocalStorage("user", 0);
-  const urlAdmin = `${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`;
-  const urlAutoEcole = `${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}/${type}`;
+
 
   useEffect(() => {
-    fetch(type === "admin" ? urlAdmin : urlAutoEcole)
+    fetch(url)
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, [urlAdmin, urlAutoEcole]);
+  }, [url]);
 
   const filter = {
     type: "Menu",

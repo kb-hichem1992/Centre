@@ -310,7 +310,7 @@ export default function Dashboard(props) {
                       type === "auto_ecole" ? (
                         <AppCand {...props} />
                       ) : (
-                        <SearchTable />
+                        <SearchTable url ={`${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`}/>
                       )
                     ) : (
                       <Redirect to="/signIn" />
