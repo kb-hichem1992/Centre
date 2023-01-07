@@ -1,6 +1,6 @@
+import React, { useState } from "react";
 import { TextField, Paper, makeStyles, Button } from "@material-ui/core";
 import axios from "axios";
-import React, { useState } from "react";
 import Controls from "../components/controls/Controls";
 
 const useStyles = makeStyles((theme) => ({
@@ -53,9 +53,9 @@ export default function OperateurForm(props) {
   const [siege, setSiege] = useState(SIEGE_OP);
   const [propriétaire, setPropriétaire] = useState(PROPRIETAIRE);
   const [wilaya, setWilaya] = useState(WILAYA);
-  const [date_Enregistrement, setdate_Enregistrement] = useState(
-    convert(DATE_ENREGISTREMENT)
-  );
+  const [date_Enregistrement, setdate_Enregistrement] =
+    useState(DATE_ENREGISTREMENT);
+  const [message, setmessage] = useState("");
 
   const add = (
     numeroEnregistrement,
@@ -74,8 +74,13 @@ export default function OperateurForm(props) {
         numeroEnregistrement: numeroEnregistrement,
         date_Enregistrement: date_Enregistrement,
       })
-      .then(() => {
-        setEtat(!etat);
+      .then((response) => {
+        if (response.data.message) {
+          alert(response.data.message);
+        } else {
+          setEtat(!etat);
+          props.Close(false);
+        }
       });
   };
   const update = (
@@ -95,8 +100,13 @@ export default function OperateurForm(props) {
         date_Enregistrement: date_Enregistrement,
         numeroEnregistrement: numeroEnregistrement,
       })
-      .then(() => {
-        setEtat(!etat);
+      .then((response) => {
+        if (response.data.message) {
+          alert(response.data.message);
+        } else {
+          setEtat(!etat);
+          props.Close(false);
+        }
       });
   };
 
@@ -132,6 +142,7 @@ export default function OperateurForm(props) {
             label="رقم القيد"
             value={numeroEnregistrement}
             size="small"
+            disabled={props.type === "update" ? true : false}
             onChange={(e) => setNumeroEnregistrement(e.target.value)}
           />
           <Controls.DatePicker
@@ -172,7 +183,7 @@ export default function OperateurForm(props) {
             color="primary"
             size="small"
             onClick={() => {
-              if (props.type === "add") {
+              if (props.type === "Add") {
                 add(
                   numeroEnregistrement,
                   nomOperateur,
@@ -181,7 +192,6 @@ export default function OperateurForm(props) {
                   wilaya,
                   convert(date_Enregistrement)
                 );
-                props.Close(false);
               }
               if (props.type === "update") {
                 update(
@@ -192,7 +202,6 @@ export default function OperateurForm(props) {
                   wilaya,
                   convert(date_Enregistrement)
                 );
-                props.Close(false);
               }
             }}
           >

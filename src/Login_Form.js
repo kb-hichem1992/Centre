@@ -74,14 +74,16 @@ export default function LoginForm({ setisLogedIn, setUser, setSide }) {
           }
         });
     }
-    if (etablissement === "المديرية") {
+    if (etablissement === "marchandise" || etablissement === "formation") {
       axios
         .post(process.env.REACT_APP_API_URL + "/login_service", {
           username: userName,
           password: password,
+          service: etablissement,
         })
         .then((response) => {
-          if (response.data.message) {
+          if (response.data.message) { 
+            
             setmessage(response.data.message);
           } else {
             setUser(response.data[0]);
@@ -93,7 +95,7 @@ export default function LoginForm({ setisLogedIn, setUser, setSide }) {
             localStorage.setItem("pass", response.data[0].PASSWORD);
             localStorage.setItem("username", response.data[0].USERNAME);
             setisLogedIn(true);
-            window.open("/Direction", "_self");
+            window.open("/" + etablissement, "_self");
           }
         });
     }
@@ -143,7 +145,7 @@ export default function LoginForm({ setisLogedIn, setUser, setSide }) {
             >
               دخول
             </Button>
-            {/* <Button
+            <Button
               fullWidth
               variant="contained"
               color="primary"
@@ -153,7 +155,7 @@ export default function LoginForm({ setisLogedIn, setUser, setSide }) {
               }}
             >
               تسجيل
-            </Button> */}
+            </Button>
             <FormControl component="fieldset">
               <FormLabel component="legend">المؤسسة</FormLabel>
               <RadioGroup
@@ -172,9 +174,14 @@ export default function LoginForm({ setisLogedIn, setUser, setSide }) {
                   label="مركز"
                 />
                 <FormControlLabel
-                  value="المديرية"
+                  value="marchandise"
                   control={<Radio />}
-                  label="المديرية"
+                  label="المديرية - البضائع"
+                />
+                <FormControlLabel
+                  value="formation"
+                  control={<Radio />}
+                  label="المديرية - التكوين"
                 />
               </RadioGroup>
             </FormControl>

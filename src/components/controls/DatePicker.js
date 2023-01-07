@@ -6,17 +6,18 @@ import {
 import MomentUtils from "@date-io/moment";
 
 export default function DatePicker(props) {
-  const { label, value, onChange } = props;
+  const { label, value, onChange , ...other} = props;
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <KeyboardDatePicker
-        variant="inline"
+        variant="dialog"
         inputVariant="outlined"
         label={label}
         format="YYYY-MM-DD"
         value={value}
         onChange={onChange}
+        {...other}
       />
     </MuiPickersUtilsProvider>
   );

@@ -54,7 +54,7 @@ export default function Form(props) {
     DEBUT,
     FIN,
     TYPE_GROUPE,
-  } = props.values;
+  } = props.values || [];
 
   const [data, setdata] = useState([]);
   const [numeroFormation, setnumeroFormation] = useState(NUMERO_FORMATION);

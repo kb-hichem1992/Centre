@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import "./Opérateur.css";
 import {
   GridComponent,
   ColumnDirective,
@@ -14,22 +13,21 @@ import {
 import { makeStyles } from "@material-ui/core";
 import Button from "../components/controls/Button";
 import { L10n } from "@syncfusion/ej2-base";
-
+import PageHeader from "../PageHeader";
+import AddIcon from "@material-ui/icons/Add";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useLocalStorage } from "../useLocalStorage";
-
-import Popup from "../components/Popup";
-import TravailDateForm from "./travailDateForm";
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import axios from "axios";
+import AlertDialog from "../components/controls/Dialog";
 
-export default function ListTravailleur(props) {
+export default function Vehicule(props) {
   const [admin] = useLocalStorage("typeUser", "");
   const [Values, setValues] = useState();
-  const [openDateForm, setopenDateForm] = useState(false);
-  const [state, setstate] = useState(false);
-  const NUMERO_ENREGISTREMENT = props.selectedValue.NUMERO_ENREGISTREMENT;
-
+  const [openAlert, setOpenAlert] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [etat, setEtat] = useState(false);
   L10n.load({
     "ar-AE": {
       grid: {
@@ -56,19 +54,18 @@ export default function ListTravailleur(props) {
     },
   });
   const [data, setdata] = useState([]);
-
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL + props.api + NUMERO_ENREGISTREMENT)
+    fetch(process.env.REACT_APP_API_URL + "/api/get_veh_Mar")
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, [NUMERO_ENREGISTREMENT, state]);
+  }, [etat]);
 
   const useStyles = makeStyles((theme) => ({
     container: {
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(1),
       display: "flex",
-      justifyContent: "flex-end",
+      justifyContent: "space-between",
     },
   }));
 
@@ -91,68 +88,49 @@ export default function ListTravailleur(props) {
     }
   }
 
-  const selectCandidat = () => {
-    props.setnum_peris(Values.NUM_PERMIS);
-    props.setOpenPopup(false);
-  };
-  const delete_travail = () => {
+  const delete_vehicule = () => {
+    const MATRECULE = Values.MATRECULE;
     axios
-      .post(`${process.env.REACT_APP_API_URL}/delete_travail`, {
-        numeroEnregistrement: Values.NUMERO_ENREGISTREMENT,
-        NUM_INS: Values.NUM_INS,
-        DATE_INS: Values.DATE_INS,
-        NUM_PERMIS: Values.NUM_PERMIS,
-        DATE_RECRUTEMENT: Values.DATE_RECRUT,
-      })
+      .delete(`${process.env.REACT_APP_API_URL}/delete_vehicule/${MATRECULE}`)
       .then(() => {
-        setstate(!state);
-        alert("تم الحذف");
+        setEtat(!etat);
       });
   };
   return (
-    <>
+    <Fragment>
+      <PageHeader
+        title=" العربات"
+        subTitle="قائمة العربات"
+        icon={<LocalShippingIcon />}
+      />
       <div className={classes.container}>
-        {props.api === "/api/get_candidat_foreach_operateur_noVehcule/" ? (
+        <div>
           <Button
-            text="تأكيد"
+            text="تعديل"
             variant="outlined"
             size="small"
             startIcon={<EditOutlinedIcon />}
             className={classes.newButton}
-            disabled={Values === undefined ? true : false}
-            onClick={selectCandidat}
+            disabled={Values === undefined || admin !== "admin" ? true : false}
+            onClick={() => {
+              setOpenUpdate(true);
+            }}
           />
-        ) : (
-          <div>
-            <Button
-              text="تعديل"
-              variant="outlined"
-              size="small"
-              startIcon={<EditOutlinedIcon />}
-              className={classes.newButton}
-              disabled={
-                Values === undefined || admin !== "admin" ? true : false
-              }
-              onClick={() => {
-                setopenDateForm(true);
-              }}
-            />
-            <Button
-              text="حذف"
-              variant="outlined"
-              size="small"
-              color="secondary"
-              startIcon={<DeleteIcon />}
-              className={classes.newButton}
-              disabled={
-                Values === undefined || admin !== "admin" ? true : false
-              }
-              onClick={delete_travail}
-            />
-          </div>
-        )}
+          <Button
+            text="حذف"
+            variant="outlined"
+            size="small"
+            color="secondary"
+            startIcon={<DeleteIcon />}
+            className={classes.newButton}
+            disabled={Values === undefined || admin !== "admin" ? true : false}
+            onClick={() => {
+              setOpenAlert(true);
+            }}
+          />
+        </div>
       </div>
-      <div style={{ width: "auto" }}>
+      <div id="cont">
         <GridComponent
           dataSource={data}
           allowPaging={true}
@@ -162,7 +140,7 @@ export default function ListTravailleur(props) {
           filterSettings={filter}
           allowResizing={true}
           allowSorting={true}
-          height={300}
+          height={200}
           ref={TableRef}
           enableRtl={true}
           locale="ar-AE"
@@ -172,32 +150,32 @@ export default function ListTravailleur(props) {
           }}
         >
           <ColumnsDirective>
-            <ColumnDirective field="NUM_INS" headerText="رقم التسجيل " />
-            <ColumnDirective field="NUM_PERMIS" headerText="رخصة السياقة" />
-            <ColumnDirective field="NOM_CANDIDAT" headerText="اللفب" />
-            <ColumnDirective field="PRENOM_CANDIDAT" headerText="الإسم" />
+            <ColumnDirective field="MATRECULE" headerText="الترقيم " />
+            <ColumnDirective field="MARQUE" headerText=" العلامة" />
+            <ColumnDirective field="PTC" headerText="ptc " />
+            <ColumnDirective field="PTAC" headerText="ptac " />
+            <ColumnDirective field="CU" headerText="cu" />
+            <ColumnDirective field="NOM_OP" headerText="  المتعامل " />
+            <ColumnDirective field="PROPRIETAIRE" headerText=" المالك  " />
             <ColumnDirective
-              field="DATE_NAIS_CANDIDAT"
-              headerText="تاريخ الميلاد"
+              field="NUMERO_ENREGISTREMENT"
+              headerText=" رقم القيد"
             />
-            <ColumnDirective field="DATE_RECRUT" headerText="بداية التوظيف" />
-            <ColumnDirective field="DATE_FIN" headerText="نهابة التوظيف" />
           </ColumnsDirective>
           <Inject services={[Page, Sort, Filter, Group, Resize]} />
         </GridComponent>
       </div>
-      <Popup
-        title=" تعديل تاريخ الإنتساب"
-        openPopup={openDateForm}
-        setOpenPopup={setopenDateForm}
-      >
-        <TravailDateForm
-          setOpenPopup={setopenDateForm}
-          selectedValue={Values}
-          state={state}
-          setstate={setstate}
-        />
-      </Popup>
-    </>
+
+      <AlertDialog
+        title="تأكيد"
+        message=" هل تريد حذف هذا المتعامل ؟"
+        open={openAlert}
+        setOpen={setOpenAlert}
+        method={() => {
+          delete_vehicule();
+          setOpenAlert(false);
+        }}
+      />
+    </Fragment>
   );
 }

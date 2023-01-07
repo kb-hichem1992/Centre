@@ -10,7 +10,10 @@ import Container from "@material-ui/core/Container";
 import Axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useLocalStorage } from "./useLocalStorage";
+import AlertDialog from "./components/controls/Dialog";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -51,7 +54,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profil({ id }) {
   const classes = useStyles();
-  const [openSnack, setOpenSnack] = useState(false);
+  const [openَAlert, setOpenAlert] = useState(false);
+
   const [oldpass, setoldpass] = useState("");
   const [newpass, setnewpass] = useState("");
   const [newpassconfirmation, setnewpassconfirmation] = useState("-");
@@ -81,9 +85,7 @@ export default function Profil({ id }) {
       if (response.data.message) {
         setmessage(response.data.message);
       } else {
-        handleClick();
-        localStorage.clear();
-        window.open("/", "_self");
+        setOpenAlert(true);
       }
     });
   };
@@ -97,23 +99,9 @@ export default function Profil({ id }) {
       if (response.data.message) {
         setmessage(response.data.message);
       } else {
-        handleClick();
-        localStorage.clear();
-        window.open("/", "_self");
+        setOpenAlert(true);
       }
     });
-  };
-
-  const handleClick = () => {
-    setOpenSnack(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSnack(false);
   };
 
   return (
@@ -181,8 +169,13 @@ export default function Profil({ id }) {
                     admin,
                     numeroAgrement
                   );
-                } else if (side === "المديرية") {
-                  update_pass_direction(oldpass, oldPassword, newpass, username);
+                } else if (side === "formation" || "marchandise") {
+                  update_pass_direction(
+                    oldpass,
+                    oldPassword,
+                    newpass,
+                    username
+                  );
                 }
               }}
             >
@@ -195,15 +188,16 @@ export default function Profil({ id }) {
         </div>
       </Container>
       <div className={classes.root}>
-        <Snackbar
-          open={openSnack}
-          autoHideDuration={6000}
-          onClose={handleClose}
-        >
-          <Alert onClose={handleClose} severity="info">
-            تمت العملية
-          </Alert>
-        </Snackbar>
+        <AlertDialog
+          title="تأكيد"
+          message=" تمت تغيير كلمة السر, هل تريد الخروج ؟"
+          open={openَAlert}
+          setOpen={setOpenAlert}
+          method={() => {
+            localStorage.clear();
+            window.open("/", "_self");
+          }}
+        />
       </div>
     </>
   );

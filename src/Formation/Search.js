@@ -19,19 +19,23 @@ import PageHeader from "../PageHeader";
 import SearchIcon from "@material-ui/icons/Search";
 import { useLocalStorage } from "../useLocalStorage";
 
-export default function SearchTable({ id }) {
+export default function SearchTable() {
   const [data, setdata] = useState([]);
 
   const [side] = useLocalStorage("side");
+  const [type] = useLocalStorage("typeUser");
+  const [numeroAgrement] = useLocalStorage("user", 0);
+  const urlAdmin = `${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`;
+  const urlAutoEcole = `${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}/${type}`;
 
   useEffect(() => {
-    fetch(id)
+    fetch(type === "admin" ? urlAdmin : urlAutoEcole)
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, [id]);
+  }, [urlAdmin, urlAutoEcole]);
 
   const filter = {
-    type: "CheckBox",
+    type: "Menu",
   };
 
   const TableRef3 = useRef(null);
@@ -74,13 +78,13 @@ export default function SearchTable({ id }) {
         <GridComponent
           dataSource={data}
           allowPaging={true}
-          pageSettings={{ pageSize: 100 }}
+          pageSettings={{ pageSize: 13 }}
           allowFiltering={true}
           allowGrouping={true}
           filterSettings={filter}
           allowResizing={true}
           allowSorting={true}
-          height={240}
+          height="auto"
           ref={TableRef3}
           enableRtl={true}
           locale="ar-AE"
@@ -137,6 +141,11 @@ export default function SearchTable({ id }) {
             <ColumnDirective
               field="NOTE"
               headerText="العلامة"
+              clipMode="EllipsisWithTooltip"
+            />
+            <ColumnDirective
+              field="BREVET"
+              headerText="رقم الشهادة"
               clipMode="EllipsisWithTooltip"
             />
           </ColumnsDirective>

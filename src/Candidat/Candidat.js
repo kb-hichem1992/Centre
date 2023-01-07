@@ -121,11 +121,15 @@ export default function AppCand({ id }) {
   const [etat, setEtat] = useState(false);
   const [open, setOpen] = useState(false);
   const [Values, setValues] = useState();
-  const [admin] = useLocalStorage("typeUser", "");
+  const [admin] = useLocalStorage("typeUser");
   const [numeroAgrement] = useLocalStorage("user", 0);
+  const [numCand, setNumCan] = useState("");
 
   useEffect(() => {
-    fetch(id)
+    const urlAdmin = process.env.REACT_APP_API_URL + "/api/get_candidat";
+    const urlAutoEcole =
+      process.env.REACT_APP_API_URL + "/api/get_candidat/" + admin;
+    fetch(admin === "admin" ? urlAdmin : urlAutoEcole)
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [id, etat]);
@@ -172,7 +176,8 @@ export default function AppCand({ id }) {
     Num_permis,
     date_liv,
     categorie_permis,
-    type_permis
+    type_permis,
+    createur
   ) => {
     Axios.post(process.env.REACT_APP_API_URL + "/Add_condidat", {
       numeroCandidat: numeroCandidat,
@@ -190,6 +195,7 @@ export default function AppCand({ id }) {
       date_liv: date_liv,
       categorie_permis: categorie_permis,
       type_permis: type_permis,
+      createur: createur,
     }).then(() => {
       setEtat(!etat);
     });
@@ -280,6 +286,8 @@ export default function AppCand({ id }) {
       const obj = JSON.stringify(selectedrecords);
       const parsedobj = JSON.parse(obj);
       setValues(parsedobj[0]);
+      const a = parsedobj[0].NUM_INS ;
+      setNumCan(a.split("-")[0]);
     } catch (error) {
       console.log(error);
     }
@@ -364,7 +372,9 @@ export default function AppCand({ id }) {
               size="small"
               startIcon={<AddIcon />}
               className={classes.newButton}
-              disabled={Values === undefined ? true : false}
+              disabled={
+                Values === undefined || admin !== "admin" ? true : false
+              }
               onClick={() => {
                 setOpenFormation(true);
               }}
@@ -390,13 +400,13 @@ export default function AppCand({ id }) {
             dataSource={filtredData}
             enableRtl={true}
             allowPaging={true}
-            pageSettings={{ pageSize: 100 }}
+            pageSettings={{ pageSize: 11 }}
             allowFiltering={true}
             allowGrouping={true}
             filterSettings={filter}
             allowResizing={true}
             allowSorting={true}
-            height={180}
+            height="auto"
             ref={TableRef2}
             contextMenuItems={[...ContextMenuItemModel, ...contextMenuItems]}
             contextMenuClick={contextMenuClick}
@@ -454,6 +464,11 @@ export default function AppCand({ id }) {
                 headerText="نوع المترشح"
                 clipMode="EllipsisWithTooltip"
               />
+              <ColumnDirective
+                field="createur"
+                headerText=" المصدر"
+                clipMode="EllipsisWithTooltip"
+              />
             </ColumnsDirective>
             <Inject
               services={[
@@ -497,6 +512,7 @@ export default function AppCand({ id }) {
           onClick={updateCandidat}
           Close={setOpenModifier}
           values={Values}
+          numCand={numCand}
           data={data}
         />
       </Popup>

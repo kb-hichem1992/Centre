@@ -24,7 +24,7 @@ export default function Register({ etablissement }) {
         alert("inserted");
       });
     }
-    if (etablissement === "المديرية") {
+    if (etablissement === "marchandise" || etablissement === "formation") {
       Axios.post(process.env.REACT_APP_API_URL + "/register_service", {
         username: directionUserName,
         wilaya: wilaya,

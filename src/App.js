@@ -2,9 +2,11 @@ import React, { useState, useMemo } from "react";
 import { UserContext } from "./UserContext";
 import LoginForm from "./Login_Form";
 import Dashboard from "./Dashboard.js";
-import DashboardService from "./DashboardService";
+import DashboardService from "./DashboardMarchandise";
 import { useLocalStorage } from "./useLocalStorage";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import DashboardFormation from "./DashboardFormation";
+import DashboardMarchandise from "./DashboardMarchandise";
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
 
@@ -95,10 +97,20 @@ function App() {
           }
         />
         <Route
-          path="/Direction"
+          path="/formation"
           render={(props) =>
-            isLogedIn && side === "المديرية" ? (
-              <DashboardService setisLogedIn={setisLogedIn} />
+            isLogedIn && side === "formation" ? (
+              <DashboardFormation setisLogedIn={setisLogedIn} />
+            ) : (
+              <Redirect to="/signIn" />
+            )
+          }
+        />
+        <Route
+          path="/marchandise"
+          render={(props) =>
+            isLogedIn && side === "marchandise" ? (
+              <DashboardMarchandise setisLogedIn={setisLogedIn} />
             ) : (
               <Redirect to="/signIn" />
             )

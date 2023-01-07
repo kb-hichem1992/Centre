@@ -16,31 +16,27 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import LaptopChromebookIcon from "@material-ui/icons/LaptopChromebook";
-import AppOp from "./Tables/AppOp.js";
-import AppFor from "./Formation/Formation.js";
-import AppCand from "./Candidat/Candidat.js";
-import AppVeh from "./Table_vehicule//AppVeh.js";
 import Button from "./components/controls/Button";
+import Operateur from "./Opérateur/Opérateur";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Link,
   useRouteMatch,
-  Redirect,
 } from "react-router-dom";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import GroupIcon from "@material-ui/icons/Group";
-import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
-import AppBrevet from "./Brevet/Brevet.js";
 import Profil from "./Profil";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SearchTable from "./Formation/Search.js";
 import SearchIcon from "@material-ui/icons/Search";
-import { useLocalStorage } from "./useLocalStorage";
+import Vehicule from "./Vehicule/vehicule";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import GroupIcon from "@mui/icons-material/Group";
 
-const drawerWidth = 180;
+const drawerWidth = 200;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -153,22 +149,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard(props) {
+export default function DashboardMarchandise(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [numeroAgrement] = useLocalStorage("user", 0);
-  let { path, url } = useRouteMatch();
-  const [isLogedIn] = useLocalStorage("isLoggedIn");
-  const [side] = useLocalStorage("side");
-  const [type] = useLocalStorage("typeUser");
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  let { path, url } = useRouteMatch();
   return (
     // the Appbar Starts from here
     <Router>
@@ -199,7 +190,7 @@ export default function Dashboard(props) {
               noWrap
               className={classes.title}
             >
-              مركز رقم {numeroAgrement}
+              مديرية النقل - البضائع{" "}
             </Typography>
             <Button
               text="خروج"
@@ -235,51 +226,28 @@ export default function Dashboard(props) {
           </div>
           <Divider />
           <List>
-            <Link to={`${url}`} className={classes.link}>
+            <Link to={url} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
-                  {type === "auto_ecole" ? <GroupIcon /> : <SearchIcon />}
+                  <SearchIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={type === "auto_ecole" ? "المنرشحين" : "البحث"}
-                />
+                <ListItemText primary="البحث" />
               </ListItem>
             </Link>
-            <Link
-              hidden={type === "admin" ? false : true}
-              to={`${url}/candidat`}
-              className={classes.link}
-            >
-              ''
+            <Link to={url + "/operateur"} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <GroupIcon />
                 </ListItemIcon>
-                <ListItemText primary="المنرشحين" />
+                <ListItemText primary="المتعاملين" />
               </ListItem>
             </Link>
-            <Link
-              to={`${url}/Formation`}
-              className={classes.link}
-              hidden={type === "admin" ? false : true}
-            >
+            <Link to={url + "/véhicule"} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
-                  <LaptopChromebookIcon />
+                  <LocalShippingIcon />
                 </ListItemIcon>
-                <ListItemText primary="الدورات" />
-              </ListItem>
-            </Link>
-            <Link
-              to={url + "/Diplômes"}
-              className={classes.link}
-              hidden={type === "admin" ? false : true}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <LibraryBooksIcon />
-                </ListItemIcon>
-                <ListItemText primary="الشهادات" />
+                <ListItemText primary="العربات" />
               </ListItem>
             </Link>
           </List>
@@ -287,7 +255,7 @@ export default function Dashboard(props) {
           <Link to={url + "/Profile"} className={classes.link}>
             <ListItem button>
               <ListItemIcon>
-                <AccountCircleIcon />
+                <AdminPanelSettingsIcon />
               </ListItemIcon>
               <ListItemText primary="الحساب" />
             </ListItem>
@@ -303,81 +271,31 @@ export default function Dashboard(props) {
             <Grid item xs={12}>
               <Switch>
                 <Route
-                  path={`${path}`}
+                  path={path}
                   exact
-                  render={(props) =>
-                    isLogedIn && side === "مركز" ? (
-                      type === "auto_ecole" ? (
-                        <AppCand {...props} />
-                      ) : (
-                        <SearchTable />
-                      )
-                    ) : (
-                      <Redirect to="/signIn" />
-                    )
-                  }
-                />
-                <Route path="/op/mor">
-                  <AppOp
-                    id={process.env.REACT_APP_API_URL + "/api/get_op/mor"}
-                    Title={"Liste des opérateurs/Personne Morale"}
-                  />
-                </Route>
-                <Route
-                  path="/op/phy"
-                  render={(props) => (
-                    <AppOp
-                      {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_op/phy"}
-                      Title={"Liste des opérateurs/Personne Physique"}
+                  render={() => (
+                    <SearchTable
+                      id={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
                     />
                   )}
                 />
                 <Route
-                  path={`${path}/Formation`}
-                  render={(props) =>
-                    isLogedIn && side === "مركز" ? (
-                      <AppFor
-                        {...props}
-                        id={
-                          process.env.REACT_APP_API_URL +
-                          "/api/get_form/" +
-                          numeroAgrement
-                        }
-                      />
-                    ) : (
-                      <Redirect to="/signIn" />
-                    )
-                  }
+                  path={path + "/operateur"}
+                  exact
+                  render={() => <Operateur />}
                 />
                 <Route
-                  path={`${path}/candidat`}
-                  render={(props) => <AppCand {...props} />}
-                />
-                <Route
-                  path="/Vehicule"
-                  render={(props) => (
-                    <AppVeh
-                      {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_veh_Mar"}
-                      id2={process.env.REACT_APP_API_URL + "/api/get_veh_voyag"}
-                    />
-                  )}
-                />
-                <Route
-                  path={path + "/Diplômes"}
-                  render={(props) => (
-                    <AppBrevet
-                      {...props}
-                      id={`${process.env.REACT_APP_API_URL}/api/get_brevet/${numeroAgrement}`}
-                    />
-                  )}
+                  path={path + "/véhicule"}
+                  exact
+                  render={() => <Vehicule />}
                 />
                 <Route
                   path={path + "/Profile"}
-                  render={() => (
+                  render={(props) => (
                     <Profil
-                      id={process.env.REACT_APP_API_URL + "/pass_Center_update"}
+                      id={
+                        process.env.REACT_APP_API_URL + "/pass_Direction_update"
+                      }
                     />
                   )}
                 />

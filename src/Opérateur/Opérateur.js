@@ -25,14 +25,22 @@ import ListTravailleur from "./ListTravailleur";
 import OperateurForm from "./Operateur_form.js";
 import axios from "axios";
 import AlertDialog from "../components/controls/Dialog";
+import ListCandidat from "../Candidat/ListCandidat";
+import PopupFull from "../components/PopupFullScreen";
+import VehiculeForm from"../Vehicule/vehiculeForm";
+import PersonOutlineSharpIcon from "@mui/icons-material/PersonOutlineSharp";
+import GroupIcon from "@mui/icons-material/Group";
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 
 export default function Operateur(props) {
   const [admin] = useLocalStorage("typeUser", "");
   const [Values, setValues] = useState();
-
   const [openAlert, setOpenAlert] = useState(false);
+  const [openVehForm, setopenVehForm] = useState(false)
   const [openAdd, setOpenAdd] = useState(false);
+  const [openCandList, setOpenCandList] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [openList, setOpenList] = useState(false);
   const [etat, setEtat] = useState(false);
   L10n.load({
     "ar-AE": {
@@ -61,7 +69,7 @@ export default function Operateur(props) {
   });
   const [data, setdata] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:3001/api/getOp")
+    fetch(process.env.REACT_APP_API_URL + "/api/getOp")
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [etat]);
@@ -71,7 +79,7 @@ export default function Operateur(props) {
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(1),
       display: "flex",
-      justifyContent: "flex-end",
+      justifyContent: "space-between",
     },
   }));
 
@@ -117,42 +125,79 @@ export default function Operateur(props) {
       <PageHeader
         title=" المتعاملين"
         subTitle="قائمة المتعاملين"
-        icon={<SupervisedUserCircleIcon />}
+        icon={<GroupIcon />}
       />
       <div className={classes.container}>
-        <Button
-          text="إضافة"
-          variant="outlined"
-          size="small"
-          startIcon={<AddIcon />}
-          className={classes.newButton}
-          onClick={() => {
-            setOpenAdd(true);
-          }}
-        />
-        <Button
-          text="تعديل"
-          variant="outlined"
-          size="small"
-          startIcon={<EditOutlinedIcon />}
-          className={classes.newButton}
-          disabled={Values === undefined || admin !== "admin" ? true : false}
-          onClick={() => {
-            setOpenUpdate(true);
-          }}
-        />
-        <Button
-          text="حذف"
-          variant="outlined"
-          size="small"
-          color="secondary"
-          startIcon={<DeleteIcon />}
-          className={classes.newButton}
-          disabled={Values === undefined || admin !== "admin" ? true : false}
-          onClick={() => {
-          setOpenAlert(true)
-          }}
-        />
+        <div>
+          <Button
+            text="إضافة"
+            variant="outlined"
+            size="small"
+            startIcon={<AddIcon />}
+            className={classes.newButton}
+            onClick={() => {
+              setOpenAdd(true);
+            }}
+          />
+          <Button
+            text="تعديل"
+            variant="outlined"
+            size="small"
+            startIcon={<EditOutlinedIcon />}
+            className={classes.newButton}
+            disabled={Values === undefined || admin !== "admin" ? true : false}
+            onClick={() => {
+              setOpenUpdate(true);
+            }}
+          />
+          <Button
+            text="حذف"
+            variant="outlined"
+            size="small"
+            color="secondary"
+            startIcon={<DeleteIcon />}
+            className={classes.newButton}
+            disabled={Values === undefined || admin !== "admin" ? true : false}
+            onClick={() => {
+              setOpenAlert(true);
+            }}
+          />
+        </div>
+        <div>
+          <Button
+            text="إضافة عامل"
+            variant="outlined"
+            size="small"
+            startIcon={<SupervisedUserCircleIcon />}
+            className={classes.newButton}
+            disabled={Values === undefined || admin !== "admin" ? true : false}
+            onClick={() => {
+              setOpenCandList(true);
+            }}
+          />
+          <Button
+            text="إضافة عربة"
+            variant="outlined"
+            size="small"
+            startIcon={<LocalShippingIcon />}
+            className={classes.newButton}
+            disabled={Values === undefined || admin !== "admin" ? true : false}
+            onClick={() => {
+              setopenVehForm(true);
+            }}
+          />
+          <Button
+            text="قائمة العمال"
+            variant="outlined"
+            size="small"
+            startIcon={<PersonOutlineSharpIcon />}
+            className={classes.newButton}
+            disabled={Values === undefined || admin !== "admin" ? true : false}
+            onClick={() => {
+              setOpenList(true);
+            }}
+          />
+        </div>
       </div>
       <div id="cont">
         <GridComponent
@@ -189,14 +234,18 @@ export default function Operateur(props) {
           <Inject services={[Page, Sort, Filter, Group, Resize]} />
         </GridComponent>
       </div>
-      <div id="cont">
-        <PageHeader
-          title=" المتعاملين"
-          subTitle="قائمة العمال لكل متعامل"
-          icon={<SupervisedUserCircleIcon />}
+      <Popup
+        title="قائمة المترشحين"
+        openPopup={openCandList}
+        setOpenPopup={setOpenCandList}
+      >
+        <ListCandidat
+          setOpenPopup={setOpenCandList}
+          etat={etat}
+          setEtat={setEtat}
+          selectedValue={Values}
         />
-        <ListTravailleur type="show" />
-      </div>
+      </Popup>
       <Popup
         title=" إضافة المتعامل"
         openPopup={openAdd}
@@ -204,7 +253,7 @@ export default function Operateur(props) {
       >
         <OperateurForm
           type="Add"
-          Values={Values}
+          Values={initialvalues}
           setEtat={setEtat}
           etat={etat}
           Close={setOpenAdd}
@@ -223,6 +272,26 @@ export default function Operateur(props) {
           Close={setOpenUpdate}
         />
       </Popup>
+      <Popup
+        title="  إضافة عربة"
+        openPopup={openVehForm}
+        setOpenPopup={setopenVehForm}
+      >
+        <VehiculeForm
+          type="update"
+          Values={Values}
+          setEtat={setEtat}
+          etat={etat}
+          Close={setOpenUpdate}
+        />
+      </Popup>
+      <PopupFull
+        title=" قائمة العمال "
+        openPopup={openList}
+        setOpenPopup={setOpenList}
+      >
+        <ListTravailleur api={"/api/get_candidat_foreach_operateur/"} selectedValue={Values || ""} type="show" />
+      </PopupFull>
       <AlertDialog
         title="تأكيد"
         message=" هل تريد حذف هذا المتعامل ؟"

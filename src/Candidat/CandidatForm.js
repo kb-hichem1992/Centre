@@ -23,6 +23,7 @@ import Popup from "../components/Popup";
 import ListCategorie from "./CategoriePermis";
 
 import { useLocalStorage } from "../useLocalStorage";
+import { Stack } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,6 +63,10 @@ const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(1),
   },
+
+  FormGroup: {
+    display: "inline",
+  },
 }));
 
 export default function Candidat(props) {
@@ -87,7 +92,7 @@ export default function Candidat(props) {
   } = props.values || [];
 
   const [selectedDate, setSelectedDate] = useState(DATE_NAIS_CANDIDAT);
-  const [numeroCandidat, setNumeroCandidat] = useState(NUM_INS);
+  const [numeroCandidat, setNumeroCandidat] = useState(props.numCand);
   const [Date_ins, setDate_ins] = useState(DATE_INS);
   const [Type_candidat, setType_candidat] = useState(TYPE_CANDIDAT);
   const [Nom, setNom] = useState(NOM_CANDIDAT);
@@ -105,6 +110,7 @@ export default function Candidat(props) {
   const [open, setOpen] = useState(false);
   const [Categorie, setOpenCategorie] = useState(false);
   const [numeroAgrement] = useLocalStorage("user", 0);
+  const [createur] = useLocalStorage("typeUser");
 
   const Num_insc =
     numeroCandidat +
@@ -209,7 +215,13 @@ export default function Candidat(props) {
       textChanged === true
     ) {
       alert("المترشح مسجل من قبل");
-    } else if (TestNumIns(Num_insc)) {
+    } else if (TestNumIns(Num_insc) && props.type === "add") {
+      alert("رقم التسجيل مكرر");
+    } else if (
+      TestNumIns(Num_insc) &&
+      props.type === "update" &&
+      textChanged === true
+    ) {
       alert("رقم التسجيل مكرر");
     } else if (CategoriePermis === "B") {
       alert(" صنف رخسة السياقة غير مقبول");
@@ -231,16 +243,30 @@ export default function Candidat(props) {
         <form className={classes.root} noValidate autoComplete="on">
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField
-                variant="outlined"
-                label=" رقم التسجيل"
-                value={numeroCandidat}
-                size="small"
-                /*    disabled={
-                  props.onClick.name === "updateCandidat" ? true : false
-                } */
-                onChange={(e) => setNumeroCandidat(e.target.value)}
-              />
+              <Stack
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={0.5}
+              >
+                <TextField
+                  variant="outlined"
+                  label=" رقم التسجيل"
+                  value={numeroCandidat}
+                  size="small"
+                  style={{ width: "auto" }}
+                  /*    disabled={
+          props.onClick.name === "updateCandidat" ? true : false
+        } */
+                  onChange={(e) => {
+                    setNumeroCandidat(e.target.value);
+                    setTextChanged(true);
+                  }}
+                />
+                <p> {new Date(Date_ins).getFullYear()} - </p>
+                <p>{numeroAgrement}</p>
+              </Stack>
+
               <Controls.DatePicker
                 label="تاريخ التسجيل"
                 value={Date_ins}
@@ -461,12 +487,12 @@ export default function Candidat(props) {
                 convert(LivPermis),
                 CategoriePermis.toString(),
                 Typepermis,
-                convert(Date_ins)
+                createur
               );
             } else if (props.type === "update") {
               props.onClick(
                 NUM_INS,
-                numeroCandidat,
+                Num_insc,
                 convert(DATE_INS),
                 Nom,
                 Prenom,
@@ -481,7 +507,8 @@ export default function Candidat(props) {
                 convert(LivPermis),
                 CategoriePermis.toString(),
                 Typepermis,
-                convert(Date_ins)
+                convert(Date_ins),
+                createur
               );
             }
           } catch (err) {
