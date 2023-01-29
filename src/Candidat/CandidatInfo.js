@@ -51,6 +51,7 @@ export default function CandidatInfo(props) {
     }
   }
   const {
+    NUMERO_NAT,
     ADRESSE_CANDIDAT,
     DATE_NAIS_CANDIDAT,
     LIEU_NAIS_CANDIDAT,
@@ -95,17 +96,7 @@ export default function CandidatInfo(props) {
                 {convert(DATE_LIV_PERMIS)}
               </Typography>
             </Typography>
-            {/* <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              :  رقم الهاتف {" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                
-              </Typography>
-            </Typography> */}
+
             <Typography
               align="right"
               color="textSecondary"
@@ -133,136 +124,7 @@ export default function CandidatInfo(props) {
                 {TYPE_PERMIS}
               </Typography>
             </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              رقم التسجيل :{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
-                {NUM_INS}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              تاريخ التسجيل:{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
-                {convert(DATE_INS)}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              اللقب:{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
-                {NOM_CANDIDAT}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              الاسم:{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
-                {PRENOM_CANDIDAT}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              إسم الأب:{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
-                {PRENOM_PERE}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              تاريخ الميلاد :
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
-                {convert(DATE_NAIS_CANDIDAT)}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              مكان الميلاد:
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
-                {LIEU_NAIS_CANDIDAT}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              الجنس :{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
-                {SEX_CONDIDAT}
-              </Typography>
-            </Typography>
+
             <Typography
               align="right"
               color="textSecondary"
@@ -270,12 +132,7 @@ export default function CandidatInfo(props) {
               paragraph={true}
             >
               المستوى الدراسي:{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
                 {NIVEAU_SCOL_CANDIDAT}
               </Typography>
             </Typography>
@@ -286,12 +143,7 @@ export default function CandidatInfo(props) {
               paragraph={true}
             >
               العنوان:{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
                 {ADRESSE_CANDIDAT}
               </Typography>
             </Typography>
@@ -302,13 +154,109 @@ export default function CandidatInfo(props) {
               paragraph={true}
             >
               طبيعة المترشح:{" "}
-              <Typography
-                color="textPrimary"
-                variant="h6"
-                display="inline"
-                paragraph={true}
-              >
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
                 {TYPE_CANDIDAT}
+              </Typography>
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              رقم التسجيل :{" "}
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {NUM_INS}
+              </Typography>
+            </Typography>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              تاريخ التسجيل:{" "}
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {convert(DATE_INS)}
+              </Typography>
+            </Typography>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              الرقم الوطني:
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {NUMERO_NAT ? NUMERO_NAT : " لم يسجل بعد"}
+              </Typography>
+            </Typography>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              اللقب:{" "}
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {NOM_CANDIDAT}
+              </Typography>
+            </Typography>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              الاسم:{" "}
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {PRENOM_CANDIDAT}
+              </Typography>
+            </Typography>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              إسم الأب:{" "}
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {PRENOM_PERE}
+              </Typography>
+            </Typography>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              تاريخ الميلاد :
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {convert(DATE_NAIS_CANDIDAT)}
+              </Typography>
+            </Typography>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              مكان الميلاد:
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {LIEU_NAIS_CANDIDAT}
+              </Typography>
+            </Typography>
+            <Typography
+              align="right"
+              color="textSecondary"
+              variant="h6"
+              paragraph={true}
+            >
+              الجنس :{" "}
+              <Typography color="textPrimary" variant="h6" paragraph={true}>
+                {SEX_CONDIDAT}
               </Typography>
             </Typography>
           </Grid>

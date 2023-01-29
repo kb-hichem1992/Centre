@@ -13,6 +13,9 @@ import {
   Resize,
   Sort,
   ExcelExport,
+  PdfExport,
+  ColumnMenu,
+  Edit,
 } from "@syncfusion/ej2-react-grids";
 import { L10n } from "@syncfusion/ej2-base";
 import PageHeader from "../PageHeader";
@@ -24,16 +27,16 @@ export default function SearchTable({ url }) {
 
   const [side] = useLocalStorage("side");
 
-
   useEffect(() => {
     fetch(url)
       .then((response) => response.json())
       .then((json) => setdata(json));
   }, [url]);
 
-  const filter = {
-    type: "Menu",
-  };
+
+
+  const groupOptions = { showGroupedColumn: true };
+  const filterSettings = { type: "Menu" };
 
   const TableRef3 = useRef(null);
   const contextMenuItems = ["Copy", "ExcelExport"];
@@ -49,6 +52,15 @@ export default function SearchTable({ url }) {
         ClearButton: "مسح ",
         Search: "بحث ",
         GroupDropArea: "اسحب رأس العمود هنا لتجميع العمود الخاص به ",
+        StartsWith: "يبدأ بي",
+        EndsWith: "ينتهي بي",
+        Contains: "يحتوي على",
+        Equal: "يساوي",
+        NotEqual: "لا يساوي",
+        LessThan: "أقل من",
+        LessThanOrEqual: "أقل أو يساوي",
+        GreaterThan: "أكبر من",
+        GreaterThanOrEqual: "أكبر أو يساوي",
       },
 
       pager: {
@@ -78,7 +90,6 @@ export default function SearchTable({ url }) {
           pageSettings={{ pageSize: 13 }}
           allowFiltering={true}
           allowGrouping={true}
-          filterSettings={filter}
           allowResizing={true}
           allowSorting={true}
           height="auto"
@@ -87,6 +98,8 @@ export default function SearchTable({ url }) {
           locale="ar-AE"
           contextMenuItems={contextMenuItems}
           allowExcelExport={true}
+          groupSettings={groupOptions}
+          filterSettings={filterSettings}
         >
           <ColumnsDirective>
             <ColumnDirective
@@ -155,6 +168,10 @@ export default function SearchTable({ url }) {
               Resize,
               ContextMenu,
               ExcelExport,
+              ColumnMenu,
+              PdfExport,
+              Group,
+              Edit,
             ]}
           />
         </GridComponent>

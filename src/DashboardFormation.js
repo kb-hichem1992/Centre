@@ -186,7 +186,7 @@ export default function DashboardFormation(props) {
               noWrap
               className={classes.title}
             >
-              مديرية النقل - التكوين{" "}
+               مكتب التكوين{" "}
             </Typography>
             <Button
               text="خروج"

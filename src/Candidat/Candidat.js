@@ -94,8 +94,15 @@ L10n.load({
       ClearButton: "مسح ",
       Search: "بحث ",
       GroupDropArea: "اسحب رأس العمود هنا لتجميع العمود الخاص به ",
-      Excelexport: "تصدير Excel",
-      Copy: "نسخ",
+      StartsWith: "يبدأ بي",
+      EndsWith: "ينتهي بي",
+      Contains: "يحتوي على",
+      Equal: "يساوي",
+      NotEqual: "لا يساوي",
+      LessThan: "أقل من",
+      LessThanOrEqual: "أقل أو يساوي",
+      GreaterThan: "أكبر من",
+      GreaterThanOrEqual: "أكبر أو يساوي",
     },
 
     pager: {
@@ -110,7 +117,6 @@ L10n.load({
     },
   },
 });
-
 export default function AppCand({ id }) {
   const [data, setdata] = useState([]);
   const [openAjouter, setOpenAjouter] = useState(false);
@@ -163,6 +169,7 @@ export default function AppCand({ id }) {
   const addCondidat = (
     numeroCandidat,
     Date_ins,
+    num_Nationnal,
     Nom,
     Prénom,
     Date_naissance,
@@ -181,6 +188,7 @@ export default function AppCand({ id }) {
     Axios.post(process.env.REACT_APP_API_URL + "/Add_condidat", {
       numeroCandidat: numeroCandidat,
       Date_ins: Date_ins,
+      num_Nationnal: num_Nationnal,
       Nom: Nom,
       Prénom: Prénom,
       Date_naissance: Date_naissance,
@@ -203,6 +211,7 @@ export default function AppCand({ id }) {
     numeroCandidat,
     numins,
     DATE_INS,
+    num_Nationnal,
     Nom,
     Prénom,
     Date_naissance,
@@ -220,6 +229,7 @@ export default function AppCand({ id }) {
   ) => {
     Axios.put(process.env.REACT_APP_API_URL + "/update_candidat", {
       numins: numins,
+      num_Nationnal: num_Nationnal,
       Nom: Nom,
       Prénom: Prénom,
       Date_naissance: Date_naissance,
@@ -251,9 +261,6 @@ export default function AppCand({ id }) {
     });
   };
 
-  const filter = {
-    type: "CheckBox",
-  };
   const SortSettingsModel = {
     columns: [{ field: "DATE_INS", direction: "Descending " }],
   };
@@ -277,6 +284,7 @@ export default function AppCand({ id }) {
     DATE_LIV_PERMIS: new Date(),
     CATEGORIE_PERMIS: "",
     TYPE_PERMIS: "القديم",
+    NUMERO_NAT : ""
   };
 
   async function rowSelected() {
@@ -285,7 +293,7 @@ export default function AppCand({ id }) {
       const obj = JSON.stringify(selectedrecords);
       const parsedobj = JSON.parse(obj);
       setValues(parsedobj[0]);
-      const a = parsedobj[0].NUM_INS ;
+      const a = parsedobj[0].NUM_INS;
       setNumCan(a.split("-")[0]);
     } catch (error) {
       console.log(error);
@@ -315,7 +323,7 @@ export default function AppCand({ id }) {
         icon={<GroupIcon />}
       />
       <div className={classes.div}>
-        <div className={classes.container}>
+        <div>
           <Button
             text="إضافة"
             variant="outlined"
@@ -386,26 +394,24 @@ export default function AppCand({ id }) {
               size="small"
               startIcon={<PrintIcon />}
               className={classes.newButton}
-              disabled={
-                Values === undefined || admin !== "admin" ? true : false
-              }
+              disabled={Values === undefined ? true : false}
             />
           </form>
         </div>
       </div>
-      <div className={classes.container}>
+      <div >
         <Paper className={classes.paper}>
           <GridComponent
             dataSource={filtredData}
             enableRtl={true}
             allowPaging={true}
-            pageSettings={{ pageSize: 11 }}
+            pageSettings={{ pageSize: 10 }}
             allowFiltering={true}
             allowGrouping={true}
-            filterSettings={filter}
+            filterSettings={{ type: "Menu" }}
             allowResizing={true}
             allowSorting={true}
-            height="auto"
+            height="250"
             ref={TableRef2}
             contextMenuItems={[...ContextMenuItemModel, ...contextMenuItems]}
             contextMenuClick={contextMenuClick}
@@ -419,6 +425,11 @@ export default function AppCand({ id }) {
             }}
           >
             <ColumnsDirective>
+              <ColumnDirective
+                field="NUMERO_NAT"
+                headerText="الرقم الوطني"
+                clipMode="EllipsisWithTooltip"
+              />
               <ColumnDirective
                 field="NUM_INS"
                 headerText="رقم التسجيل"

@@ -89,6 +89,7 @@ export default function Candidat(props) {
     TYPE_PERMIS,
     DATE_INS,
     TYPE_CANDIDAT,
+    NUMERO_NAT,
   } = props.values || [];
 
   const [selectedDate, setSelectedDate] = useState(DATE_NAIS_CANDIDAT);
@@ -106,7 +107,10 @@ export default function Candidat(props) {
   const [NumPermis, setNumPermis] = useState(NUM_PERMIS);
   const [LivPermis, setLivPermis] = useState(DATE_LIV_PERMIS);
   const [CategoriePermis, setCategoriePermis] = useState(CATEGORIE_PERMIS);
+  const [numeroNationnal, setNumeroNationnal] = useState(NUMERO_NAT);
+
   const [textChanged, setTextChanged] = useState(false);
+  const [NumNatChanged, setNumNatChanged] = useState(false);
   const [open, setOpen] = useState(false);
   const [Categorie, setOpenCategorie] = useState(false);
   const [numeroAgrement] = useLocalStorage("user", 0);
@@ -155,13 +159,9 @@ export default function Candidat(props) {
     }
   }
 
-  function CandidatExists(id, date, num_permis) {
+  function numero_nationnal_existe(id) {
     return props.data.some(function (el) {
-      if (
-        el.NUM_INS === id &&
-        el.DATE_INS === convert(date) &&
-        el.NUM_PERMIS === num_permis
-      ) {
+      if (el.NUMERO_NAT === id) {
         return true;
       } else {
         return false;
@@ -204,15 +204,17 @@ export default function Candidat(props) {
       alert("يجب ملئ جميع البيانات ");
     } else if (convert(dt1) >= convert(dt0)) {
       alert("تاريخ الميلاد خاطئ");
+    } else if (numeroNationnal.length != 20) {
+      alert("الرقم الوطني خاطئ");
     } else if (
-      CandidatExists(Num_insc, Date_ins, NumPermis) === true &&
+      numero_nationnal_existe(numeroNationnal) === true &&
       props.type === "add"
     ) {
       alert("المترشح مسجل من قبل");
     } else if (
-      CandidatExists(numeroCandidat, Date_ins, NumPermis) === true &&
+      numero_nationnal_existe(numeroNationnal) === true &&
       props.type === "update" &&
-      textChanged === true
+      NumNatChanged === true
     ) {
       alert("المترشح مسجل من قبل");
     } else if (TestNumIns(Num_insc) && props.type === "add") {
@@ -272,6 +274,7 @@ export default function Candidat(props) {
                 value={Date_ins}
                 onChange={handleDateChange}
               />
+
               <FormControl>
                 <InputLabel id="demo-simple-select-label">
                   نوع المترشح
@@ -292,6 +295,16 @@ export default function Candidat(props) {
                   })}
                 </Select>
               </FormControl>
+              <TextField
+                variant="outlined"
+                label=" الرقم الوطني"
+                value={numeroNationnal}
+                size="small"
+                onChange={(e) => {
+                  setNumeroNationnal(e.target.value);
+                  setNumNatChanged(true);
+                }}
+              />
               <TextField
                 variant="outlined"
                 label="اللقب"
@@ -474,6 +487,7 @@ export default function Candidat(props) {
               props.onClick(
                 Num_insc,
                 convert(Date_ins),
+                numeroNationnal,
                 Nom,
                 Prenom,
                 convert(selectedDate),
@@ -494,6 +508,7 @@ export default function Candidat(props) {
                 NUM_INS,
                 Num_insc,
                 convert(DATE_INS),
+                numeroNationnal,
                 Nom,
                 Prenom,
                 convert(selectedDate),

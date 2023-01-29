@@ -17,7 +17,7 @@ import PageHeader from "../PageHeader";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useLocalStorage } from "../useLocalStorage";
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import axios from "axios";
 import AlertDialog from "../components/controls/Dialog";
 
@@ -151,15 +151,15 @@ export default function Vehicule(props) {
           <ColumnsDirective>
             <ColumnDirective field="MATRECULE" headerText="الترقيم " />
             <ColumnDirective field="MARQUE" headerText=" العلامة" />
-            <ColumnDirective field="PTC" headerText="ptc " />
-            <ColumnDirective field="PTAC" headerText="ptac " />
-            <ColumnDirective field="CU" headerText="cu" />
-            <ColumnDirective field="NOM_OP" headerText="  المتعامل " />
-            <ColumnDirective field="PROPRIETAIRE" headerText=" المالك  " />
             <ColumnDirective
               field="NUMERO_ENREGISTREMENT"
               headerText=" رقم القيد"
             />
+            <ColumnDirective field="NOM_OP" headerText="  المتعامل " />
+            <ColumnDirective field="PROPRIETAIRE" headerText=" المسير  " />
+            <ColumnDirective field="PTC" headerText="ptc " />
+            <ColumnDirective field="PTAC" headerText="ptac " />
+            <ColumnDirective field="CU" headerText="cu" />
           </ColumnsDirective>
           <Inject services={[Page, Sort, Filter, Group, Resize]} />
         </GridComponent>

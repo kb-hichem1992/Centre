@@ -27,16 +27,16 @@ import axios from "axios";
 import AlertDialog from "../components/controls/Dialog";
 import ListCandidat from "../Candidat/ListCandidat";
 import PopupFull from "../components/PopupFullScreen";
-import VehiculeForm from"../Vehicule/vehiculeForm";
+import VehiculeForm from "../Vehicule/vehiculeForm";
 import PersonOutlineSharpIcon from "@mui/icons-material/PersonOutlineSharp";
 import GroupIcon from "@mui/icons-material/Group";
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 export default function Operateur(props) {
   const [admin] = useLocalStorage("typeUser", "");
   const [Values, setValues] = useState();
   const [openAlert, setOpenAlert] = useState(false);
-  const [openVehForm, setopenVehForm] = useState(false)
+  const [openVehForm, setopenVehForm] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const [openCandList, setOpenCandList] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
@@ -219,8 +219,6 @@ export default function Operateur(props) {
           }}
         >
           <ColumnsDirective>
-            <ColumnDirective field="NOM_OP" headerText="إسم المتعامل" />
-            <ColumnDirective field="SIEGE_OP" headerText="عنوان المقر" />
             <ColumnDirective
               field="NUMERO_ENREGISTREMENT"
               headerText=" رقم القيد"
@@ -229,7 +227,9 @@ export default function Operateur(props) {
               field="DATE_ENREGISTREMENT"
               headerText=" تاريخ القيد "
             />
-            <ColumnDirective field="PROPRIETAIRE" headerText=" المالك  " />
+            <ColumnDirective field="NOM_OP" headerText="إسم المتعامل" />
+            <ColumnDirective field="PROPRIETAIRE" headerText=" المسير  " />
+            <ColumnDirective field="SIEGE_OP" headerText="عنوان المقر" />
           </ColumnsDirective>
           <Inject services={[Page, Sort, Filter, Group, Resize]} />
         </GridComponent>
@@ -290,7 +290,11 @@ export default function Operateur(props) {
         openPopup={openList}
         setOpenPopup={setOpenList}
       >
-        <ListTravailleur api={"/api/get_candidat_foreach_operateur/"} selectedValue={Values || ""} type="show" />
+        <ListTravailleur
+          api={"/api/get_candidat_foreach_operateur/"}
+          selectedValue={Values || ""}
+          type="show"
+        />
       </PopupFull>
       <AlertDialog
         title="تأكيد"

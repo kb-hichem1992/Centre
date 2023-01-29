@@ -307,7 +307,7 @@ export default function Dashboard(props) {
                   exact
                   render={(props) =>
                     isLogedIn && side === "مركز" ? (
-                      type === "auto_ecole" ? (
+                      type.match(/Bureau/) !== null ? (
                         <AppCand {...props} />
                       ) : (
                         <SearchTable url ={`${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`}/>

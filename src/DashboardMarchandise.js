@@ -190,7 +190,7 @@ export default function DashboardMarchandise(props) {
               noWrap
               className={classes.title}
             >
-              مديرية النقل - البضائع{" "}
+            مكتب نقل البضائع{" "}
             </Typography>
             <Button
               text="خروج"
