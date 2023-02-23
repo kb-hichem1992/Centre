@@ -204,7 +204,7 @@ export default function Candidat(props) {
       alert("يجب ملئ جميع البيانات ");
     } else if (convert(dt1) >= convert(dt0)) {
       alert("تاريخ الميلاد خاطئ");
-    } else if (numeroNationnal.length != 20) {
+    } else if (numeroNationnal.length != 18 ) {
       alert("الرقم الوطني خاطئ");
     } else if (
       numero_nationnal_existe(numeroNationnal) === true &&
