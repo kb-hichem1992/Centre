@@ -204,9 +204,9 @@ export default function Candidat(props) {
       alert("يجب ملئ جميع البيانات ");
     } else if (convert(dt1) >= convert(dt0)) {
       alert("تاريخ الميلاد خاطئ");
-    } else if (numeroNationnal.length != 18 ) {
-      alert("الرقم الوطني خاطئ");
-    } else if (
+   // } else if (numeroNationnal.length != 18 ) {
+     // alert("الرقم الوطني خاطئ");
+   /*  } else if (
       numero_nationnal_existe(numeroNationnal) === true &&
       props.type === "add"
     ) {
@@ -216,7 +216,7 @@ export default function Candidat(props) {
       props.type === "update" &&
       NumNatChanged === true
     ) {
-      alert("المترشح مسجل من قبل");
+      alert("المترشح مسجل من قبل"); */
     } else if (TestNumIns(Num_insc) && props.type === "add") {
       alert("رقم التسجيل مكرر");
     } else if (
@@ -300,6 +300,7 @@ export default function Candidat(props) {
                 label=" الرقم الوطني"
                 value={numeroNationnal}
                 size="small"
+                inputProps={{ maxLength: 18 }}
                 onChange={(e) => {
                   setNumeroNationnal(e.target.value);
                   setNumNatChanged(true);
