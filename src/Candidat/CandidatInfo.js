@@ -1,6 +1,6 @@
-import { Grid, Paper, Typography } from "@material-ui/core";
-import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Fragment } from "react";
+import "./Candidat.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,206 +62,97 @@ export default function CandidatInfo(props) {
     PRENOM_PERE,
     SEX_CONDIDAT,
     NUM_PERMIS,
-    DATE_LIV_PERMIS,
     CATEGORIE_PERMIS,
     TYPE_PERMIS,
     DATE_INS,
     TYPE_CANDIDAT,
+    TELE_FIRST,
+    TELE_SECOND,
+    MONTANT,
+    RESTE,
+    VEHICULE,
+    FORMATION ,
+    PRIX
   } = props.values || [];
 
   return (
     <Fragment>
-      <Paper className={classes.pageContent}>
-        <Grid container className={classes.root} spacing={3}>
-          <Grid item xs={6}>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              : رقم رخسة السياقة{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {NUM_PERMIS}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              : تاريخ الإصدار{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {convert(DATE_LIV_PERMIS)}
-              </Typography>
-            </Typography>
-
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              : الاصناف{" "}
-              <Typography
-                align="right"
-                color="textPrimary"
-                variant="h6"
-                paragraph={true}
-              >
-                {CATEGORIE_PERMIS}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              : نوع الرخسة{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {TYPE_PERMIS}
-              </Typography>
-            </Typography>
-
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              المستوى الدراسي:{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {NIVEAU_SCOL_CANDIDAT}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              العنوان:{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {ADRESSE_CANDIDAT}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              طبيعة المترشح:{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {TYPE_CANDIDAT}
-              </Typography>
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              رقم التسجيل :{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {NUM_INS}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              تاريخ التسجيل:{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {convert(DATE_INS)}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              الرقم الوطني:
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {NUMERO_NAT ? NUMERO_NAT : " لم يسجل بعد"}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              اللقب:{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {NOM_CANDIDAT}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              الاسم:{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {PRENOM_CANDIDAT}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              إسم الأب:{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {PRENOM_PERE}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              تاريخ الميلاد :
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {convert(DATE_NAIS_CANDIDAT)}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              مكان الميلاد:
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {LIEU_NAIS_CANDIDAT}
-              </Typography>
-            </Typography>
-            <Typography
-              align="right"
-              color="textSecondary"
-              variant="h6"
-              paragraph={true}
-            >
-              الجنس :{" "}
-              <Typography color="textPrimary" variant="h6" paragraph={true}>
-                {SEX_CONDIDAT}
-              </Typography>
-            </Typography>
-          </Grid>
-        </Grid>
-      </Paper>
+ 
+        <div className="candidat-details">
+          
+          <h2>Information sur le Candidat</h2>
+          <ul>
+            
+            <li>
+              <strong>Numéro d'inscription:</strong> <strong> {NUM_INS} </strong> 
+            </li>
+            <li>
+              <strong>Date d'inscription:</strong>  <strong> {DATE_INS}</strong> 
+            </li>
+            <li>
+              <strong>Numéro national:</strong> <strong> {NUMERO_NAT}</strong> 
+            </li>
+            <li>
+              <strong>Nom:</strong> <strong> {NOM_CANDIDAT}</strong> 
+            </li>
+            <li>
+              <strong>Prénom:</strong> <strong> {PRENOM_CANDIDAT}</strong> 
+            </li>
+            <li>
+              <strong>Prénom du père:</strong> <strong> {PRENOM_PERE}</strong> 
+            </li>
+            <li>
+              <strong>Date de naissance:</strong> <strong> {DATE_NAIS_CANDIDAT}</strong> 
+            </li>
+            <li>
+              <strong>Lieu de naissance:</strong> <strong> {LIEU_NAIS_CANDIDAT}</strong> 
+            </li>
+            <li>
+              <strong>Niveau scolaire:</strong><strong> {NIVEAU_SCOL_CANDIDAT}</strong> 
+            </li>
+            <li>
+              <strong>Adresse:</strong> <strong> {ADRESSE_CANDIDAT}</strong> 
+            </li>
+            <li>
+              <strong>Sexe:</strong> <strong> {SEX_CONDIDAT}</strong>  
+            </li>
+            <li>
+              <strong>Type de candidat:</strong> <strong> {TYPE_CANDIDAT}</strong>  
+            </li>
+            <li>
+              <strong>Numéro de permis:</strong> <strong> {NUM_PERMIS}</strong> 
+            </li>
+            <li>
+              <strong>Type de permis:</strong><strong> {TYPE_PERMIS}</strong>  
+            </li>
+            <li>
+              <strong>Catégorie de permis:</strong> <strong> {CATEGORIE_PERMIS}</strong>  
+            </li>
+  
+            <li>
+              <strong>Formation:</strong> <strong> {FORMATION}</strong>
+            </li>
+            <li>
+              <strong>Véhicule:</strong><strong> {VEHICULE}</strong> 
+            </li>
+            <li>
+              <strong>Numéro de téléphone (1):</strong>  <strong> {TELE_FIRST}</strong> 
+            </li>
+            <li>
+              <strong>Numéro de téléphone (2):</strong> <strong> {TELE_SECOND}</strong>
+            </li> 
+             <li>
+              <strong>Prix de Formation:</strong> <strong> {PRIX}</strong>
+            </li>
+            <li>
+              <strong>Montant:</strong> <strong> {MONTANT}</strong> 
+            </li>
+            <li>
+              <strong>Reste:</strong> <strong> {RESTE}</strong> 
+            </li>
+          </ul>
+        </div>
+    
     </Fragment>
   );
 }

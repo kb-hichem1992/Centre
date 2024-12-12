@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import GroupIcon from "@material-ui/icons/Group";
 import PrintIcon from "@material-ui/icons/Print";
 import { L10n } from "@syncfusion/ej2-base";
 import {
@@ -21,16 +20,12 @@ import {
   Sort,
 } from "@syncfusion/ej2-react-grids";
 import Axios from "axios";
-import { Fragment, useEffect, useRef, useState } from "react";
-import TableFormation from "../Formation/TableFormation.js";
-import PageHeader from "../PageHeader";
-import Popup from "../components/Popup.js";
+import { useEffect, useRef, useState } from "react";
+import { useRouteMatch } from "react-router";
 import Button from "../components/controls/Button";
 import AlertDialog from "../components/controls/Dialog";
 import { useLocalStorage } from "../useLocalStorage";
 import "./Candidat.css";
-import CandidatFormulaire from "./CandidatFormulaire";
-import CandidatInfo from "./CandidatInfo";
 
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
@@ -117,8 +112,8 @@ L10n.load({
     },
   },
 });
-export default function AppCand({ id }) {
-  //States--------------------------------
+
+export default function CadidatList() {
   const [data, setdata] = useState([]);
   const [openAjouter, setOpenAjouter] = useState(false);
   const [openModifier, setOpenModifier] = useState(false);
@@ -131,36 +126,8 @@ export default function AppCand({ id }) {
   const [numeroAgrement] = useLocalStorage("user", 0);
   const [numCand, setNumCan] = useState("");
 
-  // Table Propreties and values --------------------------------
-  const classes = useStyles();
-  const TableRef2 = useRef(null);
-  const initialvalues = {
-    NUM_INS: "",
-    DATE_INS: new Date(),
-    NOM_CANDIDAT: "",
-    PRENOM_CANDIDAT: "",
-    DATE_NAIS_CANDIDAT: new Date(),
-    LIEU_NAIS_CANDIDAT: "",
-    NIVEAU_SCOL_CANDIDAT: "",
-    ADRESSE_CANDIDAT: "",
-    PRENOM_PERE: "",
-    SEX_CONDIDAT: "",
-    TYPE_CANDIDAT: "",
-    NUM_PERMIS: "",
-    DATE_LIV_PERMIS: new Date(),
-    CATEGORIE_PERMIS: "",
-    TYPE_PERMIS: "القديم",
-    NUMERO_NAT: "",
-  };
-  const SortSettingsModel = {
-    columns: [{ field: "DATE_INS", direction: "Descending " }],
-  };
-  const contextMenuItems = ["Copy", "ExcelExport"];
-  const ContextMenuItemModel = [
-    { text: "معلومات إضافية", target: ".e-content", id: "Details" },
-  ];
+  let { path, url } = useRouteMatch();
 
-  // life cycle hook --------------------------------
   useEffect(() => {
     const urlAdmin = process.env.REACT_APP_API_URL + "/api/get_candidat";
     const urlAutoEcole =
@@ -168,12 +135,12 @@ export default function AppCand({ id }) {
     fetch(admin === "admin" ? urlAdmin : urlAutoEcole)
       .then((response) => response.json())
       .then((json) => setdata(json));
-  }, [id, etat, admin]);
+  }, [etat]);
 
-  // usefull functions- --------------------------------
   const filtredData = data.filter(
     (el) => el.NUM_INS.split("-")[2] == numeroAgrement
   );
+
   function convert(date) {
     const current_datetime = new Date(date);
     const m = current_datetime.getMonth() + 1;
@@ -196,6 +163,92 @@ export default function AppCand({ id }) {
       );
     }
   }
+
+  const addCondidat = (
+    numeroCandidat,
+    Date_ins,
+    num_Nationnal,
+    Nom,
+    Prénom,
+    Date_naissance,
+    Lieu_naissance,
+    Niveau,
+    Adresse,
+    Prénom_Pére,
+    Sexe,
+    Type_Candidat,
+    Num_permis,
+    date_liv,
+    categorie_permis,
+    type_permis,
+    createur
+  ) => {
+    Axios.post(process.env.REACT_APP_API_URL + "/Add_condidat", {
+      numeroCandidat: numeroCandidat,
+      Date_ins: Date_ins,
+      num_Nationnal: num_Nationnal,
+      Nom: Nom,
+      Prénom: Prénom,
+      Date_naissance: Date_naissance,
+      Lieu_naissance: Lieu_naissance,
+      Niveau: Niveau,
+      Adresse: Adresse,
+      Prénom_Pére: Prénom_Pére,
+      Sexe: Sexe,
+      Type_Candidat: Type_Candidat,
+      Num_permis: Num_permis,
+      date_liv: date_liv,
+      categorie_permis: categorie_permis,
+      type_permis: type_permis,
+      createur: createur,
+    }).then(() => {
+      setEtat(!etat);
+    });
+  };
+  const updateCandidat = (
+    numeroCandidat,
+    numins,
+    DATE_INS,
+    num_Nationnal,
+    Nom,
+    Prénom,
+    Date_naissance,
+    Lieu_naissance,
+    Niveau,
+    Adresse,
+    Prénom_Pére,
+    Sexe,
+    Type_Candidat,
+    Num_permis,
+    date_liv,
+    categorie_permis,
+    type_permis,
+    Date_ins
+  ) => {
+    Axios.put(process.env.REACT_APP_API_URL + "/update_candidat", {
+      numins: numins,
+      num_Nationnal: num_Nationnal,
+      Nom: Nom,
+      Prénom: Prénom,
+      Date_naissance: Date_naissance,
+      Lieu_naissance: Lieu_naissance,
+      Niveau: Niveau,
+      Adresse: Adresse,
+      Prénom_Pére: Prénom_Pére,
+      Sexe: Sexe,
+      Type_Candidat: Type_Candidat,
+      date_liv: date_liv,
+      categorie_permis: categorie_permis,
+      type_permis: type_permis,
+      Date_ins: Date_ins,
+      Num_permis: Num_permis,
+      DATE_INS: DATE_INS,
+      numeroCandidat: numeroCandidat,
+    }).then(() => {
+      setEtat(!etat);
+    });
+  };
+
   const deleteCandidat = (Num_permis, Date_ins, numeroCandidat) => {
     Axios.post(process.env.REACT_APP_API_URL + `/delete_candidat`, {
       Num_permis: Num_permis,
@@ -205,6 +258,33 @@ export default function AppCand({ id }) {
       setEtat(!etat);
     });
   };
+
+  const SortSettingsModel = {
+    columns: [{ field: "DATE_INS", direction: "Descending " }],
+  };
+  const classes = useStyles();
+
+  const TableRef2 = useRef(null);
+
+  const initialvalues = {
+    NUM_INS: "",
+    DATE_INS: new Date(),
+    NOM_CANDIDAT: "",
+    PRENOM_CANDIDAT: "",
+    DATE_NAIS_CANDIDAT: new Date(),
+    LIEU_NAIS_CANDIDAT: "",
+    NIVEAU_SCOL_CANDIDAT: "",
+    ADRESSE_CANDIDAT: "",
+    PRENOM_PERE: "",
+    SEX_CONDIDAT: "",
+    TYPE_CANDIDAT: "",
+    NUM_PERMIS: "",
+    DATE_LIV_PERMIS: new Date(),
+    CATEGORIE_PERMIS: "",
+    TYPE_PERMIS: "القديم",
+    NUMERO_NAT: "",
+  };
+
   async function rowSelected() {
     try {
       const selectedrecords = await TableRef2.current.getSelectedRecords();
@@ -217,6 +297,12 @@ export default function AppCand({ id }) {
       console.log(error);
     }
   }
+  const contextMenuItems = ["Copy", "ExcelExport"];
+
+  const ContextMenuItemModel = [
+    { text: "معلومات إضافية", target: ".e-content", id: "Details" },
+  ];
+
   const contextMenuClick = (MenuEventArgs) => {
     if (
       TableRef2 &&
@@ -226,15 +312,13 @@ export default function AppCand({ id }) {
       setOpenDetail(true);
     }
   };
+  const actionTemplate = (props) => {
+    return  <button> Add </button>;
+  };
 
   return (
-    <Fragment>
-      <PageHeader
-        title="المترشحين"
-        subTitle="قائمة المترشحين"
-        icon={<GroupIcon />}
-      />
-      <div className={classes.div}>
+    <>
+      <div>
         <div>
           <Button
             text="إضافة"
@@ -263,7 +347,9 @@ export default function AppCand({ id }) {
             startIcon={<DeleteIcon />}
             className={classes.newButton}
             disabled={Values === undefined || admin !== "admin" ? true : false}
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+            }}
           />
         </div>
         <div>
@@ -294,6 +380,7 @@ export default function AppCand({ id }) {
                 setOpenFormation(true);
               }}
             />
+
             <Button
               type="submit"
               text="شهادة التسجيل"
@@ -305,166 +392,113 @@ export default function AppCand({ id }) {
             />
           </form>
         </div>
-      </div>
-      <div>
-        <Paper className={classes.paper}>
-          <GridComponent
-            dataSource={filtredData}
-            enableRtl={true}
-            allowPaging={true}
-            pageSettings={{ pageSize: 10 }}
-            allowFiltering={true}
-            allowGrouping={true}
-            filterSettings={{ type: "Menu" }}
-            allowResizing={true}
-            allowSorting={true}
-            height="250"
-            ref={TableRef2}
-            contextMenuItems={[...ContextMenuItemModel, ...contextMenuItems]}
-            contextMenuClick={contextMenuClick}
-            allowExcelExport={true}
-            allowPdfExport={true}
-            sortSettings={SortSettingsModel}
-            locale="ar-AE"
-            rowSelected={rowSelected}
-            rowDeselected={() => {
-              setValues(undefined);
-            }}
-          >
-            <ColumnsDirective>
-              <ColumnDirective
-                field="NUMERO_NAT"
-                headerText="الرقم الوطني"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
-                field="NUM_INS"
-                headerText="رقم التسجيل"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
-                field="DATE_INS"
-                headerText="تاريخ التسجيل"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
-                field="NOM_CANDIDAT"
-                headerText="اللقب"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
-                field="PRENOM_CANDIDAT"
-                headerText="الاسم"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
-                field="PRENOM_PERE"
-                headerText="إسم الأب"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
-                field="DATE_NAIS_CANDIDAT"
-                headerText="تاريخ الميلاد"
-                type="date"
-                format="dd/MM/yyyy"
-                clipMode="EllipsisWithTooltip"
-                allowFiltering={false}
-              />
-              <ColumnDirective
-                field="FORMATION"
-                headerText=" الدورة"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
-                field="CREATEUR"
-                headerText=" المصدر"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
-                field="ID_TYPE_FORMATION"
-                headerText=" ID_TYPE_FORMATION"
-                clipMode="EllipsisWithTooltip"
-                visible={false}
-              />
-              <ColumnDirective
-                field="ID_VEHICULE"
-                headerText="ID_VEHICULE"
-                clipMode="EllipsisWithTooltip"
-                visible={false}
-              />
-               <ColumnDirective
-                field="PRIX"
-                headerText="PRIX"
-                clipMode="EllipsisWithTooltip"
-                visible={false}
-              />
-            </ColumnsDirective>
-            <Inject
-              services={[
-                Page,
-                Sort,
-                Filter,
-                Group,
-                Resize,
-                ContextMenu,
-                PdfExport,
-                ExcelExport,
-              ]}
-            />
-          </GridComponent>
-        </Paper>
-      </div>
+        <div>
+          <Paper className={classes.paper}>
+            <GridComponent
+              dataSource={filtredData}
+              enableRtl={true}
+              allowPaging={true}
+              pageSettings={{
+                pageSize: 10,
+              }}
+              allowFiltering={true}
+              allowGrouping={true}
+              filterSettings={{
+                type: "Menu",
+              }}
+              allowResizing={true}
+              allowSorting={true}
+              height="250"
+              ref={TableRef2}
+              contextMenuItems={[...ContextMenuItemModel, ...contextMenuItems]}
+              contextMenuClick={contextMenuClick}
+              allowExcelExport={true}
+              allowPdfExport={true}
+              sortSettings={SortSettingsModel}
+              locale="ar-AE"
+              rowSelected={rowSelected}
+              rowDeselected={() => {
+                setValues(undefined);
+              }}
+            >
+              <ColumnsDirective>
+                <ColumnDirective
+                  field="NUMERO_NAT"
+                  headerText="الرقم الوطني"
+                  clipMode="EllipsisWithTooltip"
+                />
+                <ColumnDirective
+                  field="NUM_INS"
+                  headerText="رقم التسجيل"
+                  clipMode="EllipsisWithTooltip"
+                />
+                <ColumnDirective
+                  field="DATE_INS"
+                  headerText="تاريخ التسجيل"
+                  clipMode="EllipsisWithTooltip"
+                />
+                <ColumnDirective
+                  field="NOM_CANDIDAT"
+                  headerText="اللقب"
+                  clipMode="EllipsisWithTooltip"
+                />
 
-      <Popup
-        title="إضافة المترشح"
-        openPopup={openAjouter}
-        setOpenPopup={setOpenAjouter}
-      >
-        <CandidatFormulaire
-          key="Ajouter"
-          action="add_candidat"
-          values={initialvalues}
-          data={data}
-          refresh={setEtat}
-          etat={etat}
-          setOpenPopup={setOpenAjouter}
-        />
-      </Popup>
-      <Popup
-        title="تعديل البيانات"
-        openPopup={openModifier}
-        setOpenPopup={setOpenModifier}
-      >
-        <CandidatFormulaire
-          action="update_candidat"
-          setOpenPopup={setOpenModifier}
-          values={Values}
-          numCand={numCand}
-          data={data}
-          refresh={setEtat}
-        />
-      </Popup>
-      <Popup
-        title="تحديد التكوين"
-        openPopup={openFormation}
-        setOpenPopup={setOpenFormation}
-      >
-        <TableFormation
-          key="TableFormation"
-          Close={setOpenFormation}
-          rowSelected={rowSelected}
-          valeur={Values}
-        />
-      </Popup>
-      <Popup title="" openPopup={openDetail} setOpenPopup={setOpenDetail}>
-        <CandidatInfo
-          key="CandidatInfo"
-          Close={setOpenDetail}
-          rowSelected={rowSelected}
-          values={Values}
-        />
-      </Popup>
-
+                <ColumnDirective
+                  field="PRENOM_CANDIDAT"
+                  headerText="الاسم"
+                  clipMode="EllipsisWithTooltip"
+                />
+                <ColumnDirective
+                  field="PRENOM_PERE"
+                  headerText="إسم الأب"
+                  clipMode="EllipsisWithTooltip"
+                />
+                <ColumnDirective
+                  field="DATE_NAIS_CANDIDAT"
+                  headerText="تاريخ الميلاد"
+                  type="date"
+                  format="dd/MM/yyyy"
+                  clipMode="EllipsisWithTooltip"
+                  allowFiltering={false}
+                />
+                <ColumnDirective
+                  field="LIEU_NAIS_CANDIDAT"
+                  headerText="مكان الميلاد"
+                  clipMode="EllipsisWithTooltip"
+                />
+                <ColumnDirective
+                  field="TYPE_CANDIDAT"
+                  headerText="نوع المترشح"
+                  clipMode="EllipsisWithTooltip"
+                />
+                <ColumnDirective
+                  field="createur"
+                  headerText=" المصدر"
+                  clipMode="EllipsisWithTooltip"
+                />
+                <ColumnDirective
+                  headerText="Actions"
+                  template={actionTemplate}
+                  textAlign="Center"
+                  width="100"
+                />
+              </ColumnsDirective>
+              <Inject
+                services={[
+                  Page,
+                  Sort,
+                  Filter,
+                  Group,
+                  Resize,
+                  ContextMenu,
+                  PdfExport,
+                  ExcelExport,
+                ]}
+              />
+            </GridComponent>
+          </Paper>
+        </div>
+      </div>
       <AlertDialog
         title="تحذير"
         message="قيامك بهذه العملية سيحذف كل مايتعلق بهاذاالمترشح. هل انت متأكد ؟"
@@ -478,6 +512,6 @@ export default function AppCand({ id }) {
           );
         }}
       />
-    </Fragment>
+    </>
   );
 }

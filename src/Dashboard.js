@@ -40,6 +40,7 @@ import SearchTable from "./Formation/Search.js";
 import SearchIcon from "@material-ui/icons/Search";
 import { useLocalStorage } from "./useLocalStorage";
 
+
 const drawerWidth = 180;
 
 const useStyles = makeStyles((theme) => ({
@@ -169,6 +170,7 @@ export default function Dashboard(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   return (
     // the Appbar Starts from here
     <Router>
@@ -176,7 +178,7 @@ export default function Dashboard(props) {
         <CssBaseline />
         <AppBar
           position="fixed"
-          color="Primary"
+          color="primary"
           className={clsx(classes.appBar, open && classes.appBarShift)}
         >
           <Toolbar className={classes.toolbar}>
@@ -310,28 +312,14 @@ export default function Dashboard(props) {
                       type.match(/Bureau/) !== null ? (
                         <AppCand {...props} />
                       ) : (
-                        <SearchTable url ={`${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`}/>
+                        <SearchTable
+                          url={`${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`}
+                        />
                       )
                     ) : (
                       <Redirect to="/signIn" />
                     )
                   }
-                />
-                <Route path="/op/mor">
-                  <AppOp
-                    id={process.env.REACT_APP_API_URL + "/api/get_op/mor"}
-                    Title={"Liste des opérateurs/Personne Morale"}
-                  />
-                </Route>
-                <Route
-                  path="/op/phy"
-                  render={(props) => (
-                    <AppOp
-                      {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_op/phy"}
-                      Title={"Liste des opérateurs/Personne Physique"}
-                    />
-                  )}
                 />
                 <Route
                   path={`${path}/Formation`}
@@ -351,6 +339,7 @@ export default function Dashboard(props) {
                   }
                 />
                 <Route
+                  exact
                   path={`${path}/candidat`}
                   render={(props) => <AppCand {...props} />}
                 />

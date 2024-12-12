@@ -1,25 +1,25 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import { makeStyles } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import { L10n } from "@syncfusion/ej2-base";
 import {
-  GridComponent,
   ColumnDirective,
   ColumnsDirective,
-  Page,
-  Inject,
   Filter,
+  GridComponent,
   Group,
+  Inject,
+  Page,
   Resize,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import { makeStyles } from "@material-ui/core";
-import Button from "../components/controls/Button";
-import { L10n } from "@syncfusion/ej2-base";
-import PageHeader from "../PageHeader";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { useLocalStorage } from "../useLocalStorage";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import axios from "axios";
+import { Fragment, useEffect, useRef, useState } from "react";
+import Button from "../components/controls/Button";
 import AlertDialog from "../components/controls/Dialog";
+import PageHeader from "../PageHeader";
+import { useLocalStorage } from "../useLocalStorage";
 
 export default function Vehicule(props) {
   const [admin] = useLocalStorage("typeUser", "");

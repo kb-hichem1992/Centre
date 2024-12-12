@@ -334,13 +334,6 @@ export default function Candidat(props) {
                 size="small"
                 onChange={(e) => setAdresse(e.target.value)}
               />
-              <TextField
-                variant="outlined"
-                label="مكان الميلاد"
-                value={Lieu}
-                size="small"
-                onChange={(e) => setLieu(e.target.value)}
-              />
             </Grid>
             <Grid item xs={6}>
               <Controls.DatePicker
@@ -369,7 +362,6 @@ export default function Candidat(props) {
                 </Select>
               </FormControl>
               <FormControl component="fieldset">
-                <FormLabel component="legend">Sexe</FormLabel>
                 <RadioGroup
                   row
                   aria-label="الجنس"

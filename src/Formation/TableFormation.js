@@ -1,29 +1,27 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import "./Formation.css";
+import { makeStyles } from "@material-ui/core";
+import { L10n } from "@syncfusion/ej2-base";
 import {
-  GridComponent,
   ColumnDirective,
   ColumnsDirective,
-  Page,
-  Inject,
   Filter,
+  GridComponent,
   Group,
+  Inject,
+  Page,
   Resize,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import { makeStyles } from "@material-ui/core";
-import Button from "../components/controls/Button";
 import axios from "axios";
-import { L10n } from "@syncfusion/ej2-base";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState
+} from "react";
+import Button from "../components/controls/Button";
 import AlertDialog from "../components/controls/Dialog";
-import { UserContext } from "../UserContext";
 import { useLocalStorage } from "../useLocalStorage";
+import "./Formation.css";
 
 export default function TableFormation(props) {
   const [data, setdata] = useState([]);

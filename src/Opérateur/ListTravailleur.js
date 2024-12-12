@@ -1,27 +1,27 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import "./Opérateur.css";
+import { makeStyles } from "@material-ui/core";
+import { L10n } from "@syncfusion/ej2-base";
 import {
-  GridComponent,
   ColumnDirective,
   ColumnsDirective,
-  Page,
-  Inject,
   Filter,
+  GridComponent,
   Group,
+  Inject,
+  Page,
   Resize,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import { makeStyles } from "@material-ui/core";
+import { useEffect, useRef, useState } from "react";
 import Button from "../components/controls/Button";
-import { L10n } from "@syncfusion/ej2-base";
+import "./Opérateur.css";
 
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import { useLocalStorage } from "../useLocalStorage";
 
+import axios from "axios";
 import Popup from "../components/Popup";
 import TravailDateForm from "./travailDateForm";
-import axios from "axios";
 
 export default function ListTravailleur(props) {
   const [admin] = useLocalStorage("typeUser", "");

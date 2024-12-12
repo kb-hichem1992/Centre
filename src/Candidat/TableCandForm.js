@@ -1,37 +1,36 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import "./Candidat.css";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
+import { L10n } from "@syncfusion/ej2-base";
 import {
-  GridComponent,
   ColumnDirective,
   ColumnsDirective,
-  Page,
-  Inject,
+  ExcelExport,
   Filter,
+  GridComponent,
   Group,
+  Inject,
+  Page,
   Resize,
   Sort,
-  ExcelExport,
 } from "@syncfusion/ej2-react-grids";
-import Button from "../components/controls/Button";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import Popup from "../components/Popup";
-import PasseFrom from "../Formation/PasseForm";
 import axios from "axios";
-import BrevetForm from "../Formation/BrevetForm";
-import { L10n } from "@syncfusion/ej2-base";
-import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
-import TableFormation from "../Formation/TableFormation.js";
-import DeleteIcon from "@material-ui/icons/Delete";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState
+} from "react";
+import Button from "../components/controls/Button";
 import AlertDialog from "../components/controls/Dialog";
+import Popup from "../components/Popup";
+import BrevetForm from "../Formation/BrevetForm";
 import GroupeForm from "../Formation/GroupeForm";
+import PasseFrom from "../Formation/PasseForm";
+import TableFormation from "../Formation/TableFormation.js";
 import { useLocalStorage } from "../useLocalStorage";
+import "./Candidat.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -25,7 +25,7 @@ import ListTravailleur from "./ListTravailleur";
 import OperateurForm from "./Operateur_form.js";
 import axios from "axios";
 import AlertDialog from "../components/controls/Dialog";
-import ListCandidat from "../Candidat/ListCandidat";
+import CadidatList from "../Candidat/CadidatList";
 import PopupFull from "../components/PopupFullScreen";
 import VehiculeForm from "../Vehicule/vehiculeForm";
 import PersonOutlineSharpIcon from "@mui/icons-material/PersonOutlineSharp";
@@ -239,7 +239,7 @@ export default function Operateur(props) {
         openPopup={openCandList}
         setOpenPopup={setOpenCandList}
       >
-        <ListCandidat
+        <CadidatList
           setOpenPopup={setOpenCandList}
           etat={etat}
           setEtat={setEtat}
