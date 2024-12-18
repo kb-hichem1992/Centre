@@ -204,9 +204,9 @@ export default function Candidat(props) {
       alert("يجب ملئ جميع البيانات ");
     } else if (convert(dt1) >= convert(dt0)) {
       alert("تاريخ الميلاد خاطئ");
-   // } else if (numeroNationnal.length != 18 ) {
-     // alert("الرقم الوطني خاطئ");
-   /*  } else if (
+      // } else if (numeroNationnal.length != 18 ) {
+      // alert("الرقم الوطني خاطئ");
+      /*  } else if (
       numero_nationnal_existe(numeroNationnal) === true &&
       props.type === "add"
     ) {
@@ -340,6 +340,13 @@ export default function Candidat(props) {
                 label="تاريخ الميلاد"
                 value={selectedDate}
                 onChange={setSelectedDate}
+              />
+              <TextField
+                variant="outlined"
+                label="مكان الميلاد"
+                value={Lieu}
+                size="small"
+                onChange={(e) => setLieu(e.target.value)}
               />
               <FormControl className={classes.formControl}>
                 <InputLabel id="demo-simple-select-label">

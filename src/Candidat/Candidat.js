@@ -159,7 +159,8 @@ export default function AppCand({ id }) {
   const ContextMenuItemModel = [
     { text: "معلومات إضافية", target: ".e-content", id: "Details" },
   ];
-
+  
+  const filterSettings = { type: "Excel" };
   // life cycle hook --------------------------------
   useEffect(() => {
     const urlAdmin = process.env.REACT_APP_API_URL + "/api/get_candidat";
@@ -313,9 +314,8 @@ export default function AppCand({ id }) {
             enableRtl={true}
             allowPaging={true}
             pageSettings={{ pageSize: 10 }}
-            allowFiltering={true}
+            allowFiltering
             allowGrouping={true}
-            filterSettings={{ type: "Menu" }}
             allowResizing={true}
             allowSorting={true}
             height="250"
@@ -332,11 +332,6 @@ export default function AppCand({ id }) {
             }}
           >
             <ColumnsDirective>
-              <ColumnDirective
-                field="NUMERO_NAT"
-                headerText="الرقم الوطني"
-                clipMode="EllipsisWithTooltip"
-              />
               <ColumnDirective
                 field="NUM_INS"
                 headerText="رقم التسجيل"
@@ -358,21 +353,28 @@ export default function AppCand({ id }) {
                 clipMode="EllipsisWithTooltip"
               />
               <ColumnDirective
-                field="PRENOM_PERE"
-                headerText="إسم الأب"
-                clipMode="EllipsisWithTooltip"
-              />
-              <ColumnDirective
                 field="DATE_NAIS_CANDIDAT"
                 headerText="تاريخ الميلاد"
-                type="date"
-                format="dd/MM/yyyy"
                 clipMode="EllipsisWithTooltip"
-                allowFiltering={false}
               />
               <ColumnDirective
                 field="FORMATION"
                 headerText=" الدورة"
+                clipMode="EllipsisWithTooltip"
+              />
+              <ColumnDirective
+                field="PRIX"
+                headerText="سعر الدورة"
+                clipMode="EllipsisWithTooltip"
+              />
+              <ColumnDirective
+                field="MONTANT"
+                headerText="المبلغ المدفوع"
+                clipMode="EllipsisWithTooltip"
+              />
+              <ColumnDirective
+                field="RESTE"
+                headerText="المبلغ المتبقي"
                 clipMode="EllipsisWithTooltip"
               />
               <ColumnDirective
@@ -389,12 +391,6 @@ export default function AppCand({ id }) {
               <ColumnDirective
                 field="ID_VEHICULE"
                 headerText="ID_VEHICULE"
-                clipMode="EllipsisWithTooltip"
-                visible={false}
-              />
-               <ColumnDirective
-                field="PRIX"
-                headerText="PRIX"
                 clipMode="EllipsisWithTooltip"
                 visible={false}
               />

@@ -98,7 +98,7 @@ export default function ListCategorie(props) {
     return Object.keys(Validelemnts).toString();
   }
   return (
-    <Paper style={{ maxWidth: 250 }}>
+    <Paper style={{ maxWidth: "auto" }}>
       <Grid
         container
         direction="column"

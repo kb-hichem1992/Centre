@@ -347,6 +347,7 @@ export default function CandidatFormulaire(props) {
     PRENOM_CANDIDAT,
     PRENOM_PERE,
     DATE_NAIS_CANDIDAT,
+    LIEU_NAIS_CANDIDAT,
     NIVEAU_SCOL_CANDIDAT,
     ADRESSE_CANDIDAT,
     SEX_CONDIDAT,
@@ -371,6 +372,7 @@ export default function CandidatFormulaire(props) {
         PRENOM_CANDIDAT: PRENOM_CANDIDAT,
         PRENOM_PERE: PRENOM_PERE,
         DATE_NAIS_CANDIDAT: DATE_NAIS_CANDIDAT,
+        LIEU_NAIS_CANDIDAT : LIEU_NAIS_CANDIDAT,
         NIVEAU_SCOL_CANDIDAT: NIVEAU_SCOL_CANDIDAT,
         ADRESSE_CANDIDAT: ADRESSE_CANDIDAT,
         SEX_CONDIDAT: SEX_CONDIDAT,
@@ -523,6 +525,13 @@ export default function CandidatFormulaire(props) {
                 label="تاريخ الميلاد"
                 value={selectedDate}
                 onChange={setSelectedDate}
+              />
+              <TextField
+                variant="outlined"
+                label="مكان الميلاد"
+                value={Lieu}
+                size="small"
+                onChange={(e) => setLieu(e.target.value)}
               />
               <FormControl variant="outlined" fullWidth>
                 <InputLabel id="demo-simple-select-label">
@@ -767,6 +776,7 @@ export default function CandidatFormulaire(props) {
                 Prenom,
                 PrenomPere,
                 convert(selectedDate),
+                Lieu,
                 Niveau,
                 Adresse,
                 Sexe,
