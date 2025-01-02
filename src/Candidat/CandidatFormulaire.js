@@ -714,7 +714,7 @@ export default function CandidatFormulaire(props) {
               </FormGroup>
               <FormControl fullWidth>
                 <InputMask
-                  mask="0999 99 99 99"
+                  mask="0999-99-99-99"
                   value={phoneNumberFirst}
                   onChange={handlePhoneNumberFirstChange}
                 >

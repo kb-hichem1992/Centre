@@ -332,6 +332,11 @@ export default function AppBrevet({ id }) {
                 field="PRENOM_CANDIDAT"
                 headerText="الإسم"
                 clipMode="EllipsisWithTooltip"
+              />  
+              <ColumnDirective
+                field="RESTE"
+                headerText="المبلخ المتبقي"
+                clipMode="EllipsisWithTooltip"
               />
               <ColumnDirective
                 field="LIV_BREVET"

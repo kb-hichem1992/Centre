@@ -159,7 +159,7 @@ export default function AppCand({ id }) {
   const ContextMenuItemModel = [
     { text: "معلومات إضافية", target: ".e-content", id: "Details" },
   ];
-  
+
   const filterSettings = { type: "Excel" };
   // life cycle hook --------------------------------
   useEffect(() => {
@@ -358,13 +358,14 @@ export default function AppCand({ id }) {
                 clipMode="EllipsisWithTooltip"
               />
               <ColumnDirective
-                field="FORMATION"
-                headerText=" الدورة"
+                field="TELE_FIRST"
+                headerText="رقم الهاتف"
                 clipMode="EllipsisWithTooltip"
               />
+
               <ColumnDirective
-                field="PRIX"
-                headerText="سعر الدورة"
+                field="FORMATION"
+                headerText=" الدورة"
                 clipMode="EllipsisWithTooltip"
               />
               <ColumnDirective
@@ -375,6 +376,11 @@ export default function AppCand({ id }) {
               <ColumnDirective
                 field="RESTE"
                 headerText="المبلغ المتبقي"
+                clipMode="EllipsisWithTooltip"
+              />
+              <ColumnDirective
+                field="VEHICULE"
+                headerText="المركبة"
                 clipMode="EllipsisWithTooltip"
               />
               <ColumnDirective
