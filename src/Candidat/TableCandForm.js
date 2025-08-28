@@ -15,7 +15,7 @@ import {
   Resize,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import axios from "axios";
+import axios from "../Utils/setupAxios";
 import {
   Fragment,
   useEffect,
@@ -29,8 +29,9 @@ import BrevetForm from "../Formation/BrevetForm";
 import GroupeForm from "../Formation/GroupeForm";
 import PasseFrom from "../Formation/PasseForm";
 import TableFormation from "../Formation/TableFormation.js";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 import "./Candidat.css";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,10 +94,10 @@ export default function TableCandForm({
 
 
   useEffect(() => {
-    fetch(
-      `${process.env.REACT_APP_API_URL}/api/get_candidat_form/${numeroFormation}/${numeroAgrement}/${groupe}` )
-      .then((response) => response.json())
-      .then((json) => setdata(json));
+
+    axios.get(`api/get_candidat_form/${numeroFormation}/${numeroAgrement}/${groupe}` )
+    .then ((response)=> setdata(response.data))
+    .catch((error)=> console.error("Error fetching data:", error));
   }, [etat, numeroFormation, numeroAgrement, groupe]);
 
   const filter = {
@@ -145,7 +146,7 @@ export default function TableCandForm({
     numeroAgrement,
   ) => {
     axios
-      .put(process.env.REACT_APP_API_URL + "/update_passe", {
+      .put("/update_passe", {
         remarque: remarque,
         note: note,
         numeroCandidat: numeroCandidat,
@@ -169,7 +170,7 @@ export default function TableCandForm({
     GROUPE
   ) => {
     axios
-      .put(process.env.REACT_APP_API_URL + "/insert_brevet", {
+      .put("/insert_brevet", {
         NumeroBrevet: NumeroBrevet,
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
@@ -191,7 +192,7 @@ export default function TableCandForm({
     numeroAgrement
   ) => {
     axios
-      .post(`${process.env.REACT_APP_API_URL}/delete_passe`, {
+      .post(`/delete_passe`, {
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
         Num_permis: Num_permis,
@@ -336,7 +337,10 @@ export default function TableCandForm({
             <ColumnDirective
               field="DATE_NAIS_CANDIDAT"
               headerText="تاريخ الميلاد "
+              type="date"
+              format="dd/MM/yyyy"
               clipMode="EllipsisWithTooltip"
+              allowFiltering={false}
             />
             <ColumnDirective
               field="LIEU_NAIS_CANDIDAT"
@@ -357,8 +361,10 @@ export default function TableCandForm({
             <ColumnDirective
               field="DATE_LIV_PERMIS"
               headerText="تاريخ إصدار رخصة السياقة"
+              type="date"
+              format="dd/MM/yyyy"
               clipMode="EllipsisWithTooltip"
-              Width="120"
+              allowFiltering={false}
             />
             <ColumnDirective
               field="REMARQUE"

@@ -16,20 +16,29 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Button from "./components/controls/Button";
-import Operateur from "./Opérateur/Opérateur";
+import LaptopChromebookIcon from "@material-ui/icons/LaptopChromebook";
+import Formation from "../Formation/Formation.js";
+import Candidat from "../Candidat/Candidat.js";
+import Vehicule from "../Vehicule/vehicule.js";  
+import Button from "../components/controls/Button.js";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Link,
   useRouteMatch,
+  Redirect,
 } from "react-router-dom";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import Profil from "./Profil";
+import GroupIcon from "@material-ui/icons/Group";
+import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SearchTable from "./Formation/Search.js";
+import SearchTable from "../Formation/Search.js";
 import SearchIcon from "@material-ui/icons/Search";
+import { useLocalStorage } from "../Utils/useLocalStorage.js";
+import Brevet from "../Brevet/Brevet.js";
+import Profile from "../Authentication/Profil.js";
+
 
 const drawerWidth = 180;
 
@@ -144,17 +153,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DashboardService(props) {
+export default function Dashboard(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [numeroAgrement] = useLocalStorage("user", 0);
+  let { path, url } = useRouteMatch();
+  const [side] = useLocalStorage("side");
+  const [type] = useLocalStorage("typeUser");
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  let { path, url } = useRouteMatch();
+
   return (
     // the Appbar Starts from here
     <Router>
@@ -162,7 +176,7 @@ export default function DashboardService(props) {
         <CssBaseline />
         <AppBar
           position="fixed"
-          color="Primary"
+          color="primary"
           className={clsx(classes.appBar, open && classes.appBarShift)}
         >
           <Toolbar className={classes.toolbar}>
@@ -185,7 +199,7 @@ export default function DashboardService(props) {
               noWrap
               className={classes.title}
             >
-              مديرية النقل
+              مركز رقم {numeroAgrement}
             </Typography>
             <Button
               text="خروج"
@@ -221,20 +235,51 @@ export default function DashboardService(props) {
           </div>
           <Divider />
           <List>
-            <Link to={url} className={classes.link}>
+            <Link to={`${url}`} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
-                  <SearchIcon />
+                  {type === "auto_ecole" ? <GroupIcon /> : <SearchIcon />}
                 </ListItemIcon>
-                <ListItemText primary="البحث" />
+                <ListItemText
+                  primary={type === "auto_ecole" ? "المنرشحين" : "البحث"}
+                />
               </ListItem>
             </Link>
-            <Link to={url + "/operateur"} className={classes.link}>
+            <Link
+              hidden={type === "admin" ? false : true}
+              to={`${url}/candidat`}
+              className={classes.link}
+            >
+              ''
               <ListItem button>
                 <ListItemIcon>
-                  <SearchIcon />
+                  <GroupIcon />
                 </ListItemIcon>
-                <ListItemText primary="المعاملين" />
+                <ListItemText primary="المنرشحين" />
+              </ListItem>
+            </Link>
+            <Link
+              to={`${url}/Formation`}
+              className={classes.link}
+              hidden={type === "admin" ? false : true}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <LaptopChromebookIcon />
+                </ListItemIcon>
+                <ListItemText primary="الدورات" />
+              </ListItem>
+            </Link>
+            <Link
+              to={url + "/Diplômes"}
+              className={classes.link}
+              hidden={type === "admin" ? false : true}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <LibraryBooksIcon />
+                </ListItemIcon>
+                <ListItemText primary="الشهادات" />
               </ListItem>
             </Link>
           </List>
@@ -254,30 +299,69 @@ export default function DashboardService(props) {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Container maxWidth="lg" className={classes.container}>
+          <Container maxWidth={false} className={classes.container}>
             <Grid item xs={12}>
               <Switch>
                 <Route
-                  path={path}
+                  path={`${path}`}
                   exact
-                  render={() => (
-                    <SearchTable
-                      id={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
+                  render={(props) =>
+                    localStorage.getItem("token") && side === "مركز" ? (
+                      type.match(/Bureau/) !== null ? (
+                        <Candidat {...props} />
+                      ) : (
+                        <SearchTable
+                          url={`/api/Passing_List/${numeroAgrement}`}
+                        />
+                      )
+                    ) : (
+                      <Redirect to="/signIn" />
+                    )
+                  }
+                />
+                <Route
+                  path={`${path}/Formation`}
+                  render={(props) =>
+                    localStorage.getItem("token") && side === "مركز" ? (
+                      <Formation
+                        {...props}
+                        id={`/api/get_form/${numeroAgrement}`}
+                      />
+                    ) : (
+                      <Redirect to="/signIn" />
+                    )
+                  }
+                />
+                <Route
+                  exact
+                  path={`${path}/candidat`}
+                  render={(props) => <Candidat {...props} />}
+                  />
+                <Route
+                  path="/Vehicule"
+                  exact
+                  render={(props) => (
+                    <Vehicule
+                      {...props}
+                      id="/api/get_veh_Mar"
+                      id2="/api/get_veh_voyag"
+                    />  
+                  )}
+                />
+                <Route
+                  path={path + "/Diplômes"}
+                  render={(props) => (
+                    <Brevet
+                      {...props}
+                      id={`/api/get_brevet/${numeroAgrement}`}
                     />
                   )}
                 />
                 <Route
-                  path={path + "/operateur"}
-                  exact
-                  render={() => <Operateur/>}
-                />
-                <Route
                   path={path + "/Profile"}
-                  render={(props) => (
-                    <Profil
-                      id={
-                        process.env.REACT_APP_API_URL + "/pass_Direction_update"
-                      }
+                  render={() => (
+                    <Profile
+                      id="/pass_Center_update"
                     />
                   )}
                 />

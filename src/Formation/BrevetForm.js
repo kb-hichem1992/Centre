@@ -9,6 +9,7 @@ import Alert from "@material-ui/lab/Alert";
 import axios from "axios";
 import React, { useState } from "react";
 import AlertDialog from "../components/controls/Dialog";
+import { fetchDiplomePDF } from "../Utils/pdfService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -153,7 +154,7 @@ export default function BrevetForm(props) {
             />
             <Button
               variant="contained"
-              color="Primary"
+              color="primary"
               size="small"
               onClick={Enregister}
             >
@@ -178,20 +179,7 @@ export default function BrevetForm(props) {
             NUMERO_AGREMENT,
             GROUPE
           );
-          window.open(
-            process.env.REACT_APP_API_URL +
-              "/report/DIPLOME/" +
-              NUM_INS +
-              "/" +
-              NUMERO_FORMATION +
-              "/" +
-              DATE_INS +
-              "/" +
-              NUMERO_AGREMENT +
-              "/" +
-              GROUPE +
-              ""
-          );
+          fetchDiplomePDF(NUM_INS, NUMERO_FORMATION, DATE_INS, NUMERO_AGREMENT, GROUPE);
           setPrinted(
             NUM_INS,
             NUM_PERMIS,
@@ -219,20 +207,7 @@ export default function BrevetForm(props) {
             NUMERO_AGREMENT,
             GROUPE
           );
-          window.open(
-            process.env.REACT_APP_API_URL +
-              "/report/DIPLOME/" +
-              NUM_INS +
-              "/" +
-              NUMERO_FORMATION +
-              "/" +
-              DATE_INS +
-              "/" +
-              NUMERO_AGREMENT +
-              "/" +
-              GROUPE +
-              ""
-          );
+          fetchDiplomePDF(NUM_INS, NUMERO_FORMATION, DATE_INS, NUMERO_AGREMENT, GROUPE);
           props.Close(false);
         }}
       />

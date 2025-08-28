@@ -29,9 +29,9 @@ import Popup from "../components/Popup";
 import ListCategorie from "./CategoriePermis";
 
 import { Stack } from "@mui/material";
-import axios from "axios";
+import axios from "../Utils/setupAxios";
 import InputMask from "react-input-mask";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -158,7 +158,7 @@ export default function CandidatFormulaire(props) {
   const [enabled, setEnabled] = useState(false);
   useEffect(() => {
     axios
-      .get(process.env.REACT_APP_API_URL + "/api/type_formation")
+      .get("/api/type_formation")
       .then((response) => {
         setTypesFormtion(response.data);
       })
@@ -167,7 +167,7 @@ export default function CandidatFormulaire(props) {
       });
 
     axios
-      .get(process.env.REACT_APP_API_URL + "/api/vehicules")
+      .get("/api/vehicules")
       .then((response) => {
         setVehicules(response.data);
       })
@@ -218,7 +218,7 @@ export default function CandidatFormulaire(props) {
 
   const handleAddVehicle = () => {
     axios
-      .post(process.env.REACT_APP_API_URL + "/api/add-vehicule", {
+      .post("/api/add-vehicule", {
         lib: newVehicule,
       })
       .then((response) => {
@@ -364,7 +364,7 @@ export default function CandidatFormulaire(props) {
     RESTE
   ) => {
     axios
-      .post(process.env.REACT_APP_API_URL + "/api/candidats", {
+      .post("/api/candidats", {
         NUM_INS: NUM_INS,
         DATE_INS: DATE_INS,
         NUMERO_NAT: NUMERO_NAT,
@@ -420,13 +420,7 @@ export default function CandidatFormulaire(props) {
   ) => {
     axios
       .put(
-        process.env.REACT_APP_API_URL +
-          "/updateCandidat/" +
-          NUM_INS +
-          "/" +
-          DATE_INS +
-          "/" +
-          NUM_PERMIS,
+          `/api/updateCandidat/${NUM_INS}/${DATE_INS}/${NUM_PERMIS}`,
         {
           NUMERO_NAT: NUMERO_NAT,
           NOM_CANDIDAT: NOM_CANDIDAT,

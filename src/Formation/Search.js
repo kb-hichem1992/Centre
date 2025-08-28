@@ -20,18 +20,22 @@ import {
 import { L10n } from "@syncfusion/ej2-base";
 import PageHeader from "../PageHeader";
 import SearchIcon from "@material-ui/icons/Search";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
+import axios from "../Utils/setupAxios";
 
-export default function SearchTable({ url }) {
+export default function SearchTable() {
   const [data, setdata] = useState([]);
-
+  const [numeroAgrement] = useLocalStorage("user", 0);
   const [side] = useLocalStorage("side");
 
-  useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((json) => setdata(json));
-  }, [url]);
+  useEffect(() => {     
+    axios.get(`/api/Passing_List/${numeroAgrement}`)
+      .then((response) => setdata(response.data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setdata([]);
+      });
+    }, [numeroAgrement]);
 
 
 
@@ -126,7 +130,10 @@ export default function SearchTable({ url }) {
             <ColumnDirective
               field="DATE_NAIS_CANDIDAT"
               headerText=" تاريخ الميلاد"
+              type="date"
+              format="dd/MM/yyyy"
               clipMode="EllipsisWithTooltip"
+              allowFiltering={false}
             />
             <ColumnDirective
               field="NUMERO_FORMATION"

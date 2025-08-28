@@ -17,7 +17,7 @@ import "./Opérateur.css";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 
 import axios from "axios";
 import Popup from "../components/Popup";

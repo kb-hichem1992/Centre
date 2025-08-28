@@ -1,63 +1,71 @@
-import React, { useState, useMemo } from "react";
-import { UserContext } from "./UserContext";
-import LoginForm from "./Login_Form";
-import Dashboard from "./Dashboard.js";
-import { useLocalStorage } from "./useLocalStorage";
+import React, { useState, useMemo, useEffect } from "react";
+import { UserContext } from "./Utils/UserContext";
+import LoginForm from "./Authentication/Login_Form";
+import Dashboard from "./Dashboards/Dashboard.js";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
-import DashboardFormation from "./DashboardFormation";
-import DashboardMarchandise from "./DashboardMarchandise";
+import DashboardFormation from "./Dashboards/DashboardFormation";
+import DashboardMarchandise from "./Dashboards/DashboardMarchandise";
+import axios from "./Utils/setupAxios";
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
-
-//const LoginForm = React.lazy(() => import("./Login_Form"));
-//const Dashboard = React.lazy(() => import("./Dashboard.js"));
 
 function App() {
   const [state, setstate] = useState(false);
   const [userData, setuserData] = useState([]);
-  const [isLogedIn, setisLogedIn] = useLocalStorage("isLoggedIn");
-  const [side, setSide] = useLocalStorage("side");
+  const [side, setSide] = useState(localStorage.getItem("side") || "");
+  const [authChecked, setAuthChecked] = useState(false);
+  const [hasToken, setHasToken] = useState(!!localStorage.getItem("token"));
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const storedSide = localStorage.getItem("side");
+    
+    if (!token) {
+      setAuthChecked(true);
+      setHasToken(false);
+      setSide("");
+      return;
+    }
+    
+    if (storedSide) {
+      setSide(storedSide);
+    }
+    
+    axios
+      .get("/auth/me")
+      .then((res) => {
+        if (res && res.data && res.data.user) {
+          setuserData(res.data.user);
+          setHasToken(true);
+        } else {
+          setHasToken(false);
+          setSide("");
+          localStorage.removeItem("token");
+          localStorage.removeItem("side");
+        }
+      })
+      .catch(() => {
+        setHasToken(false);
+        setSide("");
+        localStorage.removeItem("token");
+        localStorage.removeItem("side");
+      })
+      .finally(() => setAuthChecked(true));
+  }, []);
 
   const value = useMemo(
     () => ({
-      isLogedIn,
-      setisLogedIn,
       state,
       setstate,
       userData
     }),
-    [isLogedIn, setisLogedIn, state, userData]
+    [state, userData]
   );
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:3001/login").then((response) => {
-  //     setisLogedIn(response.data.loggedIn);
-  //     setuserData(response.data[0]);
-  //     console.log(userData);
-  //   });
-  // }, [userData]);
-  // eslint-disable-next-line no-lone-blocks
-  {
-    /* {isLogedIn === true && side === "مركز" && (
-        <UserContext.Provider value={value}>
-          <Dashboard setisLogedIn={setisLogedIn} />{" "}
-        </UserContext.Provider>
-      )}
-      {isLogedIn === true && side === "المديرية" && (
-        <UserContext.Provider value={value}>
-          {" "}
-          <DashboardService setisLogedIn={setisLogedIn} />{" "}
-        </UserContext.Provider>
-      )}
-      {isLogedIn === false && (
-        <LoginForm
-          setisLogedIn={setisLogedIn}
-          setUser={setuserData}
-          user={userData}
-          setSide={setSide}
-        />
-      )} */
+  if (!authChecked) {
+    return null; // or a loader
   }
+
   return (
     <BrowserRouter>
       <Route
@@ -65,7 +73,6 @@ function App() {
         path="/signIn"
         render={() => (
           <LoginForm
-            setisLogedIn={setisLogedIn}
             setUser={setuserData}
             user={userData}
             setSide={setSide}
@@ -77,7 +84,6 @@ function App() {
         path="/"
         render={() => (
           <LoginForm
-            setisLogedIn={setisLogedIn}
             setUser={setuserData}
             user={userData}
             setSide={setSide}
@@ -88,8 +94,8 @@ function App() {
         <Route
           path="/Center"
           render={(props) =>
-            isLogedIn && side === "مركز" ? (
-              <Dashboard setisLogedIn={setisLogedIn} />
+            hasToken && side === "مركز" ? (
+              <Dashboard />
             ) : (
               <Redirect to="/signIn" />
             )
@@ -98,8 +104,8 @@ function App() {
         <Route
           path="/formation"
           render={(props) =>
-            isLogedIn && side === "formation" ? (
-              <DashboardFormation setisLogedIn={setisLogedIn} />
+            hasToken && side === "formation" ? (
+              <DashboardFormation />
             ) : (
               <Redirect to="/signIn" />
             )
@@ -108,8 +114,8 @@ function App() {
         <Route
           path="/marchandise"
           render={(props) =>
-            isLogedIn && side === "marchandise" ? (
-              <DashboardMarchandise setisLogedIn={setisLogedIn} />
+            hasToken && side === "marchandise" ? (
+              <DashboardMarchandise />
             ) : (
               <Redirect to="/signIn" />
             )

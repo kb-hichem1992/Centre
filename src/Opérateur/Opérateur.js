@@ -19,7 +19,7 @@ import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import AddIcon from "@material-ui/icons/Add";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 import Popup from "../components/Popup";
 import ListTravailleur from "./ListTravailleur";
 import OperateurForm from "./Operateur_form.js";

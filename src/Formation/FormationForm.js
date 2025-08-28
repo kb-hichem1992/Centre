@@ -11,6 +11,7 @@ import {
 import FormControl from "@material-ui/core/FormControl";
 import Controls from "../components/controls/Controls";
 import AlertDialog from "../components/controls/Dialog";
+import axios from "../Utils/setupAxios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Form(props) {
+export default function FormationForm (props) {
   const classes = useStyles();
 
   const {
@@ -76,10 +77,13 @@ export default function Form(props) {
     setGroupe(e.target.value);
   };
 
-  useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL + "/api/get_form")
-      .then((response) => response.json())
-      .then((json) => setdata(json));
+  useEffect(() => { 
+    axios.get("/api/get_form/"+numeroAgrement)
+      .then((response) => setdata(response.data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setdata([]);
+      });
   }, []);
   // convertir le format de la Date en yyyy-mm-dd
   function convert(date) {

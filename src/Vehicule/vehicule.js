@@ -19,7 +19,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import Button from "../components/controls/Button";
 import AlertDialog from "../components/controls/Dialog";
 import PageHeader from "../PageHeader";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 
 export default function Vehicule(props) {
   const [admin] = useLocalStorage("typeUser", "");

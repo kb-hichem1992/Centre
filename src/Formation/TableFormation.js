@@ -11,7 +11,7 @@ import {
   Resize,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import axios from "axios";
+import axios from "../Utils/setupAxios";
 import {
   Fragment,
   useEffect,
@@ -20,7 +20,7 @@ import {
 } from "react";
 import Button from "../components/controls/Button";
 import AlertDialog from "../components/controls/Dialog";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 import "./Formation.css";
 
 export default function TableFormation(props) {
@@ -75,15 +75,23 @@ export default function TableFormation(props) {
   }
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL + "/api/get_form/" + numeroAgrement)
-      .then((response) => response.json())
-      .then((json) => setdata(json));
+    const url = `/api/get_form/${numeroAgrement}`;
+    axios.get(url)
+      .then((response) => setdata(response.data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setdata([]);
+      });
   }, [numeroAgrement]);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL + "/api/get_passe")
-      .then((response) => response.json())
-      .then((json) => setpassdata(json));
+    const url = "/api/get_passe";
+    axios.get(url)
+      .then((response) => setpassdata(response.data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setpassdata([]);
+      });
   }, []);
 
   async function rowSelected() {
@@ -108,7 +116,7 @@ export default function TableFormation(props) {
     groupe
   ) => {
     axios
-      .post(process.env.REACT_APP_API_URL + "/Add_passe", {
+        .post("/Add_passe", {
         numeroCandidat: numeroCandidat,
         Date_ins: Date_ins,
         Num_permis: Num_permis,

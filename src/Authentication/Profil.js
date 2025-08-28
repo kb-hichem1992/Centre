@@ -7,9 +7,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Axios from "axios";
-import { useLocalStorage } from "./useLocalStorage";
-import AlertDialog from "./components/controls/Dialog";
+import axios from "../Utils/setupAxios";
+import { useLocalStorage } from "../Utils/useLocalStorage";
+import AlertDialog from "../components/controls/Dialog";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,12 +48,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Profil({ id }) {
   const classes = useStyles();
   const [openَAlert, setOpenAlert] = useState(false);
-
   const [oldpass, setoldpass] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+
   const [newpass, setnewpass] = useState("");
   const [newpassconfirmation, setnewpassconfirmation] = useState("-");
   const [message, setmessage] = useState("");
-  const [oldPassword] = useLocalStorage("pass");
   const [username] = useLocalStorage("username");
   const [admin] = useLocalStorage("typeUser");
   const [numeroAgrement] = useLocalStorage("user");
@@ -61,15 +61,13 @@ export default function Profil({ id }) {
 
   const update_pass_center = (
     oldpass,
-    storedpass,
     password,
     username,
     admin,
     numeroAgrement
   ) => {
-    Axios.put(id, {
+    axios.put(id, {
       oldpass: oldpass,
-      storedpass: storedpass,
       password: password,
       username: username,
       admin: admin,
@@ -83,7 +81,7 @@ export default function Profil({ id }) {
     });
   };
   const update_pass_direction = (oldpass, storedpass, password, username) => {
-    Axios.put(id, {
+    axios.put(id, {
       oldpass: oldpass,
       storedpass: storedpass,
       password: password,
@@ -156,7 +154,6 @@ export default function Profil({ id }) {
                 if (side === "مركز") {
                   update_pass_center(
                     oldpass,
-                    oldPassword,
                     newpass,
                     username,
                     admin,

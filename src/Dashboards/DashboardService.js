@@ -1,41 +1,37 @@
-import AppBar from "@material-ui/core/AppBar";
-import Container from "@material-ui/core/Container";
+import React from "react";
+import clsx from "clsx";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import MenuIcon from "@material-ui/icons/Menu";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import clsx from "clsx";
-import React from "react";
-import Button from "./components/controls/Button";
-import Operateur from "./Opérateur/Opérateur";
-
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import SearchIcon from "@material-ui/icons/Search";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import GroupIcon from "@mui/icons-material/Group";
+import Button from "../components/controls/Button";
+import Operateur from "../Opérateur/Opérateur";
 import {
-  Link,
-  Route,
   BrowserRouter as Router,
+  Route,
   Switch,
+  Link,
   useRouteMatch,
 } from "react-router-dom";
-import SearchTable from "./Formation/Search.js";
-import Profil from "./Profil";
-import Vehicule from "./Vehicule/vehicule";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import Profil from "../Authentication/Profil";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import SearchTable from "../Formation/Search.js";
+import SearchIcon from "@material-ui/icons/Search";
 
-const drawerWidth = 200;
+const drawerWidth = 180;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -148,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DashboardMarchandise(props) {
+export default function DashboardService(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -189,7 +185,7 @@ export default function DashboardMarchandise(props) {
               noWrap
               className={classes.title}
             >
-            مكتب نقل البضائع{" "}
+              مديرية النقل
             </Typography>
             <Button
               text="خروج"
@@ -236,17 +232,9 @@ export default function DashboardMarchandise(props) {
             <Link to={url + "/operateur"} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
-                  <GroupIcon />
+                  <SearchIcon />
                 </ListItemIcon>
-                <ListItemText primary="المتعاملين" />
-              </ListItem>
-            </Link>
-            <Link to={url + "/véhicule"} className={classes.link}>
-              <ListItem button>
-                <ListItemIcon>
-                  <LocalShippingIcon />
-                </ListItemIcon>
-                <ListItemText primary="العربات" />
+                <ListItemText primary="المعاملين" />
               </ListItem>
             </Link>
           </List>
@@ -254,7 +242,7 @@ export default function DashboardMarchandise(props) {
           <Link to={url + "/Profile"} className={classes.link}>
             <ListItem button>
               <ListItemIcon>
-                <AdminPanelSettingsIcon />
+                <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText primary="الحساب" />
             </ListItem>
@@ -266,7 +254,7 @@ export default function DashboardMarchandise(props) {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Container maxWidth={false} className={classes.container}>
+          <Container maxWidth="lg" className={classes.container}>
             <Grid item xs={12}>
               <Switch>
                 <Route
@@ -274,19 +262,14 @@ export default function DashboardMarchandise(props) {
                   exact
                   render={() => (
                     <SearchTable
-                      url={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
+                      id={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
                     />
                   )}
                 />
                 <Route
                   path={path + "/operateur"}
                   exact
-                  render={() => <Operateur />}
-                />
-                <Route
-                  path={path + "/véhicule"}
-                  exact
-                  render={() => <Vehicule />}
+                  render={() => <Operateur/>}
                 />
                 <Route
                   path={path + "/Profile"}

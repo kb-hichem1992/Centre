@@ -22,7 +22,7 @@ import AlertDialog from "../components/controls/Dialog";
 import Popup from "../components/Popup";
 import ListCategorie from "./CategoriePermis";
 
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 import { Stack } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Candidat(props) {
+export default function CandidatForm(props) {
   const classes = useStyles();
   const textField = useRef(null);
 

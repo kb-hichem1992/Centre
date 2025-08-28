@@ -20,18 +20,18 @@ import {
   Resize,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import Axios from "axios";
+import axios from "../Utils/setupAxios";
 import { Fragment, useEffect, useRef, useState } from "react";
 import TableFormation from "../Formation/TableFormation.js";
 import PageHeader from "../PageHeader";
 import Popup from "../components/Popup.js";
 import Button from "../components/controls/Button";
 import AlertDialog from "../components/controls/Dialog";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 import "./Candidat.css";
 import CandidatFormulaire from "./CandidatFormulaire";
 import CandidatInfo from "./CandidatInfo";
-
+import { fetchEvaluationPDF } from "../Utils/pdfService";
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
 
@@ -117,7 +117,7 @@ L10n.load({
     },
   },
 });
-export default function AppCand({ id }) {
+export default function Candidat() {
   //States--------------------------------
   const [data, setdata] = useState([]);
   const [openAjouter, setOpenAjouter] = useState(false);
@@ -163,13 +163,15 @@ export default function AppCand({ id }) {
   const filterSettings = { type: "Excel" };
   // life cycle hook --------------------------------
   useEffect(() => {
-    const urlAdmin = process.env.REACT_APP_API_URL + "/api/get_candidat";
-    const urlAutoEcole =
-      process.env.REACT_APP_API_URL + "/api/get_candidat/" + admin;
-    fetch(admin === "admin" ? urlAdmin : urlAutoEcole)
-      .then((response) => response.json())
-      .then((json) => setdata(json));
-  }, [id, etat, admin]);
+    const urlAdmin = '/api/get_candidat';
+    const urlAutoEcole = "/api/get_candidat/" + admin;
+    axios.get('/api/get_candidat/')
+      .then((response) => setdata(response.data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setdata([]);
+      });
+  }, [etat, admin]);
 
   // usefull functions- --------------------------------
   const filtredData = data.filter(
@@ -198,7 +200,7 @@ export default function AppCand({ id }) {
     }
   }
   const deleteCandidat = (Num_permis, Date_ins, numeroCandidat) => {
-    Axios.post(process.env.REACT_APP_API_URL + `/delete_candidat`, {
+    axios.post(`/delete_candidat`, {
       Num_permis: Num_permis,
       Date_ins: Date_ins,
       numeroCandidat: numeroCandidat,
@@ -227,6 +229,12 @@ export default function AppCand({ id }) {
       setOpenDetail(true);
     }
   };
+
+ 
+  const showPdf = (e) => {
+    e.preventDefault();
+    fetchEvaluationPDF(Values.NUM_INS, Values.DATE_INS)
+  }
 
   return (
     <Fragment>
@@ -269,18 +277,7 @@ export default function AppCand({ id }) {
         </div>
         <div>
           <form
-            action={
-              Values !== undefined
-                ? process.env.REACT_APP_API_URL +
-                  "/report/EVALUATION/" +
-                  Values.NUM_INS +
-                  "/" +
-                  Values.DATE_INS +
-                  "/"
-                : "error"
-            }
-            method="get"
-            target="_blank"
+            onSubmit={showPdf}
           >
             <Button
               text="تكوين"
@@ -340,7 +337,10 @@ export default function AppCand({ id }) {
               <ColumnDirective
                 field="DATE_INS"
                 headerText="تاريخ التسجيل"
+                type="date"
+                format="dd/MM/yyyy"
                 clipMode="EllipsisWithTooltip"
+                allowFiltering={false}
               />
               <ColumnDirective
                 field="NOM_CANDIDAT"
@@ -355,7 +355,10 @@ export default function AppCand({ id }) {
               <ColumnDirective
                 field="DATE_NAIS_CANDIDAT"
                 headerText="تاريخ الميلاد"
+                type="date"
+                format="dd/MM/yyyy"
                 clipMode="EllipsisWithTooltip"
+                allowFiltering={false}
               />
               <ColumnDirective
                 field="TELE_FIRST"

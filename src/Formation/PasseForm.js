@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PasseFrom(props) {
+export default function PasseForm(props) {
   const classes = useStyles();
 
   const {

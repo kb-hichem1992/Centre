@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiFormControl-root": {
       width: "auto",
-      margin: theme.spacing(1),
+          margin: theme.spacing(1),
     },
     "& .MuiDialog-paper-root": {
       width: "auto",
@@ -73,7 +73,7 @@ export default function CandidatInfo(props) {
     VEHICULE,
     FORMATION ,
     PRIX
-  } = props.values || [];
+      } = props || {};
 
   return (
     <Fragment>

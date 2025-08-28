@@ -24,16 +24,16 @@ import Button from "../components/controls/Button";
 import PageHeader from "../PageHeader";
 import BrevetForm from "../Formation/BrevetForm.js";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
-import axios from "axios";
+import axios from "../Utils/setupAxios.js";
 import { L10n } from "@syncfusion/ej2-base";
-//import { UserContext } from "../UserContext.js";
 import PrintIcon from "@material-ui/icons/Print";
 import AlertDialog from "../components/controls/Dialog";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import BrevetDateForm from "./BrevetDateForm.js";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage.js";
+import { fetchDiplomePDF } from "../Utils/pdfService.js";
 
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AppBrevet({ id }) {
+export default function Brevet({ id }) {
   const [data, setdata] = useState([]);
   const [openModifier, setOpenModifier] = useState(false);
   const [etat, setEtat] = useState(false);
@@ -110,9 +110,9 @@ export default function AppBrevet({ id }) {
   const [admin] = useLocalStorage("typeUser", "");
 
   useEffect(() => {
-    fetch(id)
-      .then((response) => response.json())
-      .then((json) => setdata(json));
+    axios.get(id)
+      .then((response) => setdata(response.data))
+      .catch((error) => console.error("Error fetching data:", error))
   }, [id, etat]);
 
   const filter = {
@@ -131,7 +131,7 @@ export default function AppBrevet({ id }) {
     GROUPE
   ) => {
     axios
-      .put(process.env.REACT_APP_API_URL + "/insert_brevet", {
+      .put("/insert_brevet", {
         NumeroBrevet: NumeroBrevet,
         LivBrevet: LivBrevet,
         ExpBrevet: ExpBrevet,
@@ -156,7 +156,7 @@ export default function AppBrevet({ id }) {
     numeroAgrement
   ) => {
     axios
-      .put(process.env.REACT_APP_API_URL + "/Printed", {
+      .put("/Printed", {
         numeroCandidat: numeroCandidat,
         Num_permis: Num_permis,
         dateins: dateins,
@@ -237,20 +237,7 @@ export default function AppBrevet({ id }) {
         Values.NUMERO_AGREMENT
       );
       handleClick();
-      window.open(
-        process.env.REACT_APP_API_URL +
-          "/report/DIPLOME/" +
-          Values.NUM_INS +
-          "/" +
-          Values.NUMERO_FORMATION +
-          "/" +
-          Values.DATE_INS +
-          "/" +
-          Values.NUMERO_AGREMENT +
-          "/" +
-          Values.GROUPE +
-          ""
-      );
+      fetchDiplomePDF(Values.NUM_INS,Values.NUMERO_FORMATION,Values.DATE_INS, Values.NUMERO_AGREMENT, Values.GROUPE)
     }
   };
 
@@ -332,7 +319,7 @@ export default function AppBrevet({ id }) {
                 field="PRENOM_CANDIDAT"
                 headerText="الإسم"
                 clipMode="EllipsisWithTooltip"
-              />  
+              />
               <ColumnDirective
                 field="RESTE"
                 headerText="المبلخ المتبقي"
@@ -413,22 +400,7 @@ export default function AppBrevet({ id }) {
         message="هذه الشهادة قد طبعت من قبل. هل تود طباعتها من جديد؟"
         open={open}
         setOpen={setOpen}
-        method={() => {
-          window.open(
-            process.env.REACT_APP_API_URL +
-              "/report/DIPLOME/" +
-              Values.NUM_INS +
-              "/" +
-              Values.NUMERO_FORMATION +
-              "/" +
-              Values.DATE_INS +
-              "/" +
-              Values.NUMERO_AGREMENT +
-              "/" +
-              Values.GROUPE +
-              ""
-          );
-        }}
+        method={ fetchDiplomePDF(Values.NUM_INS,Values.NUMERO_FORMATION,Values.DATE_INS, Values.NUMERO_AGREMENT, Values.GROUPE)}
       />
       <div className={classes.root}>
         <Snackbar

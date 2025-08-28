@@ -19,12 +19,12 @@ import {
   Resize,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import Axios from "axios";
+import axios from "../Utils/setupAxios";
 import { useEffect, useRef, useState } from "react";
 import { useRouteMatch } from "react-router";
 import Button from "../components/controls/Button";
 import AlertDialog from "../components/controls/Dialog";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 import "./Candidat.css";
 
 require("es6-promise").polyfill();
@@ -129,12 +129,14 @@ export default function CadidatList() {
   let { path, url } = useRouteMatch();
 
   useEffect(() => {
-    const urlAdmin = process.env.REACT_APP_API_URL + "/api/get_candidat";
-    const urlAutoEcole =
-      process.env.REACT_APP_API_URL + "/api/get_candidat/" + admin;
-    fetch(admin === "admin" ? urlAdmin : urlAutoEcole)
-      .then((response) => response.json())
-      .then((json) => setdata(json));
+    const urlAdmin ="/api/get_candidat";
+    const urlAutoEcole = "/api/get_candidat/" + admin;
+    axios.get(admin === "admin" ? urlAdmin : urlAutoEcole)
+      .then((response) => setdata(response.data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setdata([]);
+      });
   }, [etat]);
 
   const filtredData = data.filter(
@@ -183,7 +185,7 @@ export default function CadidatList() {
     type_permis,
     createur
   ) => {
-    Axios.post(process.env.REACT_APP_API_URL + "/Add_condidat", {
+    axios.post("/Add_condidat", {
       numeroCandidat: numeroCandidat,
       Date_ins: Date_ins,
       num_Nationnal: num_Nationnal,
@@ -225,7 +227,7 @@ export default function CadidatList() {
     type_permis,
     Date_ins
   ) => {
-    Axios.put(process.env.REACT_APP_API_URL + "/update_candidat", {
+    axios.put("/update_candidat", {
       numins: numins,
       num_Nationnal: num_Nationnal,
       Nom: Nom,
@@ -250,7 +252,7 @@ export default function CadidatList() {
   };
 
   const deleteCandidat = (Num_permis, Date_ins, numeroCandidat) => {
-    Axios.post(process.env.REACT_APP_API_URL + `/delete_candidat`, {
+    axios.post( `/delete_candidat`, {
       Num_permis: Num_permis,
       Date_ins: Date_ins,
       numeroCandidat: numeroCandidat,

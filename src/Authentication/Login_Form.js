@@ -7,9 +7,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Popup from "./components/Popup";
+import Popup from "../components/Popup";
 import Register from "./Register";
-import axios from "axios";
+import axios from "../Utils/setupAxios"
+
 import {
   FormControl,
   FormControlLabel,
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
 
-export default function LoginForm({ setisLogedIn, setUser, setSide }) {
+export default function LoginForm({ setUser, setSide }) {
   const classes = useStyles();
 
   const [userName, setuserName] = useState("");
@@ -50,52 +51,90 @@ export default function LoginForm({ setisLogedIn, setUser, setSide }) {
   const [message, setmessage] = useState("");
   const [etablissement, setEtablissement] = useState("مركز");
 
+  const storeAuth = (token, user, sideValue) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("side", sideValue);
+    
+    if (user) {
+      if (sideValue === "مركز") {
+        localStorage.setItem("user", user.numeroAgrement);
+        localStorage.setItem("typeUser", user.admin);
+        localStorage.setItem("username", user.username);
+      } else {
+        localStorage.setItem("user", user.SERVICE);
+        localStorage.setItem("typeUser", user.TYPE);
+        localStorage.setItem("username", user.USERNAME);
+      }
+    }
+
+  };
+
+  const handleLoginSuccess = (user, sideValue) => {
+    console.log("🎉 Login success! Updating state and redirecting...");
+    setUser(user);
+    setSide(sideValue);
+    
+    const redirectUrl = sideValue === "مركز" ? "/Center" : `/${sideValue}`;
+    console.log("Redirecting to:", redirectUrl);
+    
+    // Force a page reload to ensure the App component picks up the new state
+    window.location.href = redirectUrl;
+  };
+
   const login = () => {
     if (etablissement === "مركز") {
       axios
-        .post(process.env.REACT_APP_API_URL + "/login_centre", {
+        .post("/login_centre", {
           username: userName,
           password: password,
         })
         .then((response) => {
+          console.log("Login response:", response.data);
           if (response.data.message) {
             setmessage(response.data.message);
           } else {
-            setUser(response.data[0]);
-            setSide(etablissement);
-            localStorage.setItem("isLoggedIn", true);
-            localStorage.setItem("user", response.data[0].NUMERO_AGREMENT);
-            localStorage.setItem("typeUser", response.data[0].ADMIN);
-            localStorage.setItem("side", etablissement);
-            localStorage.setItem("pass", response.data[0].PASSWORD);
-            localStorage.setItem("username", response.data[0].USERNAME);
-            setisLogedIn(true);
-            window.open("/Center", "_self");
+            const { token, user } = response.data;
+            console.log("Token:", token ? token.substring(0, 20) + "..." : "No token");
+            console.log("User:", user);
+            if (token) {
+              storeAuth(token, user, etablissement);
+              handleLoginSuccess(user, etablissement);
+            } else {
+              setmessage("Réponse inattendue du serveur");
+            }
           }
+        })
+        .catch((error) => {
+          console.error("Login error:", error);
+          setmessage("Erreur de connexion");
         });
     }
     if (etablissement === "marchandise" || etablissement === "formation") {
       axios
-        .post(process.env.REACT_APP_API_URL + "/login_service", {
+        .post("/login_service", {
           username: userName,
           password: password,
           service: etablissement,
         })
         .then((response) => {
+          console.log("Login response:", response.data);
           if (response.data.message) {
             setmessage(response.data.message);
           } else {
-            setUser(response.data[0]);
-            setSide(etablissement);
-            localStorage.setItem("isLoggedIn", true);
-            localStorage.setItem("user", response.data[0].SERVICE);
-            localStorage.setItem("typeUser", response.data[0].TYPE);
-            localStorage.setItem("side", etablissement);
-            localStorage.setItem("pass", response.data[0].PASSWORD);
-            localStorage.setItem("username", response.data[0].USERNAME);
-            setisLogedIn(true);
-            window.open("/" + etablissement, "_self");
+            const { token, user } = response.data;
+            console.log("Token:", token ? token.substring(0, 20) + "..." : "No token");
+            console.log("User:", user);
+            if (token) {
+              storeAuth(token, user, etablissement);
+              handleLoginSuccess(user, etablissement);
+            } else {
+              setmessage("Réponse inattendue du serveur");
+            }
           }
+        })
+        .catch((error) => {
+          console.error("Login error:", error);
+          setmessage("Erreur de connexion");
         });
     }
   };

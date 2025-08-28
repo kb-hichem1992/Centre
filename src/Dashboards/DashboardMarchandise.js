@@ -1,47 +1,41 @@
-import React from "react";
-import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
 import Grid from "@material-ui/core/Grid";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import LaptopChromebookIcon from "@material-ui/icons/LaptopChromebook";
-import AppOp from "./Tables/AppOp.js";
-import AppFor from "./Formation/Formation.js";
-import AppCand from "./Candidat/Candidat.js";
-import AppVeh from "./Table_vehicule//AppVeh.js";
-import Button from "./components/controls/Button";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Link,
-  useRouteMatch,
-  Redirect,
-} from "react-router-dom";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import MenuIcon from "@material-ui/icons/Menu";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import clsx from "clsx";
+import React from "react";
+import Button from "../components/controls/Button";
+import Operateur from "../Opérateur/Opérateur";
+
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import GroupIcon from "@material-ui/icons/Group";
-import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
-import AppBrevet from "./Brevet/Brevet.js";
-import Profil from "./Profil";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SearchTable from "./Formation/Search.js";
 import SearchIcon from "@material-ui/icons/Search";
-import { useLocalStorage } from "./useLocalStorage";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import GroupIcon from "@mui/icons-material/Group";
+import {
+  Link,
+  Route,
+  BrowserRouter as Router,
+  Switch,
+  useRouteMatch,
+} from "react-router-dom";
+import SearchTable from "../Formation/Search.js";
+import Profil from "../Authentication/Profil";
+import Vehicule from "../Vehicule/vehicule";
 
-
-const drawerWidth = 180;
+const drawerWidth = 200;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -154,23 +148,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard(props) {
+export default function DashboardMarchandise(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [numeroAgrement] = useLocalStorage("user", 0);
-  let { path, url } = useRouteMatch();
-  const [isLogedIn] = useLocalStorage("isLoggedIn");
-  const [side] = useLocalStorage("side");
-  const [type] = useLocalStorage("typeUser");
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  let { path, url } = useRouteMatch();
   return (
     // the Appbar Starts from here
     <Router>
@@ -178,7 +166,7 @@ export default function Dashboard(props) {
         <CssBaseline />
         <AppBar
           position="fixed"
-          color="primary"
+          color="Primary"
           className={clsx(classes.appBar, open && classes.appBarShift)}
         >
           <Toolbar className={classes.toolbar}>
@@ -201,7 +189,7 @@ export default function Dashboard(props) {
               noWrap
               className={classes.title}
             >
-              مركز رقم {numeroAgrement}
+            مكتب نقل البضائع{" "}
             </Typography>
             <Button
               text="خروج"
@@ -237,51 +225,28 @@ export default function Dashboard(props) {
           </div>
           <Divider />
           <List>
-            <Link to={`${url}`} className={classes.link}>
+            <Link to={url} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
-                  {type === "auto_ecole" ? <GroupIcon /> : <SearchIcon />}
+                  <SearchIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={type === "auto_ecole" ? "المنرشحين" : "البحث"}
-                />
+                <ListItemText primary="البحث" />
               </ListItem>
             </Link>
-            <Link
-              hidden={type === "admin" ? false : true}
-              to={`${url}/candidat`}
-              className={classes.link}
-            >
-              ''
+            <Link to={url + "/operateur"} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <GroupIcon />
                 </ListItemIcon>
-                <ListItemText primary="المنرشحين" />
+                <ListItemText primary="المتعاملين" />
               </ListItem>
             </Link>
-            <Link
-              to={`${url}/Formation`}
-              className={classes.link}
-              hidden={type === "admin" ? false : true}
-            >
+            <Link to={url + "/véhicule"} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
-                  <LaptopChromebookIcon />
+                  <LocalShippingIcon />
                 </ListItemIcon>
-                <ListItemText primary="الدورات" />
-              </ListItem>
-            </Link>
-            <Link
-              to={url + "/Diplômes"}
-              className={classes.link}
-              hidden={type === "admin" ? false : true}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <LibraryBooksIcon />
-                </ListItemIcon>
-                <ListItemText primary="الشهادات" />
+                <ListItemText primary="العربات" />
               </ListItem>
             </Link>
           </List>
@@ -289,7 +254,7 @@ export default function Dashboard(props) {
           <Link to={url + "/Profile"} className={classes.link}>
             <ListItem button>
               <ListItemIcon>
-                <AccountCircleIcon />
+                <AdminPanelSettingsIcon />
               </ListItemIcon>
               <ListItemText primary="الحساب" />
             </ListItem>
@@ -305,68 +270,31 @@ export default function Dashboard(props) {
             <Grid item xs={12}>
               <Switch>
                 <Route
-                  path={`${path}`}
+                  path={path}
                   exact
-                  render={(props) =>
-                    isLogedIn && side === "مركز" ? (
-                      type.match(/Bureau/) !== null ? (
-                        <AppCand {...props} />
-                      ) : (
-                        <SearchTable
-                          url={`${process.env.REACT_APP_API_URL}/api/Passing_List/${numeroAgrement}`}
-                        />
-                      )
-                    ) : (
-                      <Redirect to="/signIn" />
-                    )
-                  }
-                />
-                <Route
-                  path={`${path}/Formation`}
-                  render={(props) =>
-                    isLogedIn && side === "مركز" ? (
-                      <AppFor
-                        {...props}
-                        id={
-                          process.env.REACT_APP_API_URL +
-                          "/api/get_form/" +
-                          numeroAgrement
-                        }
-                      />
-                    ) : (
-                      <Redirect to="/signIn" />
-                    )
-                  }
-                />
-                <Route
-                  exact
-                  path={`${path}/candidat`}
-                  render={(props) => <AppCand {...props} />}
-                />
-                <Route
-                  path="/Vehicule"
-                  render={(props) => (
-                    <AppVeh
-                      {...props}
-                      id={process.env.REACT_APP_API_URL + "/api/get_veh_Mar"}
-                      id2={process.env.REACT_APP_API_URL + "/api/get_veh_voyag"}
+                  render={() => (
+                    <SearchTable
+                      url={`${process.env.REACT_APP_API_URL}/api/Passing_List`}
                     />
                   )}
                 />
                 <Route
-                  path={path + "/Diplômes"}
-                  render={(props) => (
-                    <AppBrevet
-                      {...props}
-                      id={`${process.env.REACT_APP_API_URL}/api/get_brevet/${numeroAgrement}`}
-                    />
-                  )}
+                  path={path + "/operateur"}
+                  exact
+                  render={() => <Operateur />}
+                />
+                <Route
+                  path={path + "/véhicule"}
+                  exact
+                  render={() => <Vehicule />}
                 />
                 <Route
                   path={path + "/Profile"}
-                  render={() => (
+                  render={(props) => (
                     <Profil
-                      id={process.env.REACT_APP_API_URL + "/pass_Center_update"}
+                      id={
+                        process.env.REACT_APP_API_URL + "/pass_Direction_update"
+                      }
                     />
                   )}
                 />

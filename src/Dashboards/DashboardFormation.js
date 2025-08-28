@@ -16,8 +16,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Button from "./components/controls/Button";
-import Operateur from "./Opérateur/Opérateur";
+import Button from "../components/controls/Button";
+import Operateur from "../Opérateur/Opérateur";
 import {
   BrowserRouter as Router,
   Route,
@@ -26,11 +26,11 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import Profil from "./Profil";
+import Profil from "../Authentication/Profil";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SearchTable from "./Formation/Search.js";
+import SearchTable from "../Formation/Search.js";
 import SearchIcon from "@material-ui/icons/Search";
-import Statistics from "./Statistics/Statistics";
+import Statistics from "../Statistics/Statistics";
 
 const drawerWidth = 240;
 

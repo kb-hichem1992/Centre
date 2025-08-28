@@ -23,14 +23,14 @@ import Button from "../components/controls/Button";
 import AddIcon from "@material-ui/icons/Add";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
-import axios from "axios";
+import axios from "../Utils/setupAxios";
 import PageHeader from "../PageHeader.js";
 import { Paper } from "@material-ui/core";
 import TableCandForm from "../Candidat/TableCandForm";
 import LaptopChromebookIcon from "@material-ui/icons/LaptopChromebook";
 import { L10n } from "@syncfusion/ej2-base";
 import AlertDialog from "../components/controls/Dialog";
-import { useLocalStorage } from "../useLocalStorage";
+import { useLocalStorage } from "../Utils/useLocalStorage";
 
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AppFor({ id }) {
+function Formation({ id }) {
 
   const [data, setdata] = useState([]);
   const [openAjouter, setOpenAjouter] = useState(false);
@@ -95,9 +95,11 @@ function AppFor({ id }) {
   const [admin] = useLocalStorage("typeUser","");
 
   useEffect(() => {
-    fetch(id)
-      .then((response) => response.json())
-      .then((json) => setdata(json));
+    axios.get(`/api/get_form/${numeroAgrement}`)  
+      .then((response) => setdata(response.data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, [id, etat]);
 
   const updateFormation = (
@@ -110,7 +112,7 @@ function AppFor({ id }) {
     type_groupe
   ) => {
     axios
-      .put(process.env.REACT_APP_API_URL + "/update_formation", {
+      .put("/update_formation", {
         Type: Type,
         Debut: Debut,
         Fin: Fin,
@@ -126,7 +128,7 @@ function AppFor({ id }) {
   const deleteFormation = (numeroFormation, numeroAgrement, groupe) => {
     axios
       .delete(
-        `${process.env.REACT_APP_API_URL}/delete_formation/${numeroFormation}/${numeroAgrement}/${groupe}`,
+        `/delete_formation/${numeroFormation}/${numeroAgrement}/${groupe}`,
         {}
       )
       .then(() => {
@@ -171,7 +173,7 @@ function AppFor({ id }) {
     type_groupe
   ) => {
     axios
-      .post(`${process.env.REACT_APP_API_URL}/Add_formation`, {
+      .post(`/Add_formation`, {
         numeroFormation: numeroFormation,
         numeroAgrement: numeroAgrement,
         groupe: groupe,
@@ -341,4 +343,4 @@ function AppFor({ id }) {
     </Fragment>
   );
 }
-export default AppFor;
+export default Formation;
