@@ -106,7 +106,7 @@ export default function Brevet({ id }) {
   const [open, setOpen] = useState(false);
   const [openSnack, setOpenSnack] = useState(false);
   const [openDateBrevet, setopenDateBrevet] = useState(false);
-  const [Values, setValues] = useState();
+  const [Values, setValues] = useState([]);
   const [admin] = useLocalStorage("typeUser", "");
 
   useEffect(() => {
@@ -400,7 +400,7 @@ export default function Brevet({ id }) {
         message="هذه الشهادة قد طبعت من قبل. هل تود طباعتها من جديد؟"
         open={open}
         setOpen={setOpen}
-        method={ fetchDiplomePDF(Values.NUM_INS,Values.NUMERO_FORMATION,Values.DATE_INS, Values.NUMERO_AGREMENT, Values.GROUPE)}
+        method={()=> fetchDiplomePDF(Values.NUM_INS,Values.NUMERO_FORMATION,Values.DATE_INS, Values.NUMERO_AGREMENT, Values.GROUPE)}
       />
       <div className={classes.root}>
         <Snackbar
